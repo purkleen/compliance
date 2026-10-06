@@ -923,16 +923,13 @@ kbd { font-family: var(--mono); font-size: 11px; background: var(--muted); borde
     if (state.at === 'welcome') {
       var nRisks = Q.filter(function (x) { return x.type === 'risk'; }).length;
       sec.appendChild(h('div', { class: 'head' },
-        h('div', { class: 'badges' }, h('span', { class: 'tag', text: 'Risk management matrix' })),
         h('h1', { class: 'big', text: 'Risk assessment: upcoming legal and systemic changes' }),
         h('p', { class: 'help', text: 'Tell us how each risk in this part of the matrix looks from your area: what it is, what drives it, where it comes from and any opportunities. After your name, email and area, every question is optional.' })));
       sec.appendChild(h('div', { class: 'meta' },
         h('span', { text: nRisks + ' risks' }),
         h('span', { text: 'About 10 minutes' }),
         h('span', { text: 'Skip any risk you have nothing to add to' })));
-      var startRow = okRow('Start', '');
-      startRow.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'to-dash', onclick: function () { go('dashboard', 'fwd'); }, text: 'View previous forms' }));
-      sec.appendChild(startRow);
+      sec.appendChild(okRow('Start', ''));
     } else if (state.at === 'review') {
       var flagged = vis.filter(function (x) { return x.flag && x.flag.indexOf(state.answers[x.id]) >= 0; });
       sec.appendChild(h('div', { class: 'head' },
