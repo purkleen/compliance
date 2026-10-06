@@ -26,6 +26,9 @@ img { max-width: 100%; }
   --destructive: #dc2626;
   --destructive-border: rgba(220, 38, 38, .45);
   --destructive-tint: #fef2f2;
+  --success: #15803d;
+  --success-border: rgba(22, 163, 74, .4);
+  --success-tint: #f0fdf4;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
   --radius: .5rem;
   --radius-md: calc(var(--radius) - 2px);
@@ -210,6 +213,10 @@ kbd { font-family: var(--mono); font-size: 11px; background: var(--muted); borde
 /* Alert */
 .error { background: var(--destructive-tint); color: var(--destructive); border: 1px solid var(--destructive-border); border-radius: var(--radius); padding: 8px 12px; font-size: 14px; font-weight: 500; }
 .flags { margin: 0; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; font-size: 14px; }
+
+.flags.success { display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; background: var(--success-tint); border-color: var(--success-border); color: var(--success); }
+.flags.success > span:last-child { min-width: 0; }
+.ok-mark { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--success); color: var(--success-tint); font-size: 11px; font-weight: 700; line-height: 1; }
 
 .meta { display: flex; flex-wrap: wrap; gap: 6px 20px; color: var(--muted-foreground); font-size: 14px; }
 
@@ -497,7 +504,7 @@ kbd { font-family: var(--mono); font-size: 11px; background: var(--muted); borde
     sec.classList.add('wide');
     if (justSubmitted) {
       var mine = records.filter(function (r) { return r.id === justSubmitted; })[0];
-      if (mine) sec.appendChild(h('p', { class: 'flags', role: 'status' }, h('b', { text: 'Assessment submitted. ' }), 'Your reference is ' + mine.ref + '. A copy is saved below.'));
+      if (mine) sec.appendChild(h('p', { class: 'flags success', role: 'status' }, h('span', { class: 'ok-mark', 'aria-hidden': 'true', text: '\u2713' }), h('span', null, h('b', { text: 'Assessment submitted. ' }), 'Your reference is ' + mine.ref + '. A copy is saved below.')));
     }
     sec.appendChild(h('div', { class: 'head' },
       h('h1', { text: 'Your forms' }),
