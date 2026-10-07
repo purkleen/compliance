@@ -345,6 +345,26 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
 .rv-row { scroll-margin-top: 16px; transition: box-shadow .3s; }
 .rv-row.flash { box-shadow: 0 0 0 2px var(--ring); border-radius: var(--radius-md); }
 
+.row-srcs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 2px; }
+.row-srcs .cap { margin-right: 2px; color: var(--muted-foreground); font-size: 12px; }
+.src-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; height: 26px; padding: 0 10px 0 3px; background: var(--background); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; font-weight: 500; }
+.src-pill { color: var(--foreground); text-decoration: none; cursor: pointer; }
+.src-pill:hover, .src-pill[aria-expanded="true"] { background: var(--muted); }
+.src-pill:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+.src-pill .at { font-family: var(--mono); font-size: 11px; background: var(--muted); border-radius: 4px; padding: 1px 5px; }
+.src-pill[aria-expanded="true"] .at { background: var(--background); }
+.src-ico.media { --c: var(--c4); }
+.src-view { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+.src-view .tip, .src-view .rv-text, .src-view .quote { margin: 0; }
+.src-view .quote { font-size: 15px; font-style: italic; }
+.player { display: flex; align-items: center; gap: 10px; }
+.player .play { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 11px; padding-left: 2px; }
+.player .time { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.player .track { flex: 1; height: 6px; background: var(--muted); border-radius: 3px; overflow: hidden; }
+.player .track i { display: block; height: 100%; background: var(--c4); border-radius: 3px; }
+.src-pill .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.src-pill .n { color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+
 /* Checkbox + signature */
 .sign { display: flex; flex-direction: column; gap: 20px; }
 .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 14px 16px; font-size: 14px; }
@@ -485,6 +505,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
         row.value = RISK_FIELDS.filter(function (f) { return it[f[0]]; }).map(function (f) { return f[1] + ': ' + it[f[0]]; }).join('\n');
         if (it.thread) row.thread = it.thread;
         if (it.files) row.files = it.files;
+        if (it.clips) row.clips = it.clips;
         filled++;
       }
       rows.push(row);
@@ -502,13 +523,16 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       r_anticorruption: { desc: 'Hospitality for public-sector buyers is approved informally by email.', drivers: 'No single register of gifts and hospitality.', source: 'EU Anti-Corruption Directive' }
     }),
     example(7, 'Katarzyna Wojcik', 'katarzyna.wojcik@example.com', Date.UTC(2026, 8, 29, 11, 48), {
-      r_labour: { desc: 'Shift supervisors have not been trained on the wider mobbing definition, so complaints may be handled wrongly.', drivers: 'High supervisor turnover and night shifts with little HR presence.', opps: 'Training would also lower absence and attrition.', source: 'Upcoming labour code amendment',
+      r_labour: { desc: 'Shift supervisors have not been trained on the wider mobbing definition, so complaints may be handled wrongly.', drivers: 'High supervisor turnover and night shifts with little HR presence.', opps: 'Training would also lower absence and attrition.', source: 'Upcoming labour code amendment', files: ['supervisor-briefing.mp3'],
+        clips: [{ file: 'supervisor-briefing.mp3', at: 134, dur: 1260, quote: 'Two people came to me about the night shift lead, but nobody told me that counts as a formal complaint.' },
+          { file: 'supervisor-briefing.mp3', at: 612, dur: 1260, quote: 'We have not had any training since the definition changed.' }],
         thread: [{ q: 'How likely is this to affect your area in the next 12 months?', a: 'Likely. We had two informal complaints this quarter.' }, { q: 'Who would own the response if it did?', a: 'The site HR partner.' }] }
     }),
     example(6, 'James Okafor', 'james.okafor@example.com', Date.UTC(2026, 8, 24, 16, 5), {
       r_aiact: { desc: 'Contract review tooling may fall under transparency obligations when used on employee matters.', source: 'EU AI Act' },
       r_ecgt: { desc: 'Legal is not consulted on environmental claims before campaigns launch.', drivers: 'Marketing approvals skip Legal for "minor" updates.', source: 'ECGT Directive' },
-      r_anticorruption: { desc: 'Third-party due diligence does not yet cover the new offences in the draft directive.', drivers: 'Questionnaire last updated in 2022.', opps: 'One refreshed questionnaire can serve sanctions and ESG checks too.', source: 'EU Anti-Corruption Directive', files: ['dd-questionnaire-v3.docx', 'gap-analysis.xlsx'] },
+      r_anticorruption: { desc: 'Third-party due diligence does not yet cover the new offences in the draft directive.', drivers: 'Questionnaire last updated in 2022.', opps: 'One refreshed questionnaire can serve sanctions and ESG checks too.', source: 'EU Anti-Corruption Directive', files: ['dd-questionnaire-v3.docx', 'gap-analysis.xlsx', 'supplier-onboarding-call.m4a'],
+        clips: [{ file: 'supplier-onboarding-call.m4a', at: 725, dur: 2410, quote: 'The questionnaire does not ask about trading in influence at all.' }] },
       r_dynamic: { desc: 'We track new rules in a spreadsheet that depends on one person.', drivers: 'No regulatory watch tool or backup owner.', source: 'Internal process' },
       r_unknown: { desc: 'Possible national gold-plating when directives are transposed.', source: 'National legislators' }
     }),
@@ -524,7 +548,9 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
     }),
     example(3, 'Sofia Lindgren', 'sofia.lindgren@example.com', Date.UTC(2026, 8, 4, 10, 2), {
       r_ecgt: { desc: 'Packaging uses a self-made "eco" label that will count as an unverified sustainability label.', drivers: 'Label printed on 18 months of stock.', opps: 'Switching to a certified scheme strengthens the brand.', source: 'ECGT Directive',
-        thread: [{ q: 'Who would own the response if it did?', a: 'Brand and Packaging together, with Legal reviewing the wording.' }], files: ['label-inventory.pdf', 'packaging-photo.jpg'] }
+        thread: [{ q: 'Who would own the response if it did?', a: 'Brand and Packaging together, with Legal reviewing the wording.' }], files: ['label-inventory.pdf', 'packaging-photo.jpg', 'packaging-line-walkthrough.mp4'],
+        clips: [{ file: 'packaging-line-walkthrough.mp4', at: 47, dur: 318, quote: 'This is the eco label. It goes on every carton on this line.' },
+          { file: 'packaging-line-walkthrough.mp4', at: 192, dur: 318, quote: 'These pallets are the printed stock, roughly eighteen months of it.' }] }
     }),
     example(2, 'Marek Nowak', 'marek.nowak@example.com', Date.UTC(2026, 7, 27, 15, 41), {
       r_aiact: { desc: 'Staff use public chatbots with customer data and we have no AI literacy training in place.', drivers: 'No approved tool list.', opps: 'An approved toolset would raise productivity safely.', source: 'EU AI Act' },
@@ -768,6 +794,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       if (r.files && r.files.length) para('Attached: ' + r.files.join(', '), 18, '400', MUTED, 2);
       if (r.edited) para('Edited ' + stamp(r.edited), 18, '400', MUTED, 2);
       if (r.reviewed) para('Edited by reviewer ' + stamp(r.reviewed), 18, '400', MUTED, 2);
+      (r.clips || []).forEach(function (c) { para('Recording ' + c.file + ' at ' + clock(c.at) + ': \u201C' + c.quote + '\u201D', 18, '400', MUTED, 2); });
       if (r.context) para('Original input: ' + r.context, 18, '400', MUTED, 2, M + 28);
       y += 16;
     });
@@ -826,7 +853,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
   // shown as numbered chips in the text and a list of source cards underneath.
   function summaryWithSources(rec, pane) {
     var sources = [], p = h('p', { class: 'rv-over' }), name = rowValue(rec, 'Full name') || 'This person';
-    var body = [], filled = [], asked = [], files = [], list, toggle, stack, box;
+    var body = [], filled = [], asked = [], files = [], clips = [], list, toggle, stack, box;
     rec.rows.forEach(function (r, i) { if (r.group !== 'About you') body.push({ r: r, i: i }); });
     function add(kind, title, snip, type, row, badge) {
       var src = { n: sources.length + 1, kind: kind, title: title, snip: snip, type: type, row: row, badge: badge };
@@ -852,9 +879,15 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       if (th.length) asked.push({ n: th.length, src: add('followup', 'Follow-up on ' + x.r.label, th.map(function (t) { return t.q + ' ' + (t.a || 'Not answered'); }).join(' '), th.length + (th.length === 1 ? ' follow-up question' : ' follow-up questions'), x.i, 'Q') });
     });
     body.forEach(function (x) {
+      var clipped = (x.r.clips || []).map(function (c) { return c.file; });
       (x.r.files || []).forEach(function (f) {
         var ext = (f.split('.').pop() || 'file').slice(0, 4).toUpperCase();
-        files.push(add('file', f, 'Attached to ' + x.r.label, 'Attachment', x.i, ext));
+        if (clipped.indexOf(f) < 0) files.push(add('file', f, 'Attached to ' + x.r.label, 'Attachment', x.i, ext));
+      });
+      (x.r.clips || []).forEach(function (c) {
+        var src = add('media', c.file, c.quote, /\.(mp4|mov|webm|mkv)$/i.test(c.file) ? 'Video recording' : 'Audio recording', x.i, '\u25B6');
+        src.clip = c;
+        clips.push(src);
       });
     });
     if (!rec.total) say('An earlier form with ' + body.length + (body.length === 1 ? ' answer' : ' answers'));
@@ -874,23 +907,41 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       files.forEach(function (src) { p.appendChild(cite(src)); });
       say('.');
     }
+    if (clips.length) {
+      say(' Recordings are cited at ' + clips.length + (clips.length === 1 ? ' point' : ' points'));
+      clips.forEach(function (src) { p.appendChild(cite(src)); });
+      say('.');
+    }
     pane.appendChild(p);
-    if (!sources.length) return;
-    stack = h('span', { class: 'src-stack', 'aria-hidden': 'true' });
-    sources.slice(0, 3).forEach(function (src) { stack.appendChild(h('span', { class: 'src-ico ' + src.kind, text: src.badge })); });
-    list = h('div', { class: 'src-list', id: 'src-list' });
-    sources.forEach(function (src) {
-      list.appendChild(h('button', { type: 'button', class: 'src act', id: 'src-' + src.n, onclick: function () { jump(src); } },
-        h('span', { class: 'src-top' }, h('span', { class: 'src-ico ' + src.kind, 'aria-hidden': 'true', text: src.badge }), h('span', { class: 'src-type', text: src.type }), h('span', { class: 'n', text: String(src.n) })),
-        h('span', { class: 'src-title', text: src.title }),
-        h('span', { class: 'src-snip', text: src.snip })));
-    });
-    list.hidden = rv.srcClosed;
-    toggle = h('button', { type: 'button', class: 'src-toggle act', id: 'src-toggle', 'aria-expanded': rv.srcClosed ? 'false' : 'true', 'aria-controls': 'src-list',
-      onclick: function () { rv.srcClosed = !rv.srcClosed; list.hidden = rv.srcClosed; toggle.setAttribute('aria-expanded', rv.srcClosed ? 'false' : 'true'); } },
-      stack, 'Sources', h('span', { class: 'n', text: String(sources.length) }));
-    box = h('div', { class: 'srcs' }, toggle, list);
-    pane.appendChild(box);
+    return sources;
+  }
+  function clock(sec) {
+    var h0 = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s0 = Math.floor(sec % 60);
+    return (h0 ? h0 + ':' + (m < 10 ? '0' : '') : '') + m + ':' + (s0 < 10 ? '0' : '') + s0;
+  }
+  // What a source link opens: a small panel under the sources line of its section.
+  function sourceView(src, rec, r) {
+    var box = h('div', { class: 'src-view', id: 'srcv-' + src.n }), c = src.clip;
+    if (src.kind === 'media') {
+      box.appendChild(h('div', { class: 'player' },
+        h('span', { class: 'play', 'aria-hidden': 'true', text: '▶' }),
+        h('span', { class: 'time', text: clock(c.at) + ' / ' + clock(c.dur) }),
+        h('span', { class: 'track', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.min(100, 100 * c.at / c.dur).toFixed(1) + '%' }))));
+      box.appendChild(h('p', { class: 'quote', text: '“' + c.quote + '”' }));
+      box.appendChild(h('p', { class: 'tip', text: src.type + ' ' + c.file + ', at ' + clock(c.at) + '. Recordings are not stored in this demo, so it cannot be played here. In the live product this link opens the recording at that moment.' }));
+    } else if (src.kind === 'file') {
+      box.appendChild(h('p', { class: 'rv-text', text: src.title }));
+      box.appendChild(h('p', { class: 'tip', text: 'Attached to this answer. Files are not stored in this demo, so it cannot be opened here.' }));
+    } else if (src.kind === 'followup') {
+      (r.thread || (r.fq ? [{ q: r.fq, a: r.fa }] : [])).forEach(function (t) {
+        box.appendChild(h('p', { class: 'rv-text', text: t.q + '\n' + (t.a || 'Not answered') }));
+      });
+      box.appendChild(h('p', { class: 'tip', text: 'Asked by the AI follow-up straight after this answer was given.' }));
+    } else {
+      box.appendChild(h('p', { class: 'tip', text: 'Form answer from ' + (rowValue(rec, 'Full name') || 'Unnamed') + ', submitted ' + stamp(rec.submittedAt) + ', reference ' + rec.ref + '. This section shows it in full.' }));
+    }
+    box.hidden = true;
+    return box;
   }
   function saveReview(rec) {
     var changed = false;
@@ -1042,7 +1093,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
     pane.appendChild(h('div', { class: 'head' },
       h('h1', null, rowValue(rec, 'Full name') || 'Unnamed'),
       h('p', { class: 'help', text: [rowValue(rec, 'Work email'), 'Submitted ' + stamp(rec.submittedAt), rec.ref].filter(Boolean).join(' · ') })));
-    summaryWithSources(rec, pane);
+    var srcs = summaryWithSources(rec, pane);
     if (rec.responseTo) pane.appendChild(h('p', { class: 'rv-sub', text: rec.area + ' input, added in response to ' + rec.responseTo + '.' }));
     requests.filter(function (r) { return r.from && r.from.id === rec.id; }).forEach(function (r) {
       pane.appendChild(h('p', { class: 'rv-sub', text: 'Sent to ' + r.area + ' on ' + stamp(r.createdAt) + ' · '
@@ -1082,10 +1133,34 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       (r.thread || (r.fq ? [{ q: r.fq, a: r.fa }] : [])).forEach(function (t) {
         row.appendChild(h('p', { class: 'rv-sub', text: 'Follow-up: ' + t.q + '\n' + (t.a || 'Not answered') }));
       });
-      if (r.files && r.files.length) stamps.push('Attached: ' + r.files.join(', '));
       if (r.edited) stamps.push('Edited by submitter ' + stamp(r.edited));
       if (r.reviewed) stamps.push('Edited by reviewer ' + stamp(r.reviewed));
       if (stamps.length) row.appendChild(h('p', { class: 'rv-sub', text: stamps.join('\n') }));
+      // Sources for this section sit with it, numbered to match the citations in the summary above.
+      var mine = srcs.filter(function (x) { return x.row === i; });
+      if (mine.length) {
+        var line = h('div', { class: 'row-srcs' }, h('span', { class: 'cap', text: mine.length === 1 ? 'Source' : 'Sources' }));
+        var views = [];
+        mine.forEach(function (x) {
+          var view = sourceView(x, rec, r), link;
+          link = h('a', { class: 'src-pill act', id: 'src-' + x.n, href: '#source-' + x.n, title: x.type + ': ' + x.title, 'aria-expanded': 'false', 'aria-controls': 'srcv-' + x.n,
+            onclick: function (e) {
+              var open = view.hidden;
+              e.preventDefault();
+              views.forEach(function (v) { v.view.hidden = true; v.link.setAttribute('aria-expanded', 'false'); });
+              view.hidden = !open;
+              link.setAttribute('aria-expanded', open ? 'true' : 'false');
+            } },
+            h('span', { class: 'src-ico ' + x.kind, 'aria-hidden': 'true', text: x.badge }),
+            h('span', { class: 't', text: x.kind === 'answer' ? (rowValue(rec, 'Full name') || 'Unnamed') + ' · ' + rec.ref : x.kind === 'followup' ? x.type : x.title }),
+            x.clip ? h('span', { class: 'at', text: clock(x.clip.at) }) : null,
+            h('span', { class: 'n', text: String(x.n) }));
+          views.push({ view: view, link: link });
+          line.appendChild(link);
+        });
+        row.appendChild(line);
+        views.forEach(function (v) { row.appendChild(v.view); });
+      }
       pane.appendChild(row);
     });
     return pane;
