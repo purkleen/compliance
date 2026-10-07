@@ -61,7 +61,9 @@ img { max-width: 100%; }
   color-scheme: dark;
 }
 
-html, body { height: 100%; }
+/* The whole page scrolls; no pane has its own scrollbar. */
+html { height: 100%; }
+body { min-height: 100%; }
 body {
   background: var(--background); color: var(--foreground);
   font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
@@ -79,7 +81,7 @@ button, input, textarea { font: inherit; color: inherit; }
 /* Badge, secondary */
 .tag { background: var(--muted); border-radius: var(--radius-md); padding: 2px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
 
-main { flex: 1; min-height: 0; overflow-y: auto; display: flex; padding-inline: 24px; padding-block: 16px; }
+main { flex: 1 0 auto; display: flex; padding-inline: 24px; padding-block: 16px; }
 .q { --qsize: clamp(20px, 4vw, 24px); margin: auto; width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 24px; }
 .q.fwd { animation: up .32s cubic-bezier(.2, .7, .2, 1); }
 .q.back { animation: down .32s cubic-bezier(.2, .7, .2, 1); }
@@ -220,17 +222,17 @@ kbd { font-family: var(--mono); font-size: 11px; background: var(--muted); borde
 .tabs { display: inline-flex; gap: 2px; padding: 3px; background: var(--muted); border-radius: var(--radius); }
 .tabs button { height: 30px; padding: 0 12px; border: 0; background: transparent; border-radius: var(--radius-md); color: var(--muted-foreground); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
-main.rvmode { overflow: hidden; padding-block: 4px 20px; }
-.rv { width: 100%; max-width: 1180px; min-height: 0; margin: 0 auto; display: grid; grid-template-columns: minmax(240px, 340px) minmax(0, 1fr); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; }
-.rv-list { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-.rv-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px; background: var(--background); border-bottom: 1px solid var(--border); }
+main.rvmode { padding-block: 4px 20px; }
+.rv { width: 100%; max-width: 1180px; min-height: 0; margin: 0 auto; display: grid; grid-template-columns: minmax(240px, 340px) minmax(0, 1fr); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+.rv-list { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+.rv-head { display: flex; border-top-left-radius: calc(var(--radius-xl) - 1px); align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px; background: var(--background); border-bottom: 1px solid var(--border); }
 .rv-pad { margin: 0; padding: 10px 16px; border-bottom: 1px solid var(--border); }
 .rv-item { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--border); cursor: pointer; }
 .rv-item:hover, .rv-item[aria-current="true"] { background: var(--muted); }
 .rv-item:disabled { opacity: .5; cursor: default; }
 .rv-item:focus-visible { outline-offset: -2px; }
 .rv-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 600; }
-.rv-detail { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 24px 28px; }
+.rv-detail { display: flex; flex-direction: column; gap: 16px; padding: 20px 24px 28px; }
 .rv-detail h1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 22px; }
 .rv-over { margin: 0; background: var(--muted); border-radius: var(--radius); padding: 12px 14px; font-size: 15px; }
 .rv-detail .grp { margin-top: 6px; }
@@ -242,7 +244,6 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
 .rv-detail .line { max-width: none; min-height: 110px; font-size: 14px; }
 .rv-back { display: none; align-self: flex-start; }
 @media (max-width: 760px) {
-  main.rvmode { overflow-y: auto; }
   .rv { grid-template-columns: minmax(0, 1fr); border: 0; border-radius: 0; overflow: visible; }
   .rv-list { border-right: 0; overflow: visible; }
   .rv-detail { display: none; overflow: visible; padding: 4px 0 20px; }
@@ -1175,7 +1176,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
     else if (store && !store.admin) list.appendChild(h('p', { class: 'tip rv-pad', text: 'You can see your own forms here. Editors and the owner of this page see everyone’s.' }));
     all.forEach(function (r) {
       var item = h('button', { type: 'button', class: 'rv-item act', id: 'rv-' + r.id, 'aria-current': cur && r.id === cur.id ? 'true' : null,
-        onclick: function () { rv.sel = r.id; rv.detail = true; rv.note = ''; rv.regen = null; render('stay'); } },
+        onclick: function () { rv.sel = r.id; rv.detail = true; rv.note = ''; rv.regen = null; render('fwd'); } },
         h('span', { class: 'rv-name' }, rowValue(r, 'Full name') || 'Unnamed'),
         h('span', { class: 'fsub', text: stamp(r.submittedAt) + ' · ' + r.ref }),
         h('span', { class: 'fsub', text: (r.responseTo ? r.area + ' input for ' + r.responseTo + ' \u00B7 ' : '') + (r.total ? r.risks + ' of ' + r.total + ' risks' : 'Earlier form') }));
@@ -2117,7 +2118,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
       var oldList = stage.querySelector('.rv-list'), keep = oldList ? oldList.scrollTop : 0;
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : tagScreen());
-      stage.scrollTop = 0;
+      if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
       stage.querySelectorAll('.clip').forEach(function (c) {
@@ -2217,7 +2218,7 @@ main.rvmode { overflow: hidden; padding-block: 4px 20px; }
     }
 
     stage.replaceChildren(sec);
-    stage.scrollTop = 0;
+    if (dir !== 'stay') window.scrollTo(0, 0);
     stage.querySelectorAll('.clip').forEach(function (c) {
       if (c.scrollHeight > c.clientHeight + 2 && c.nextSibling) c.nextSibling.hidden = false;
     });
