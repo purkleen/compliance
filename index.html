@@ -366,6 +366,24 @@ main.rvmode { padding-block: 4px 20px; }
 .src-pill .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .src-pill .n { color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
 
+/* History of changes on a submission */
+.hist-wrap { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--border); scroll-margin-top: 16px; }
+.hist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.hist li { position: relative; display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px; padding-bottom: 18px; }
+.hist li::before { content: ""; position: absolute; left: 7px; top: 16px; bottom: 0; width: 1px; background: var(--border); }
+.hist li:last-child { padding-bottom: 0; }
+.hist li:last-child::before { display: none; }
+.hist-dot { width: 9px; height: 9px; margin: 6px 0 0 3px; border-radius: 50%; background: var(--muted-foreground); }
+.hist li.ev-edit .hist-dot { background: var(--c1); }
+.hist li.ev-send .hist-dot { background: var(--c5); }
+.hist li.ev-tag .hist-dot { background: var(--c2); }
+.hist li.ev-submit .hist-dot { background: var(--success); }
+.hist-title { margin: 0; font-size: 14px; font-weight: 500; }
+.diff { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 8px; }
+.diff > div { min-width: 0; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-size: 13px; }
+.diff .was { color: var(--muted-foreground); }
+.diff .cap { display: block; margin-bottom: 2px; color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
 /* Checkbox + signature */
 .sign { display: flex; flex-direction: column; gap: 20px; }
 .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 14px 16px; font-size: 14px; }
@@ -486,7 +504,7 @@ main.rvmode { padding-block: 4px 20px; }
   }
 
   var state = { answers: {}, at: 'welcome', mode: 'form', req: null, files: {}, fu: {}, edited: {}, editing: false };
-  var snap = '', snapEmpty = true, focusRow = null;
+  var snap = '', snapText = '', snapEmpty = true, focusRow = null;
   var busy = null;
   var sampleP = window.claude && window.claude.use ? window.claude.use('sample').catch(function () { return null; }) : Promise.resolve(null);
   var stage = document.getElementById('stage');
@@ -686,7 +704,7 @@ main.rvmode { padding-block: 4px 20px; }
     state.mode = 'form';
     go('welcome', 'fwd');
   }
-  function resetForm() { state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editing = false; }
+  function resetForm() { state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editLog = {}; state.editing = false; }
   function submit() {
     var vis = visible(), now = new Date(), rows = [];
     GROUPS.forEach(function (g) {
@@ -696,6 +714,7 @@ main.rvmode { padding-block: 4px 20px; }
         if (fuActive(x)) row.thread = pairs(x);
         if ((state.files[x.id] || []).length) row.files = state.files[x.id].map(function (f) { return f.name; });
         if (state.edited[x.id]) row.edited = state.edited[x.id];
+        if ((state.editLog || {})[x.id]) row.edits = state.editLog[x.id];
         rows.push(row);
       });
     });
@@ -798,6 +817,12 @@ main.rvmode { padding-block: 4px 20px; }
       (r.clips || []).forEach(function (c) { para('Recording ' + c.file + ' at ' + clock(c.at) + ': \u201C' + c.quote + '\u201D', 18, '400', MUTED, 2); });
       if (r.context) para('Original input: ' + r.context, 18, '400', MUTED, 2, M + 28);
       y += 16;
+    });
+    y += 8; rule(); para('History of changes', 26, '600', INK, 14);
+    historyOf(rec).forEach(function (e) {
+      para(stamp(e.at) + '  \u00B7  ' + e.title, 19, '400', INK, e.to || e.note ? 2 : 10);
+      if (e.note) para(e.note, 18, '400', MUTED, e.to ? 2 : 10, M + 28);
+      if (e.to) { para('Before: ' + (e.from || 'No input'), 18, '400', MUTED, 2, M + 28); para('After: ' + e.to, 18, '400', MUTED, 10, M + 28); }
     });
     var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
     pages.forEach(function (cv, i) {
@@ -944,11 +969,61 @@ main.rvmode { padding-block: 4px 20px; }
     box.hidden = true;
     return box;
   }
+  // History of changes for one submission: when it was submitted, edited, sent on and answered. Newest first.
+  function historyOf(rec) {
+    var name = rowValue(rec, 'Full name') || 'The submitter', events = [], logged = rec.history || [];
+    events.push({ at: rec.submittedAt, kind: 'submit', title: 'Submitted by ' + name + (rec.responseTo ? ' as ' + rec.area + ' input for ' + rec.responseTo : '') });
+    rec.rows.forEach(function (r) {
+      var lab = labMeta[rec.id + '|' + r.label];
+      if (r.edits && r.edits.length) r.edits.forEach(function (e) {
+        events.push({ at: e.at, kind: 'edit', title: name + ' changed “' + r.label + '” on the summary before submitting', from: e.from, to: e.to });
+      });
+      else if (r.edited) events.push({ at: r.edited, kind: 'edit', title: name + ' changed “' + r.label + '” on the summary before submitting' });
+      ((lab && lab.log) || []).forEach(function (e) {
+        var who = store && e.by && e.by === store.uid ? 'You' : 'A reviewer', parts = [];
+        if (e.type === 'tags') {
+          if (e.add && e.add.length) parts.push('Added: ' + e.add.join(', '));
+          if (e.del && e.del.length) parts.push('Removed: ' + e.del.join(', '));
+          events.push({ at: e.at, kind: 'tag', title: who + ' changed the tags on “' + r.label + '”' + (e.ai ? ' using AI suggestions' : ''), note: parts.join('\n') });
+        } else if (e.type === 'region') {
+          events.push({ at: e.at, kind: 'tag', title: who + (e.op === 'add' ? ' labeled a phrase in “' : ' removed a labeled phrase from “') + r.label + '”', note: e.label + ': “' + e.quote + '”' });
+        } else if (e.type === 'status') {
+          events.push({ at: e.at, kind: 'tag', title: who + (e.status === 'submitted' ? ' submitted the labeling of “' : ' skipped labeling “') + r.label + '”' });
+        }
+      });
+      if (r.reviewed && !logged.some(function (e) { return e.label === r.label && Math.abs(e.at - r.reviewed) < 2000; })) events.push({ at: r.reviewed, kind: 'edit', title: 'A reviewer edited “' + r.label + '”' });
+    });
+    logged.forEach(function (e) {
+      events.push({ at: e.at, kind: 'edit', title: (store && e.by && e.by === store.uid ? 'You' : 'A reviewer') + ' edited “' + e.label + '”', from: e.from, to: e.to });
+    });
+    requests.forEach(function (q) {
+      if (!q.from || q.from.id !== rec.id) return;
+      events.push({ at: q.createdAt, kind: 'send', title: 'Sent to ' + q.area + (q.person ? ' (' + q.person.email + ')' : '') + ' to add input', note: q.note ? 'Message: ' + q.note : '' });
+      if (q.status === 'answered') events.push({ at: q.answeredAt, kind: 'send', title: q.area + ' answered', note: 'Their input is form ' + q.answeredRef });
+    });
+    return events.sort(function (a, b) { return b.at - a.at; });
+  }
+  function historySection(rec) {
+    var events = historyOf(rec), list = h('ol', { class: 'hist' });
+    events.forEach(function (e) {
+      var body = h('div', null, h('p', { class: 'hist-title', text: e.title }), h('span', { class: 'fsub', text: stamp(e.at) }));
+      if (e.note) body.appendChild(h('p', { class: 'rv-sub', text: e.note }));
+      if (e.to) body.appendChild(h('div', { class: 'diff' },
+        h('div', { class: 'was' }, h('span', { class: 'cap', text: 'Before' }), clipped(e.from || 'No input')),
+        h('div', null, h('span', { class: 'cap', text: 'After' }), clipped(e.to))));
+      list.appendChild(h('li', { class: 'ev-' + e.kind }, h('span', { class: 'hist-dot', 'aria-hidden': 'true' }), body));
+    });
+    return h('div', { class: 'hist-wrap', id: 'rv-history' },
+      h('h2', { class: 'grp' }, 'History of changes', h('span', { class: 'opt-note', text: events.length + (events.length === 1 ? ' entry' : ' entries') })), list);
+  }
   function saveReview(rec) {
     var changed = false;
     rec.rows.forEach(function (r, i) {
       var el = document.getElementById('rv-f-' + i), v = el ? el.value.trim() || 'No input' : null;
-      if (v !== null && v !== (r.value || 'No input')) { r.value = v; r.reviewed = Date.now(); changed = true; }
+      if (v !== null && v !== (r.value || 'No input')) {
+        rec.history = (rec.history || []).concat([{ at: Date.now(), by: store ? store.uid : '', label: r.label, from: r.value || 'No input', to: v }]).slice(-100);
+        r.value = v; r.reviewed = Date.now(); changed = true;
+      }
     });
     if (!changed) { rvEditing = false; rv.note = ''; render('stay'); return; }
     if (rec.total) rec.risks = rec.rows.filter(function (x) { return x.group !== 'About you' && x.value && x.value !== 'No input'; }).length;
@@ -1110,6 +1185,10 @@ main.rvmode { padding-block: 4px 20px; }
       actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-resend', onclick: function () { startRegen(rec, 'person'); }, text: 'Resend to a person' }));
       actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-pdf', onclick: function (e) { downloadPdf(rec, e.currentTarget); }, text: 'Download PDF' }));
     }
+    if (!rvEditing) actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-hist', onclick: function () {
+      var el = document.getElementById('rv-history');
+      if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }, text: 'History \u00B7 ' + historyOf(rec).length }));
     pane.appendChild(actions);
     var note = h('p', { class: 'tip', id: 'rv-note', role: 'status', text: rv.note });
     note.hidden = !rv.note;
@@ -1164,6 +1243,7 @@ main.rvmode { padding-block: 4px 20px; }
       }
       pane.appendChild(row);
     });
+    pane.appendChild(historySection(rec));
     return pane;
   }
   function reviewScreen() {
@@ -1217,7 +1297,7 @@ main.rvmode { padding-block: 4px 20px; }
       if (seen[k]) return;
       seen[k] = true;
       if (tagMap[k]) it.tags = tagMap[k];
-      if (m) { it.spans = m.spans; it.status = m.status; it.at = m.at; }
+      if (m) { it.spans = m.spans; it.status = m.status; it.at = m.at; if (m.log) it.log = m.log; }
       items.push(it);
     });
     tagChain = tagChain.then(function () { return storeP; }).then(function (s) {
@@ -1237,7 +1317,7 @@ main.rvmode { padding-block: 4px 20px; }
     (items || []).forEach(function (it) {
       if (!it || !it.key) return;
       if (it.tags) tagMap[it.key] = it.tags.slice();
-      if (it.spans || it.status) labMeta[it.key] = { spans: (it.spans || []).slice(), status: it.status || '', at: it.at || 0 };
+      if (it.spans || it.status || it.log) labMeta[it.key] = { spans: (it.spans || []).slice(), status: it.status || '', at: it.at || 0, log: (it.log || []).slice() };
     });
   }
   storeP.then(function (s) {
@@ -1282,8 +1362,32 @@ main.rvmode { padding-block: 4px 20px; }
   function tagUse(id) {
     return tagAnswers().filter(function (a) { return tagsOf(a).indexOf(id) >= 0; }).length;
   }
+  // Change log for one answer's tags and labels; it feeds the submission's history of changes.
+  function logLab(key, entry) {
+    var m = labMeta[key] || (labMeta[key] = { spans: [], status: '', at: 0 }), uid = store ? store.uid : '', last;
+    m.log = m.log || [];
+    last = m.log[m.log.length - 1];
+    entry.at = Date.now();
+    if (entry.type === 'tags' && !entry.ai && last && last.type === 'tags' && !last.ai && last.by === uid && entry.at - last.at < 600000) {
+      // Several tag clicks in a row are one change; a tag added and then removed again cancels out.
+      entry.add.forEach(function (n) { var i = last.del.indexOf(n); if (i >= 0) last.del.splice(i, 1); else if (last.add.indexOf(n) < 0) last.add.push(n); });
+      entry.del.forEach(function (n) { var i = last.add.indexOf(n); if (i >= 0) last.add.splice(i, 1); else if (last.del.indexOf(n) < 0) last.del.push(n); });
+      last.at = entry.at;
+      if (!last.add.length && !last.del.length) m.log.pop();
+    } else {
+      entry.by = uid;
+      m.log.push(entry);
+    }
+    m.log = m.log.slice(-30);
+  }
+  function tagName(id) {
+    var name = id;
+    taxonomy.forEach(function (g) { g.tags.forEach(function (t) { if (t.id === id) name = t.name; }); });
+    return name;
+  }
   function toggleTag(a, id) {
     var list = tagsOf(a).slice(), i = list.indexOf(id);
+    logLab(a.key, { type: 'tags', add: i >= 0 ? [] : [tagName(id)], del: i >= 0 ? [tagName(id)] : [] });
     if (i >= 0) list.splice(i, 1); else list.push(id);
     tagMap[a.key] = list;
     tg.note = '';
@@ -1312,7 +1416,9 @@ main.rvmode { padding-block: 4px 20px; }
         + 'Reply with only JSON in the form {"tags": ["id", "id"]}.', { modelTier: 'quick' });
     }).then(function (r) {
       var list = tagsOf(a).slice(), added = 0;
-      ((r && r.tags) || []).forEach(function (id) { if (typeof id === 'string' && tagExists(id) && list.indexOf(id) < 0) { list.push(id); added++; } });
+      var names = [];
+      ((r && r.tags) || []).forEach(function (id) { if (typeof id === 'string' && tagExists(id) && list.indexOf(id) < 0) { list.push(id); names.push(tagName(id)); added++; } });
+      if (added) logLab(a.key, { type: 'tags', ai: true, add: names, del: [] });
       tagMap[a.key] = list;
       tg.note = added ? 'Claude added ' + added + (added === 1 ? ' tag.' : ' tags.') + ' Remove any that do not fit.' : 'Claude found no further tags to add.';
       if (added) saveTagging();
@@ -1479,6 +1585,7 @@ main.rvmode { padding-block: 4px 20px; }
     }
     m = metaFor(a.key);
     m.spans.push({ start: start, end: end, tag: tagId });
+    logLab(a.key, { type: 'region', op: 'add', label: tagName(tagId), quote: text.slice(start, end).slice(0, 200) });
     m.at = Date.now();
     lb.note = ''; lb.region = null;
     saveTagging();
@@ -1487,6 +1594,7 @@ main.rvmode { padding-block: 4px 20px; }
   function removeSpan(a, sp) {
     var m = metaFor(a.key);
     m.spans = m.spans.filter(function (x) { return !(x.start === sp.start && x.end === sp.end && x.tag === sp.tag); });
+    logLab(a.key, { type: 'region', op: 'remove', label: tagName(sp.tag), quote: String(a.row.value).slice(sp.start, sp.end).slice(0, 200) });
     m.at = Date.now();
     lb.region = null;
     saveTagging();
@@ -1512,6 +1620,7 @@ main.rvmode { padding-block: 4px 20px; }
   function finishTask(a, status) {
     var all = lbTasks(), i = all.map(function (x) { return x.key; }).indexOf(a.key), m = metaFor(a.key), next;
     m.status = status; m.at = Date.now();
+    logLab(a.key, { type: 'status', status: status });
     if (status === 'submitted' && !tagMap[a.key]) tagMap[a.key] = tagsOf(a);
     saveTagging();
     next = all.slice(i + 1).concat(all.slice(0, i)).filter(function (x) { return !metaOf(x.key).status; })[0];
@@ -1772,7 +1881,11 @@ main.rvmode { padding-block: 4px 20px; }
     if (state.at === 'review') { submit(); return; }
     if (state.editing) {
       // Editing from the summary: stamp the change, finish any question the edit opened up, then return to the summary.
-      if (q && !snapEmpty && sig(q) !== snap) state.edited[q.id] = Date.now();
+      if (q && !snapEmpty && sig(q) !== snap) {
+        state.edited[q.id] = Date.now();
+        state.editLog = state.editLog || {};
+        state.editLog[q.id] = (state.editLog[q.id] || []).concat([{ at: state.edited[q.id], from: snapText, to: display(q) }]).slice(-20);
+      }
       todo = visible().filter(function (x) { return validate(x); })[0];
       if (todo && todo !== q) { go(todo.id, 'fwd'); return; }
       state.editing = false;
@@ -2196,7 +2309,7 @@ main.rvmode { padding-block: 4px 20px; }
     } else {
       var n = vis.indexOf(q) + 1;
       sec.classList.add('hang');
-      if (dir !== 'stay') { snap = sig(q); snapEmpty = q.type !== 'sign' && q.type !== 'risk' && state.answers[q.id] == null; }
+      if (dir !== 'stay') { snap = sig(q); snapText = display(q); snapEmpty = q.type !== 'sign' && q.type !== 'risk' && state.answers[q.id] == null; }
       sec.appendChild(h('div', { class: 'num' }, String(n), h('span', { 'aria-hidden': 'true', text: '→' })));
       sec.appendChild(h('div', { class: 'head' },
         q.type === 'risk' ? h('div', { class: 'badges' }, h('span', { class: 'tag', text: q.sub }), h('span', { class: 'tip', text: MATRIX })) : null,
