@@ -460,7 +460,7 @@ label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animat
 .v2-search { display: flex; flex-direction: column; gap: 8px; }
 .v2-searchrow { display: flex; align-items: stretch; gap: 8px; }
 .v2-searchrow .start-searchbox { flex: 1; min-width: 0; }
-.v2-searchrow .btn { height: auto; }
+.v2-searchrow .start-search { box-sizing: border-box; height: 42px; padding-block: 0; font-size: 15px; }
 .v2-list { display: flex; flex-direction: column; gap: 24px; }
 .v2-rows { display: flex; flex-direction: column; gap: 8px; }
 .v2-opt { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 14px; font-weight: 500; }
@@ -3044,8 +3044,7 @@ button.v2-opt:hover { background: var(--muted); }
       if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
     });
     results.hidden = true;
-    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search),
-      withButton ? h('button', { type: 'button', class: 'btn act', id: idp + 'search-go', text: 'Search', onclick: function () { show(); search.focus(); } }) : null));
+    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search)));
     wrap.appendChild(results);
     return wrap;
   }
@@ -3417,12 +3416,6 @@ button.v2-opt:hover { background: var(--muted); }
         headOf('Choose risks', 'Select the risks that you see in the organisation. ',
           h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }));
         sec.appendChild(v2Search(la, addPick, true, 'f-'));
-        if (n) {
-          var chips = h('div', { class: 'chips picked' });
-          w.picks.forEach(function (v, i) { chips.appendChild(h('button', { type: 'button', class: 'chip act', id: 'v3-chip-' + i, 'aria-label': 'Remove ' + v3Name(v), onclick: function () { toggle(v); } }, v3Name(v), h('span', { 'aria-hidden': 'true', text: ' ×' }))); });
-          chips.appendChild(h('button', { type: 'button', class: 'chip act', id: 'v3-clear', 'aria-pressed': 'true', onclick: function () { w.picks = []; render('stay'); } }, 'Clear all selections', h('span', { 'aria-hidden': 'true', text: ' ×' })));
-          sec.appendChild(chips);
-        }
         var listEl = h('div', { class: 'v2-list' }), mine = la ? opts.filter(function (o) { return o.area === la; }) : [];
         if (mine.length) listEl.appendChild(group('Risks in my area', rows(mine, 'v3-mine-')));
         if (ownPicks.length || (state.ownRisks || []).length) listEl.appendChild(group('Added by me', rows((state.ownRisks || []).map(function (nm) { return { v: 'own:' + nm, l: nm }; }), 'v3-own-')));
