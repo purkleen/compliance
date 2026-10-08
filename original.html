@@ -554,13 +554,12 @@ main.rvmode { padding-block: 4px 20px; }
   // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
   var CUR = 'original', inClaude = !!window.claude || /claude/.test(location.hostname);
   var V = [
-    { id: 'original', name: 'Original', file: 'original.html', url: 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' },
-    { id: 'alternative-01', name: 'Alternative 01', file: 'alternative-01.html', url: 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' },
-    { id: 'version-02', name: 'Version 02', file: 'version-02.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
-    { id: 'version-03', name: 'Version 03', file: 'index.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
+    { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
+    { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
     { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
+  document.getElementById('ver-name').textContent = 'Versions';
   V.forEach(function (v) {
     var a = document.createElement('a'), here = v.id === CUR;
     a.id = 'ver-' + v.id;

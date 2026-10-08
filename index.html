@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Risk Assessment Version 03</title>
+<title>Risk Assessment: Free hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 html { color-scheme: light; }
@@ -453,15 +453,11 @@ label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animat
 @keyframes magnifier { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(1px, -1px) rotate(-5deg); } 50% { transform: translate(0, -2px) rotate(5deg); } 75% { transform: translate(-1px, -1px) rotate(-5deg); } }
 .start-searchbox:hover .magnifier-group { animation: magnifier 1s ease-in-out; }
 @media (prefers-reduced-motion: reduce) { .start-searchbox:hover .magnifier-group { animation: none; } }
-.v3-h { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
-.go.end { justify-content: flex-end; }
-.chip.static { cursor: default; display: inline-flex; align-items: center; }
-.chip.static:hover { background: var(--background); }
 .v2-search { display: flex; flex-direction: column; gap: 8px; }
 .v2-searchrow { display: flex; align-items: stretch; gap: 8px; }
 .v2-searchrow .start-searchbox { flex: 1; min-width: 0; }
-.v2-searchrow .start-search { box-sizing: border-box; height: 42px; padding-block: 0; font-size: 15px; }
-.v2-list { display: flex; flex-direction: column; gap: 24px; }
+.v2-searchrow .btn { height: auto; }
+.v2-list { display: flex; flex-direction: column; gap: 12px; }
 .v2-rows { display: flex; flex-direction: column; gap: 8px; }
 .v2-opt { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 14px; font-weight: 500; }
 button.v2-opt { cursor: pointer; }
@@ -589,7 +585,7 @@ button.v2-opt:hover { background: var(--muted); }
 .error { background: var(--destructive-tint); color: var(--destructive); border: 1px solid var(--destructive-border); border-radius: var(--radius); padding: 8px 12px; font-size: 14px; font-weight: 500; }
 .flags { margin: 0; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; font-size: 14px; }
 
-.flags.success { display: flex; align-items: center; justify-content: flex-start; gap: 8px; text-align: left; background: var(--success-tint); border-color: var(--success-border); color: var(--success); }
+.flags.success { display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; background: var(--success-tint); border-color: var(--success-border); color: var(--success); }
 .flags.success > span:last-child { min-width: 0; }
 .ok-mark { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--success); color: var(--success-tint); font-size: 11px; font-weight: 700; line-height: 1; }
 
@@ -633,15 +629,14 @@ button.v2-opt:hover { background: var(--muted); }
 <script>
 (function () {
   // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
-  var CUR = 'version-03', inClaude = !!window.claude || /claude/.test(location.hostname);
+  var CUR = 'version-02', inClaude = !!window.claude || /claude/.test(location.hostname);
   var V = [
-    { id: 'original', name: 'Original', file: 'original.html', url: 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' },
-    { id: 'alternative-01', name: 'Alternative 01', file: 'alternative-01.html', url: 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' },
-    { id: 'version-02', name: 'Version 02', file: 'version-02.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
-    { id: 'version-03', name: 'Version 03', file: 'index.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
+    { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
+    { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
     { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
+  document.getElementById('ver-name').textContent = 'Versions';
   V.forEach(function (v) {
     var a = document.createElement('a'), here = v.id === CUR;
     a.id = 'ver-' + v.id;
@@ -947,7 +942,7 @@ button.v2-opt:hover { background: var(--muted); }
     state.mode = 'form';
     go('welcome', 'fwd');
   }
-  function resetForm() { state.v3 = null; state.items = []; state.draft = null; state.ownRisks = []; state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editLog = {}; state.editing = false; }
+  function resetForm() { state.items = []; state.draft = null; state.ownRisks = []; state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editLog = {}; state.editing = false; }
   function submit() {
     var vis = visible(), now = new Date(), rows = [];
     GROUPS.forEach(function (g) {
@@ -2599,7 +2594,7 @@ button.v2-opt:hover { background: var(--muted); }
   var sfShown = 0;
   // A link can be sent for one area: the page address ends in "#" plus the area's id. The form then opens already set
   // to that area, and the person only chooses risk categories and names.
-  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' : location.href.split('#')[0];
+  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' : location.href.split('#')[0];
   function linkArea() {
     var id = (location.hash || '').replace(/^#/, '');
     return id && areaTags().some(function (t) { return t.id === id; }) ? id : '';
@@ -2736,7 +2731,7 @@ button.v2-opt:hover { background: var(--muted); }
           if (it.unsorted) {
             var uk = 'unsorted:' + it.kind;
             used[uk] = (used[uk] || 0) + 1;
-            row = { group: 'To be sorted', label: (it.kind === 'recording' ? 'Audio recording' : it.kind === 'note' ? 'Other risks, in the person\u2019s own words' : 'Uploaded files') + (used[uk] > 1 ? ' (' + used[uk] + ')' : ''), value: unsortedText(it), unsorted: true, files: it.files.map(function (f) { return f.name; }) };
+            row = { group: 'To be sorted', label: (it.kind === 'recording' ? 'Audio recording' : 'Uploaded files') + (used[uk] > 1 ? ' (' + used[uk] + ')' : ''), value: unsortedText(it), unsorted: true, files: it.files.map(function (f) { return f.name; }) };
             rows.push(row);
             return;
           }
@@ -2846,7 +2841,6 @@ button.v2-opt:hover { background: var(--muted); }
     if (i >= 0) state.items[i] = item; else state.items.push(item);
     state.draft = null; state.files.thoughts = [];
     errMsg = ''; sfShown = 0;
-    if (state.v3 && state.v3.step === 'detail') { if (state.v3.stay) { state.v3.stay = false; return; } v3Advance(); return; }
     render('stay');
   }
   function draftSkip() {
@@ -2969,7 +2963,6 @@ button.v2-opt:hover { background: var(--muted); }
     render('stay');
   }
   function unsortedText(it) {
-    if (it.kind === 'note') return it.text || 'Files added with no description, to be sorted into the form later.';
     return it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + '), left to be sorted into the form later.' : 'Uploaded to be sorted into the form later.';
   }
   var recState = { on: false, mr: null, chunks: [], t0: 0, timer: null, stream: null };
@@ -3045,7 +3038,8 @@ button.v2-opt:hover { background: var(--muted); }
       if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
     });
     results.hidden = true;
-    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search)));
+    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search),
+      withButton ? h('button', { type: 'button', class: 'btn act', id: idp + 'search-go', text: 'Search', onclick: function () { show(); search.focus(); } }) : null));
     wrap.appendChild(results);
     return wrap;
   }
@@ -3081,84 +3075,6 @@ button.v2-opt:hover { background: var(--muted); }
       });
     }
     return wrap;
-  }
-  // ---- version-03: a step-by-step flow. Choose risks, add others in free text, review, add media, then describe each risk. ----
-  function v3() { return state.v3 || (state.v3 = { step: 'choose', picks: [], idx: 0, extra: { text: '', files: [] } }); }
-  function v3Cards() {
-    var cards = h('div', { class: 'start-cards' }), inClaude = !!window.claude;
-    // Upload
-    var up = h('input', { type: 'file', class: 'pick act', id: 'start-upload', multiple: true, accept: ACCEPT, 'aria-label': 'Upload documents or media' });
-    function take(list) {
-      var ok = [], bad = '';
-      Array.prototype.forEach.call(list || [], function (f) {
-        if (!kindOf(f)) bad = '“' + f.name + '” is not a supported file type.';
-        else if (f.size > MAX_BYTES) bad = '“' + f.name + '” is larger than 100 MB.';
-        else if (ok.length < MAX_FILES) ok.push(f);
-      });
-      if (ok.length) addUnsorted('upload', ok, 0);
-      if (bad) { errMsg = bad; showError(); }
-    }
-    up.addEventListener('change', function (e) { take(e.target.files); e.target.value = ''; });
-    var upCard = h('label', { class: 'start-card', for: 'start-upload' }, up, icon('upload', 20),
-      h('span', { class: 'start-title', text: 'Upload documents or media' }),
-      h('span', { class: 'tip', text: 'Add files now and leave the details for later. You can also drop them here.' }));
-    upCard.addEventListener('dragover', function (e) { e.preventDefault(); upCard.classList.add('over'); });
-    upCard.addEventListener('dragleave', function () { upCard.classList.remove('over'); });
-    upCard.addEventListener('drop', function (e) { e.preventDefault(); upCard.classList.remove('over'); take(e.dataTransfer && e.dataTransfer.files); });
-    cards.appendChild(upCard);
-    // Recording
-    var recCard = h('button', { type: 'button', class: 'start-card act' + (recState.on ? ' on' : ''), id: 'start-record', onclick: function () { if (recState.on) stopRecording(); else startRecording(); } },
-      recState.on ? h('span', { class: 'rec-dot on', 'aria-hidden': 'true' }) : icon('mic', 20),
-      h('span', { class: 'start-title' }, recState.on ? 'Stop recording ' : 'Leave an audio recording', recState.on ? h('span', { id: 'rec-time', class: 'at', text: clock((Date.now() - recState.t0) / 1000) }) : null),
-      h('span', { class: 'tip', text: recState.on ? 'Recording… Say what you have seen, then press here to stop.' : 'Say it in your own words. It is saved as it is and sorted into the form later.' }));
-    recCard.disabled = inClaude;
-    if (inClaude) recCard.title = 'Recording works when this page is opened on its own, outside Claude';
-    cards.appendChild(recCard);
-    return cards;
-  }
-  function v3Name(v) {
-    var o;
-    if (v.indexOf('own:') === 0) return v.slice(4);
-    o = pickOptions().filter(function (x) { return x.v === v; })[0];
-    return o ? o.l : '';
-  }
-  function v3ItemFor(v) { return (state.items || []).filter(function (it) { return !it.unsorted && (it.picks || [])[0] === v; })[0]; }
-  // Leave the current step, keeping what was typed, and set up the next one.
-  function v3Enter(step, idx) {
-    var w = v3(), it, note;
-    if (w.step === 'extra' && state.draft && state.draft.v3extra) w.extra = { text: state.draft.text || '', files: (state.files.thoughts || []).slice() };
-    stopDraftBusy();
-    state.draft = null; state.files.thoughts = [];
-    w.step = step; w.idx = idx || 0;
-    if (step === 'extra') { state.draft = { v3extra: true, text: w.extra.text, shown: true }; state.files.thoughts = w.extra.files.slice(); }
-    if (step === 'detail') {
-      it = v3ItemFor(w.picks[w.idx]);
-      state.draft = it ? { id: it.id, picks: [w.picks[w.idx]], text: it.text, thread: it.fu ? clone(it.fu) : null, shown: true } : { picks: [w.picks[w.idx]], shown: true };
-      state.files.thoughts = it ? it.files.slice() : [];
-    }
-    if (step === 'summary') {
-      // Keep only what is still selected, make sure every selected risk has a row, and carry the free-text note along.
-      state.items = (state.items || []).filter(function (x) { return x.unsorted ? x.kind !== 'note' : w.picks.indexOf((x.picks || [])[0]) >= 0; });
-      w.picks.forEach(function (v) {
-        var dd;
-        if (v3ItemFor(v)) return;
-        dd = { picks: [v] }; derive(dd);
-        state.items.push({ id: newId('i'), area: dd.area, areas: dd.areas.slice(), picks: [v], categories: dd.categories.slice(), risks: dd.risks.slice(), text: '', files: [], fu: null, thread: [] });
-      });
-      state.items.sort(function (x, y) { return (x.unsorted ? 1 : 0) - (y.unsorted ? 1 : 0) || w.picks.indexOf((x.picks || [])[0]) - w.picks.indexOf((y.picks || [])[0]); });
-      if (w.extra.text.trim() || w.extra.files.length) state.items.push({ id: newId('i'), unsorted: true, kind: 'note', dur: 0, area: '', areas: [], picks: [], categories: [], risks: [], text: w.extra.text.trim(), files: w.extra.files.slice(), thread: [] });
-    }
-    errMsg = ''; sfShown = 0;
-  }
-  function v3Go(step, idx, dir) {
-    v3Enter(step, idx);
-    render(dir || 'fwd');
-    var box = step === 'detail' || step === 'extra' ? document.getElementById('f-thoughts') : null;
-    if (box) box.focus();
-  }
-  function v3Advance() {
-    var w = v3();
-    if (w.idx + 1 < w.picks.length) v3Go('detail', w.idx + 1); else v3Go('summary');
   }
   function startBlock(hasItems, la) {
     var st = v2(), wrap = h('div', { class: 'start' }), inClaude = !!window.claude, cards = h('div', { class: 'start-cards' });
@@ -3336,7 +3252,7 @@ button.v2-opt:hover { background: var(--muted); }
           a.text = e.target.value; clearError();
           if (fb && a.thread) fb.hidden = a.thread.src !== e.target.value.trim();
         },
-        onkeydown: function (e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); (req ? submitSimple : a.v3extra ? function () {} : state.v3 && state.v3.step === 'detail' ? v3Next : draftAdd)(); } } });
+        onkeydown: function (e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); (req ? submitSimple : draftAdd)(); } } });
       box.value = a.text || '';
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
@@ -3373,124 +3289,23 @@ button.v2-opt:hover { background: var(--muted); }
       ].forEach(function (w) { why.appendChild(h('div', { class: 'intro-card' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] }))); });
       sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'Why we are asking you' }), why));
       var how = h('ol', { class: 'intro-steps' });
-      [['Add a risk', 'Search the list, pick from your own area or another one, or create your own if nothing fits.'],
-       ['Say what you see', 'Write or dictate your thoughts and attach documents or media. Short on time? Upload files or leave an audio recording and it is sorted into the form later.'],
-       ['Answer a follow-up, if one comes up', 'The assistant may ask a short question to fill a gap. You can skip it.'],
-       ['Check the list and submit', 'You can edit or remove anything before you send it.'],
-       ['Compliance takes it from there', 'They review and tag what you sent, may ask another area to add what you could not, and may come back to you with questions.']
+      [['Find or name a risk', 'Search the list, open the risks of your own area, browse the other areas, or type a risk of your own.'],
+       ['Say what you see', 'Describe the risk in your own words. Write or dictate, and attach documents or media. The assistant may ask a short follow-up question, which you can skip.'],
+       ['Add as many as you like', 'Each risk lands on your list and you are back at the start to add the next one. You can edit or remove anything on the list.'],
+       ['Short on time?', 'Upload files or leave an audio recording instead. They are saved as they are and sorted into the form later.'],
+       ['Submit your risks', 'When the list is ready, press “Submit risks”. Compliance reviews what you sent, may ask another area to add what you could not, and may come back to you with questions.']
       ].forEach(function (w, i) { how.appendChild(h('li', null, h('span', { class: 'intro-n', 'aria-hidden': 'true', text: String(i + 1) }), h('span', { class: 'intro-txt' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] })))); });
       sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'How it works' }), how));
       sec.appendChild(h('div', { class: 'meta' }, h('span', { text: 'A few minutes per risk' }), h('span', { text: 'Every part is optional' }), h('span', { text: 'Add as many risks as you like' })));
       sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'intro-start', text: items.length || state.draft ? 'Back to your risks' : 'Start', onclick: function () { state.started = true; render('fwd'); } })));
       return sec;
     }
-    var w = v3();
-    function v3Next() {
-      var d = state.draft, text = (d.text || '').trim();
-      if (draftBusy) return;
-      if (!text) { d.thread = null; draftFinish(); return; }
-      draftAdd();
-    }
-    if (w.step !== 'summary') {
-      var opts = v2Opts(), n = w.picks.length;
-      var toggle = function (v) { var i = w.picks.indexOf(v); if (i >= 0) w.picks.splice(i, 1); else w.picks.push(v); errMsg = ''; render('stay'); };
-      var addPick = function (v) { if (w.picks.indexOf(v) < 0) w.picks.push(v); errMsg = ''; render('stay'); };
-      var headOf = function (title, help, extra) { sec.appendChild(h('div', { class: 'head' }, h('h1', { class: 'big', text: title }), h('p', { class: 'help' }, help, extra || null))); };
-      var nav = function (back, nextLabel, next, more) {
-        var row = h('div', { class: 'go end' }, more || null,
-          h('button', { type: 'button', class: 'btn ghost act', id: 'v3-back', onclick: back, text: 'Back' }),
-          h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: next, text: nextLabel }));
-        sec.appendChild(row);
-        return row;
-      };
-      var rows = function (list, idp) {
-        var boxEl = h('div', { class: 'v2-rows' });
-        list.forEach(function (o, i) {
-          boxEl.appendChild(h('button', { type: 'button', class: 'v2-opt act', id: idp + i, 'aria-pressed': w.picks.indexOf(o.v) >= 0 ? 'true' : 'false', onclick: function () { toggle(o.v); } },
-            h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l })));
-        });
-        return boxEl;
-      };
-      var group = function (title, body, big) { return h('div', { class: 'pick-group' }, h(big ? 'h2' : 'h3', { class: big ? 'v3-h' : 'intro-h', text: title }), body); };
-      var ownPicks = w.picks.filter(function (v) { return v.indexOf('own:') === 0; });
-      if (w.step === 'choose') {
-        headOf('Choose risks', 'Select the risks that you see in the organisation. ',
-          h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }));
-        sec.appendChild(v2Search(la, addPick, true, 'f-'));
-        var listEl = h('div', { class: 'v2-list' }), mine = la ? opts.filter(function (o) { return o.area === la; }) : [];
-        if (mine.length) listEl.appendChild(group('Risks in my area', rows(mine, 'v3-mine-')));
-        if (ownPicks.length || (state.ownRisks || []).length) listEl.appendChild(group('Added by me', rows((state.ownRisks || []).map(function (nm) { return { v: 'own:' + nm, l: nm }; }), 'v3-own-')));
-        var others = areaTags().filter(function (t) { return t.id !== la && opts.some(function (o) { return o.area === t.id; }); });
-        if (others.length && mine.length) listEl.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
-        others.forEach(function (t) { listEl.appendChild(group(t.name, rows(opts.filter(function (o) { return o.area === t.id; }), 'v3-' + t.id + '-'))); });
-        sec.appendChild(listEl);
-        nav(function () { state.started = false; render('back'); }, n ? 'Continue with ' + n + (n === 1 ? ' risk' : ' risks') : 'Continue', function () { v3Go('extra'); });
-      } else if (w.step === 'extra') {
-        headOf('Add additional risks', 'Is anything missing from the list? Describe it in your own words; compliance will sort it into the form later.');
-        if (n) {
-          var sofar = h('div', { class: 'chips' });
-          w.picks.forEach(function (v) { sofar.appendChild(h('span', { class: 'chip static', text: v3Name(v) })); });
-          sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Selected risks so far' }), sofar));
-        }
-        step('Describe other risks you can think of', 'Optional', thoughts(''));
-        nav(function () { v3Go('choose', 0, 'back'); }, 'Continue', function () { v3Go('selected'); });
-      } else if (w.step === 'selected') {
-        headOf('Selected risks', 'Risks you have selected so far. Remove any that do not belong, or search to add more.');
-        sec.appendChild(v2Search(la, addPick, true, 'f-'));
-        var sel = h('div', { class: 'v2-list' });
-        var selRows = function (vals, idp) {
-          var boxEl = h('div', { class: 'v2-rows' });
-          vals.forEach(function (v, i) { boxEl.appendChild(h('div', { class: 'v2-opt' }, h('span', { class: 'sf-txt', text: v3Name(v) }),
-            h('button', { type: 'button', class: 'edit act', id: idp + i, 'aria-label': 'Remove ' + v3Name(v), onclick: function () { toggle(v); }, text: 'Remove' }))); });
-          return boxEl;
-        };
-        var areaOfPick = function (v) { var o = opts.filter(function (x) { return x.v === v; })[0]; return o ? o.area : ''; };
-        var mineSel = w.picks.filter(function (v) { return la && areaOfPick(v) === la; });
-        if (mineSel.length) sel.appendChild(group('Risks in my area', selRows(mineSel, 'v3-rm-mine-')));
-        if (ownPicks.length) sel.appendChild(group('Added by me', selRows(ownPicks, 'v3-rm-own-')));
-        var otherAreas = areaTags().filter(function (t) { return t.id !== la && w.picks.some(function (v) { return areaOfPick(v) === t.id; }); });
-        if (otherAreas.length && (mineSel.length || ownPicks.length)) sel.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
-        otherAreas.forEach(function (t) { sel.appendChild(group(t.name, selRows(w.picks.filter(function (v) { return areaOfPick(v) === t.id; }), 'v3-rm-' + t.id + '-'))); });
-        if (!n) sel.appendChild(h('p', { class: 'risk-empty', text: 'No risks selected. You can go back and choose some, or continue with only your own description and files.' }));
-        sec.appendChild(sel);
-        if (w.extra.text.trim()) sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Other risks, in your own words' }), h('div', { class: 'v2-opt' }, clipped(w.extra.text.trim()))));
-        nav(function () { v3Go('extra', 0, 'back'); }, 'Continue', function () { v3Go('media'); });
-      } else if (w.step === 'media') {
-        headOf('Add documents and media', 'Optional. Add supporting documents and media that may help us identify more risks.');
-        sec.appendChild(h('div', { class: 'start' }, v3Cards()));
-        var added = items.filter(function (it) { return it.unsorted && it.kind !== 'note'; });
-        if (added.length) {
-          var addedBox = h('div', { class: 'v2-rows' });
-          added.forEach(function (it, i) { addedBox.appendChild(h('div', { class: 'v2-opt' },
-            h('span', { class: 'sf-txt', text: it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + ')' : it.files.map(function (f) { return f.name; }).join(', ') }),
-            h('button', { type: 'button', class: 'edit act', id: 'v3-rm-media-' + i, onclick: function () { state.items = state.items.filter(function (x) { return x !== it; }); render('stay'); }, text: 'Remove' }))); });
-          sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Added' }), addedBox));
-        }
-        err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg }); err.hidden = !errMsg; sec.appendChild(err);
-        nav(function () { v3Go('selected', 0, 'back'); }, 'Continue', function () { if (n) v3Go('detail', 0); else v3Go('summary'); });
-      } else {
-        var busy1 = draftBusy && draftBusy.kind === 'first', lastOne = w.idx + 1 >= n;
-        headOf('Risk details (' + (w.idx + 1) + '/' + n + ')', 'Provide details of the risk you selected. You can leave it empty and move on.');
-        sec.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: v3Name(w.picks[w.idx]) })));
-        step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
-        if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
-        var navRow = nav(function () {
-          var back = w.idx;
-          stopDraftBusy();
-          w.stay = true; draftFinish();
-          if (back > 0) v3Go('detail', back - 1, 'back'); else v3Go('media', 0, 'back');
-        }, busy1 ? 'Checking your answer…' : lastOne ? 'Continue to summary' : 'Next risk', v3Next,
-          busy1 ? h('button', { type: 'button', class: 'edit act', id: 'skip-ai', onclick: draftSkip, text: 'Skip follow-up' }) : null);
-        navRow.querySelector('#ok').disabled = !!busy1;
-      }
-      return sec;
-    }
     sec.appendChild(h('div', { class: 'head' },
       la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) }),
         h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Change' })) : null,
-      h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Summary' }),
+      h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Add new risk assessment' }),
       state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
-        : h('p', { class: 'help' }, 'Check what you are about to send. You can edit or remove anything before you submit. ',
+        : h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
         h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
     // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
     var shownItems = items.filter(function (it) { return !(state.draft && state.draft.id === it.id); });
@@ -3583,22 +3398,14 @@ button.v2-opt:hover { background: var(--muted); }
       sfShown = shown;
     } else {
       sfShown = 0;
-      if (!items.length) sec.lastChild.textContent = 'Nothing to submit yet. Go back to choose risks, describe one in your own words, or add files.';
+      // After a risk is added the person is back on the start screen: the list so far, a way to send it, and the ways to add more.
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
+      // The ways to add come first; the list so far (or the empty note) and the button to send it sit below them.
+      var listEl = sec.querySelector('.table-wrap') || sec.querySelector('.risk-empty');
+      sec.insertBefore(startBlock(items.length, la), listEl);
       sec.appendChild(err);
-      buttons = h('div', { class: 'go' });
-      if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' item' : ' items') }));
-      buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'v3-back', onclick: function () {
-        // What is in the table is what counts from here on, so the selection follows it.
-        w.picks = items.filter(function (it) { return !it.unsorted && (it.picks || []).length; }).map(function (it) { return it.picks[0]; });
-        if (w.picks.length) v3Go('detail', w.picks.length - 1, 'back'); else v3Go('media', 0, 'back');
-      }, text: 'Back' }));
-      buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () {
-        w.picks = items.filter(function (it) { return !it.unsorted && (it.picks || []).length; }).map(function (it) { return it.picks[0]; });
-        v3Go('choose', 0, 'back');
-      }, text: 'Add more risks' }));
-      sec.appendChild(buttons);
+      if (items.length) sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit risks' })));
     }
     open = requests.filter(function (r) { return r.status === 'open'; });
     if (open.length) {
