@@ -463,6 +463,7 @@ label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animat
 .q.qf .qf-keys { margin: -8px 0 0; }
 .q.qf .enter kbd { margin-left: 2px; }
 .qf-row { align-items: flex-start; }
+.sf.has-table .qf-answers { max-width: 720px; }
 .qf-qa { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .qf-q { font-weight: 500; }
 .qf-a { font-weight: 400; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -2740,7 +2741,12 @@ button.v2-opt:hover { background: var(--muted); }
       saveRequest(answered);
     } else {
       items = state.items || [];
-      if (!items.length) { errMsg = 'Add at least one risk before you submit.'; showError(); return; }
+      var qfRows = [];
+      if (state.qf) QF.forEach(function (q) {
+        var val = state.qf.ans[q.id] ? qfAnswerText(q, state.qf.ans[q.id]) : '';
+        if (val) qfRows.push({ group: 'Questionnaire', label: q.t, value: val });
+      });
+      if (!items.length && !qfRows.length) { errMsg = 'Answer a question or add at least one risk before you submit.'; showError(); return; }
       // Risks in the same area sit together, in the order of the areas in the matrix.
       order = areaTags().map(function (t) { return t.id; });
       items.map(function (it, i) { return { it: it, i: i }; })
@@ -2765,6 +2771,7 @@ button.v2-opt:hover { background: var(--muted); }
           areas[it.area] = 1; it.categories.forEach(function (c) { cats[c] = 1; });
           rows.push(row);
         });
+      rows = qfRows.concat(rows);
       rec.title = 'Risk assessment' + (Object.keys(areas).length === 1 ? ': ' + tagName(Object.keys(areas)[0]) : '');
       rec.matrixArea = Object.keys(areas).length === 1 ? Object.keys(areas)[0] : '';
       rec.matrixCat = Object.keys(cats).length === 1 ? Object.keys(cats)[0] : '';
@@ -3099,48 +3106,32 @@ button.v2-opt:hover { background: var(--muted); }
   // ---- Questions first: a questionnaire, one question per screen, then anything else, files, and a summary. ----
   var YN = ['Yes', 'No', 'Not sure'];
   var QF_A = 'General compliance and anti-corruption', QF_B = 'Operations, quality, manufacturing and supply chain';
+  // Each question names the risks it points to: `detect` adds them to the person's list, `suggest` offers them.
+  // Risks are named by a fragment of their label in the matrix.
   var QF = [
     { id: 'culture', part: QF_A, sec: 'Governance, culture and tone at the top', type: 'scale', lo: 'Very weak', hi: 'Very strong',
-      t: 'How do you assess the overall compliance culture within Industrial Operations?', detail: 'What makes you say that?' },
-    { id: 'shortcuts', part: QF_A, sec: 'Governance, culture and tone at the top', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Do you see any signs of shortcuts in processes that could indicate weakened adherence to standards?', detail: 'Where do you see them?' },
+      t: 'How do you assess the overall compliance culture within Industrial Operations?', detail: 'What makes you say that?',
+      map: function (v) { return v <= 2 ? { detect: ['organisational culture'], suggest: ['governance & internal'] } : v === 3 ? { suggest: ['organisational culture'] } : {}; } },
     { id: 'exposure', part: QF_A, sec: 'Anti-corruption risks in operational relationships', type: 'multi', none: 'No particular exposure',
       opts: ['Selection of contractors', 'Engineering services', 'Maintenance providers', 'Spare parts suppliers', 'Somewhere else', 'No particular exposure'],
-      t: 'Where in your area do you see the biggest potential exposure to corruption or conflicts of interest?', help: 'Choose as many as you like.', detail: 'Anything to add?' },
+      t: 'Where in your area do you see the biggest potential exposure to corruption or conflicts of interest?', help: 'Choose as many as you like.', detail: 'Anything to add?',
+      map: function (v) {
+        var out = { detect: [], suggest: [] };
+        if (v.indexOf('Selection of contractors') >= 0) out.detect.push('procurement governance');
+        if (v.indexOf('Engineering services') >= 0 || v.indexOf('Maintenance providers') >= 0 || v.indexOf('Spare parts suppliers') >= 0) out.detect.push('supplier non-compliance');
+        if (v.indexOf('Somewhere else') >= 0) out.suggest.push('contracting');
+        if (v.length && v.indexOf('No particular exposure') < 0) out.suggest.push('anti-corruption directive');
+        return out;
+      } },
     { id: 'proposals', part: QF_A, sec: 'Anti-corruption risks in operational relationships', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Have there been situations where employees were exposed to inappropriate proposals from external vendors?', help: 'For example gifts, benefits or \u201Cfast-track\u201D service offers.', detail: 'What happened? No names needed.' },
-    { id: 'speakup', part: QF_A, sec: 'Speak-up culture and incident reporting', type: 'scale', lo: 'Rarely', hi: 'Always',
-      t: 'Do you feel employees in Operations openly report issues, deviations or concerns?', detail: 'What makes you say that?' },
+      t: 'Have there been situations where employees were exposed to inappropriate proposals from external vendors?', help: 'For example gifts, benefits or “fast-track” service offers.', detail: 'What happened? No names needed.',
+      map: function (v) { return v === 'Yes' ? { detect: ['employee misconduct', 'anti-corruption directive'] } : v === 'Not sure' ? { suggest: ['employee misconduct', 'anti-corruption directive'] } : {}; } },
     { id: 'hesitate', part: QF_A, sec: 'Speak-up culture and incident reporting', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Are there any signs that individuals might hesitate to report problems due to fear of consequences or perceived pressure?', detail: 'What signs do you see?' },
+      t: 'Are there any signs that individuals might hesitate to report problems due to fear of consequences or perceived pressure?', detail: 'What signs do you see?',
+      map: function (v) { return v === 'Yes' ? { detect: ['reporting governance'], suggest: ['communication'] } : v === 'Not sure' ? { suggest: ['reporting governance'] } : {}; } },
     { id: 'gmp', part: QF_B, sec: 'GMP and regulatory compliance', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Do you observe any tension between productivity targets and GMP adherence?', detail: 'Where does it show?' },
-    { id: 'harmonized', part: QF_B, sec: 'Standardization across manufacturing sites', type: 'scale', lo: 'Not at all', hi: 'Fully',
-      t: 'Are operational processes sufficiently harmonized across the different production locations?', detail: 'Where are the biggest differences?' },
-    { id: 'consistent', part: QF_B, sec: 'Standardization across manufacturing sites', type: 'choice', opts: YN, when: ['No', 'Not sure'],
-      t: 'Are governance standards interpreted consistently across all production sites and locations?', help: 'SOPs, escalation rules, documentation requirements and approval procedures. Think of every site, for example Polfa Lublin.', detail: 'Which sites or standards differ?' },
-    { id: 'local', part: QF_B, sec: 'Oversight of high-risk operational processes', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Do you see any processes that rely too heavily on local governance rather than group-level governance?', detail: 'Which processes?' },
-    { id: 'contractors', part: QF_B, sec: 'Supplier, contractor and service-provider governance', type: 'multi', none: 'I see no risks here',
-      opts: ['Selection', 'Monitoring', 'Conflict-of-interest controls', 'Something else', 'I see no risks here'],
-      t: 'Where do you see risks in the governance of contractors?', help: 'Engineering firms, maintenance providers and service suppliers. Choose as many as you like.', detail: 'Anything to add?' },
-    { id: 'capex', part: QF_B, sec: 'Governance of investment projects', type: 'scale', lo: 'Not at all', hi: 'Fully',
-      t: 'Are investment projects governed with adequate control, accountability and transparency?', help: 'CAPEX, modernization and new equipment.', detail: 'What is missing?' },
-    { id: 'scope', part: QF_B, sec: 'Governance of investment projects', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Do you identify risks related to scope changes or unclear ownership?', detail: 'Which projects or decisions?' },
-    { id: 'projects', part: QF_B, sec: 'Escalation culture and issue governance', type: 'multi', none: 'None of these',
-      opts: ['Questionable vendor selection', 'Unclear scope changes', 'Schedule pressures', 'Quality concerns', 'None of these'],
-      t: 'In recent investment or modernization projects, which of these risks have you observed?', help: 'Choose as many as you like.', detail: 'Anything to add?' },
-    { id: 'escalate', part: QF_B, sec: 'Escalation culture and issue governance', type: 'scale', lo: 'Rarely', hi: 'Always',
-      t: 'Do employees escalate operational problems, deviations, safety concerns or governance issues early enough?', detail: 'What makes you say that?' },
-    { id: 'silent', part: QF_B, sec: 'Escalation culture and issue governance', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Are there signals of underreporting, \u201Csilent fixing\u201D or delayed escalation due to fear of consequences or production pressure?', detail: 'What signals do you see?' },
-    { id: 'interfaces', part: QF_B, sec: 'Cross-functional governance', type: 'scale', lo: 'Not at all', hi: 'Very well',
-      t: 'Are governance interfaces between Operations and other key functions working effectively?', help: 'Quality, Procurement, Legal, Finance and Compliance.', detail: 'Which interface needs the most attention?' },
-    { id: 'structure', part: QF_B, sec: 'Workforce governance and operational leadership', type: 'choice', opts: YN, when: ['No', 'Not sure'],
-      t: 'Is the current organizational structure within Operations adequate to maintain governance rigor during periods of change or rapid growth?', detail: 'What would need to change?' },
-    { id: 'gaps', part: QF_B, sec: 'Workforce governance and operational leadership', type: 'choice', opts: YN, when: ['Yes', 'Not sure'],
-      t: 'Are there areas where workload, staffing or competency gaps may weaken governance discipline?', detail: 'Which areas?' }
+      t: 'Do you observe any tension between productivity targets and GMP adherence?', detail: 'Where does it show?',
+      map: function (v) { return v === 'Yes' ? { detect: ['pharmaceutical'], suggest: ['dynamic regulatory'] } : v === 'Not sure' ? { suggest: ['pharmaceutical'] } : {}; } }
   ];
   var qfTimer = null;
   function qf() { return state.qf || (state.qf = { step: 'q', idx: 0, ans: {}, extra: { text: '', files: [] }, back: false, anim: '' }); }
@@ -3172,12 +3163,36 @@ button.v2-opt:hover { background: var(--muted); }
   function qfNext() {
     var w = qf();
     if (w.step !== 'q') return;
-    if (w.back) { w.back = false; qfGo('summary'); return; }
-    if (w.idx + 1 < QF.length) qfGo('q', w.idx + 1); else qfGo('extra');
+    if (w.back) { w.back = false; w.step = 'risks'; qfDetect(); v3Go('summary'); return; }
+    if (w.idx + 1 < QF.length) { qfGo('q', w.idx + 1); return; }
+    w.step = 'risks'; qfDetect();
+    v3Go('selected');
+  }
+  // Turn the answers into risks: some are added to the person's list, others only offered as suggestions.
+  function qfDetect() {
+    var w = qf(), r = v3(), opts = v2Opts(), found = [], sugg = [], why = {}, notes = {};
+    function find(key) { return opts.filter(function (o) { return o.l.toLowerCase().indexOf(key) >= 0; })[0]; }
+    QF.forEach(function (q) {
+      var a = w.ans[q.id], m;
+      if (!a || !qfHas(q, a)) return;
+      m = q.map(a.v);
+      (m.detect || []).forEach(function (k) {
+        var o = find(k);
+        if (!o) return;
+        if (found.indexOf(o.v) < 0) found.push(o.v);
+        why[o.v] = (why[o.v] ? why[o.v] + '\n\n' : '') + q.t + '\n' + qfAnswerText(q, a);
+        if ((a.note || '').trim()) notes[o.v] = (notes[o.v] ? notes[o.v] + '\n' : '') + a.note.trim();
+      });
+      (m.suggest || []).forEach(function (k) { var o = find(k); if (o && sugg.indexOf(o.v) < 0) sugg.push(o.v); });
+    });
+    // Risks found last time and no longer supported by the answers go; anything the person chose themselves stays.
+    r.picks = r.picks.filter(function (v) { return (r.auto || []).indexOf(v) < 0 || found.indexOf(v) >= 0; });
+    found.forEach(function (v) { if (r.picks.indexOf(v) < 0 && (r.dropped || []).indexOf(v) < 0) r.picks.push(v); });
+    r.auto = found; r.suggest = sugg.filter(function (v) { return found.indexOf(v) < 0; }); r.why = why; r.notes = notes;
   }
   function qfPrev() {
     var w = qf();
-    if (w.back) { w.back = false; qfGo('summary', null, 'back'); return; }
+    if (w.back) { w.back = false; w.step = 'risks'; v3Go('summary', 0, 'back'); return; }
     if (w.idx > 0) qfGo('q', w.idx - 1, 'back'); else { clearTimeout(qfTimer); state.started = false; render('back'); }
   }
   function qfPick(q, val) {
@@ -3193,23 +3208,6 @@ button.v2-opt:hover { background: var(--muted); }
     // A one-click answer that needs no explanation moves on by itself, like Typeform.
     if (q.type === 'choice' && a.v != null && (q.when || []).indexOf(a.v) < 0 && !(a.note || '').trim()) qfTimer = setTimeout(qfNext, 450);
     else if (q.type !== 'multi') { note = document.getElementById('qf-note'); if (note) note.focus(); }
-  }
-  function qfSubmit() {
-    var w = qf(), now = new Date(), rows = [], rec;
-    QF.forEach(function (q) {
-      var val = w.ans[q.id] ? qfAnswerText(q, w.ans[q.id]) : '';
-      if (val) rows.push({ group: q.sec, label: q.t, value: val });
-    });
-    if (w.extra.text.trim() || w.extra.files.length) rows.push({ group: 'To be sorted', label: 'Other risks, in the person\u2019s own words', value: w.extra.text.trim() || 'Files added with no description, to be sorted later.', unsorted: true, files: w.extra.files.map(function (f) { return f.name; }) });
-    (state.items || []).filter(function (it) { return it.unsorted; }).forEach(function (it) {
-      rows.push({ group: 'To be sorted', label: it.kind === 'recording' ? 'Audio recording' : 'Uploaded files', value: unsortedText(it), unsorted: true, files: it.files.map(function (f) { return f.name; }) });
-    });
-    if (!rows.length) { errMsg = 'Answer at least one question, or add a note or a file, before you submit.'; showError(); return; }
-    rec = { kind: 'submission', simple: true, id: 's' + now.getTime(), ref: 'RSK-' + now.getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000)), submittedAt: now.getTime(),
-      title: 'Industrial Operations: compliance questionnaire', matrixArea: '', matrixCat: '', matrixRisk: '', count: rows.length };
-    rec.risks = rec.total = rows.length;
-    rec.rows = rows;
-    storeSubmission(rec);
   }
   // Keyboard, as in Typeform: letters pick an option, 1 to 5 pick a rating, Enter moves on.
   document.addEventListener('keydown', function (e) {
@@ -3275,7 +3273,7 @@ button.v2-opt:hover { background: var(--muted); }
     if (step === 'extra') { state.draft = { v3extra: true, text: w.extra.text, shown: true }; state.files.thoughts = w.extra.files.slice(); }
     if (step === 'detail') {
       it = v3ItemFor(w.picks[w.idx]);
-      state.draft = it ? { id: it.id, picks: [w.picks[w.idx]], text: it.text, thread: it.fu ? clone(it.fu) : null, shown: true } : { picks: [w.picks[w.idx]], shown: true };
+      state.draft = it ? { id: it.id, picks: [w.picks[w.idx]], text: it.text, thread: it.fu ? clone(it.fu) : null, shown: true } : { picks: [w.picks[w.idx]], text: (w.notes || {})[w.picks[w.idx]] || '', shown: true };
       state.files.thoughts = it ? it.files.slice() : [];
     }
     if (step === 'summary') {
@@ -3511,28 +3509,22 @@ button.v2-opt:hover { background: var(--muted); }
       var why = h('div', { class: 'intro-why' });
       [['You see it first', 'Problems show up in daily work long before they reach a report. Nobody in compliance knows your area the way you do.'],
        ['It shapes what gets fixed', 'What you add goes into the company risk matrix, which is used to decide where controls, training and attention are needed.'],
-       ['It does not have to be polished', 'Most questions are a single choice. Where you add detail, a few words are enough.']
+       ['It does not have to be polished', 'Most questions are a single choice, and for each risk a few sentences, a document or a voice recording is enough.']
       ].forEach(function (w) { why.appendChild(h('div', { class: 'intro-card' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] }))); });
       sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'Why we are asking you' }), why));
       var how = h('ol', { class: 'intro-steps' });
-      [['Answer the questions first', QF.length + ' short questions about compliance, suppliers, investment projects and how problems get raised in Industrial Operations. Most take one click or one key.'],
-       ['Add a few words where it matters', 'When an answer points to a problem, a box opens so you can say what you see. It is always optional.'],
-       ['Skip what you cannot judge', 'No question is required. Leave out anything outside your experience.'],
-       ['Add anything else', 'At the end you can describe risks the questions missed, upload documents or leave an audio recording.'],
-       ['Check the summary and submit', 'You see every answer before sending and can change any of them. Compliance takes it from there and may come back with questions.']
+      [['Answer a few questions first', QF.length + ' short questions about compliance in your daily work. Most take one click or one key, and you can add a few words where it matters.'],
+       ['Check the risks we detected', 'Your answers are matched to risks in the company risk matrix. Remove what does not fit, pick from the suggestions, or add others.'],
+       ['Add anything else', 'Describe risks the questions missed in your own words, upload documents or leave an audio recording.'],
+       ['Say what you see for each risk', 'One screen per risk. Write or dictate; the assistant may ask a short follow-up question, which you can skip.'],
+       ['Check the summary and submit', 'You see everything before sending and can change any of it. Compliance takes it from there and may come back with questions.']
       ].forEach(function (w, i) { how.appendChild(h('li', null, h('span', { class: 'intro-n', 'aria-hidden': 'true', text: String(i + 1) }), h('span', { class: 'intro-txt' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] })))); });
       sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'How it works' }), how));
-      sec.appendChild(h('div', { class: 'meta' }, h('span', { text: 'About 10 minutes' }), h('span', { text: QF.length + ' questions' }), h('span', { text: 'Every question is optional' })));
+      sec.appendChild(h('div', { class: 'meta' }, h('span', { text: 'About 10 minutes' }), h('span', { text: QF.length + ' questions, then your risks' }), h('span', { text: 'Every part is optional' })));
       sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'intro-start', text: state.qf && Object.keys(state.qf.ans).length ? 'Back to the questions' : 'Start', onclick: function () { state.started = true; render('fwd'); } })));
       return sec;
     }
     var W = qf();
-    var qfHead = function (title, help) { sec.appendChild(h('div', { class: 'head' }, h('h1', { class: 'big', text: title }), h('p', { class: 'help', text: help }))); };
-    var qfNav = function (back, nextLabel, next) {
-      sec.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: next, text: nextLabel }),
-        h('button', { type: 'button', class: 'btn ghost act', id: 'qf-back', onclick: back, text: 'Back' })));
-    };
     if (W.anim) { sec.classList.add(W.anim); W.anim = ''; }
     if (W.step === 'q') {
       var q = QF[W.idx], A = qfAns(q), railEl = document.querySelector('.rail'), body, showNote;
@@ -3573,53 +3565,6 @@ button.v2-opt:hover { background: var(--muted); }
       sec.appendChild(h('p', { class: 'tip qf-keys' }, q.type === 'scale' ? 'Keys 1 to 5 choose a rating.' : 'Keys A to ' + String.fromCharCode(64 + q.opts.length) + ' choose an option.'));
       return sec;
     }
-    if (W.step === 'extra') {
-      qfHead('Anything else?', 'If you see a risk the questions did not cover, describe it in your own words. Compliance will sort it later.');
-      step('Describe other risks you can think of', 'Optional', thoughts(''));
-      qfNav(function () { qfGo('q', QF.length - 1, 'back'); }, 'Continue', function () { qfGo('media'); });
-      return sec;
-    }
-    if (W.step === 'media') {
-      qfHead('Add documents and media', 'Optional. Add supporting documents and media that may help us understand your answers.');
-      sec.appendChild(h('div', { class: 'start' }, v3Cards()));
-      var qfAdded = items.filter(function (it) { return it.unsorted; });
-      if (qfAdded.length) {
-        var qfAddedBox = h('div', { class: 'v2-rows' });
-        qfAdded.forEach(function (it, i) { qfAddedBox.appendChild(h('div', { class: 'v2-opt' },
-          h('span', { class: 'sf-txt', text: it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + ')' : it.files.map(function (f) { return f.name; }).join(', ') }),
-          h('button', { type: 'button', class: 'edit act', id: 'qf-rm-media-' + i, onclick: function () { state.items = state.items.filter(function (x) { return x !== it; }); render('stay'); }, text: 'Remove' }))); });
-        sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Added' }), qfAddedBox));
-      }
-      err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg }); err.hidden = !errMsg; sec.appendChild(err);
-      qfNav(function () { qfGo('extra', null, 'back'); }, 'Continue to summary', function () { qfGo('summary'); });
-      return sec;
-    }
-    // Summary: every question with its answer, grouped by topic. Any answer can be reopened.
-    var qfDone = QF.filter(function (x) { return W.ans[x.id] && qfAnswerText(x, W.ans[x.id]); }).length, qfSecs = [], qfOther = items.filter(function (it) { return it.unsorted; });
-    qfHead('Summary', 'You answered ' + qfDone + ' of ' + QF.length + ' questions. Check your answers; you can change any of them before you submit.');
-    QF.forEach(function (x, i) {
-      var val = W.ans[x.id] ? qfAnswerText(x, W.ans[x.id]) : '', grp = qfSecs[qfSecs.length - 1];
-      if (!grp || grp.title !== x.sec) { grp = { title: x.sec, el: h('div', { class: 'v2-rows' }) }; qfSecs.push(grp); }
-      grp.el.appendChild(h('div', { class: 'v2-opt qf-row' },
-        h('div', { class: 'qf-qa' }, h('span', { class: 'qf-q', text: x.t }), val ? h('span', { class: 'qf-a', text: val }) : h('span', { class: 'qf-a none', text: 'Skipped' })),
-        h('button', { type: 'button', class: 'edit act', id: 'qf-edit-' + i, 'aria-label': (val ? 'Change' : 'Answer') + ': ' + x.t, onclick: function () { W.back = true; qfGo('q', i, 'back'); }, text: val ? 'Change' : 'Answer' })));
-    });
-    var qfList = h('div', { class: 'v2-list' });
-    qfSecs.forEach(function (g) { qfList.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: g.title }), g.el)); });
-    if (W.extra.text.trim() || W.extra.files.length || qfOther.length) {
-      var qfMore = h('div', { class: 'v2-rows' });
-      if (W.extra.text.trim() || W.extra.files.length) qfMore.appendChild(h('div', { class: 'v2-opt qf-row' },
-        h('div', { class: 'qf-qa' }, h('span', { class: 'qf-q', text: 'Other risks, in your own words' }), h('span', { class: 'qf-a', text: (W.extra.text.trim() || 'No description') + (W.extra.files.length ? '\nFiles: ' + W.extra.files.map(function (f) { return f.name; }).join(', ') : '') })),
-        h('button', { type: 'button', class: 'edit act', id: 'qf-edit-extra', onclick: function () { qfGo('extra', null, 'back'); }, text: 'Change' })));
-      qfOther.forEach(function (it) { qfMore.appendChild(h('div', { class: 'v2-opt qf-row' },
-        h('div', { class: 'qf-qa' }, h('span', { class: 'qf-q', text: it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + ')' : 'Uploaded files' }), h('span', { class: 'qf-a', text: it.files.map(function (f) { return f.name; }).join(', ') })),
-        h('button', { type: 'button', class: 'edit act', onclick: function () { state.items = state.items.filter(function (x) { return x !== it; }); render('stay'); }, text: 'Remove' }))); });
-      qfList.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Anything else' }), qfMore));
-    }
-    sec.appendChild(qfList);
-    err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg }); err.hidden = !errMsg; sec.appendChild(err);
-    qfNav(function () { qfGo('media', null, 'back'); }, 'Submit', qfSubmit);
-    return sec;
     var w = v3();
     function v3Next() {
       var d = state.draft, text = (d.text || '').trim();
@@ -3629,7 +3574,12 @@ button.v2-opt:hover { background: var(--muted); }
     }
     if (w.step !== 'summary') {
       var opts = v2Opts(), n = w.picks.length;
-      var toggle = function (v) { var i = w.picks.indexOf(v); if (i >= 0) w.picks.splice(i, 1); else w.picks.push(v); errMsg = ''; render('stay'); };
+      var toggle = function (v) {
+        var i = w.picks.indexOf(v);
+        w.dropped = (w.dropped || []).filter(function (x) { return x !== v; });
+        if (i >= 0) { w.picks.splice(i, 1); w.dropped.push(v); } else w.picks.push(v);
+        errMsg = ''; render('stay');
+      };
       var addPick = function (v) { if (w.picks.indexOf(v) < 0) w.picks.push(v); errMsg = ''; render('stay'); };
       var headOf = function (title, help, extra) { sec.appendChild(h('div', { class: 'head' }, h('h1', { class: 'big', text: title }), h('p', { class: 'help' }, help, extra || null))); };
       var nav = function (back, nextLabel, next, more) {
@@ -3650,8 +3600,7 @@ button.v2-opt:hover { background: var(--muted); }
       var group = function (title, body, big) { return h('div', { class: 'pick-group' }, h(big ? 'h2' : 'h3', { class: big ? 'v3-h' : 'intro-h', text: title }), body); };
       var ownPicks = w.picks.filter(function (v) { return v.indexOf('own:') === 0; });
       if (w.step === 'choose') {
-        headOf('Choose risks', 'Select the risks that you see in the organisation. ',
-          h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }));
+        headOf('All risks', 'Select any other risks that you see in the organisation.');
         sec.appendChild(v2Search(la, addPick, true, 'f-'));
         var listEl = h('div', { class: 'v2-list' }), mine = la ? opts.filter(function (o) { return o.area === la; }) : [];
         if (mine.length) listEl.appendChild(group('Risks in my area', rows(mine, 'v3-mine-')));
@@ -3660,7 +3609,7 @@ button.v2-opt:hover { background: var(--muted); }
         if (others.length && mine.length) listEl.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
         others.forEach(function (t) { listEl.appendChild(group(t.name, rows(opts.filter(function (o) { return o.area === t.id; }), 'v3-' + t.id + '-'))); });
         sec.appendChild(listEl);
-        nav(function () { state.started = false; render('back'); }, n ? 'Continue with ' + n + (n === 1 ? ' risk' : ' risks') : 'Continue', function () { v3Go('extra'); });
+        nav(function () { v3Go('selected', 0, 'back'); }, n ? 'Done, ' + n + (n === 1 ? ' risk' : ' risks') + ' selected' : 'Done', function () { v3Go('selected', 0, 'back'); });
       } else if (w.step === 'extra') {
         headOf('Add additional risks', 'Is anything missing from the list? Describe it in your own words; compliance will sort it into the form later.');
         if (n) {
@@ -3669,9 +3618,9 @@ button.v2-opt:hover { background: var(--muted); }
           sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Selected risks so far' }), sofar));
         }
         step('Describe other risks you can think of', 'Optional', thoughts(''));
-        nav(function () { v3Go('choose', 0, 'back'); }, 'Continue', function () { v3Go('selected'); });
+        nav(function () { v3Go('selected', 0, 'back'); }, 'Continue', function () { v3Go('media'); });
       } else if (w.step === 'selected') {
-        headOf('Selected risks', 'Risks you have selected so far. Remove any that do not belong, or search to add more.');
+        headOf('Detected risks', n ? 'These are the risks your answers point to. Remove any that do not fit, pick from the suggestions, or search to add more.' : 'Your answers did not point to a particular risk. You can still pick from the suggestions, search, or browse all risks.');
         sec.appendChild(v2Search(la, addPick, true, 'f-'));
         var sel = h('div', { class: 'v2-list' });
         var selRows = function (vals, idp) {
@@ -3687,10 +3636,13 @@ button.v2-opt:hover { background: var(--muted); }
         var otherAreas = areaTags().filter(function (t) { return t.id !== la && w.picks.some(function (v) { return areaOfPick(v) === t.id; }); });
         if (otherAreas.length && (mineSel.length || ownPicks.length)) sel.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
         otherAreas.forEach(function (t) { sel.appendChild(group(t.name, selRows(w.picks.filter(function (v) { return areaOfPick(v) === t.id; }), 'v3-rm-' + t.id + '-'))); });
-        if (!n) sel.appendChild(h('p', { class: 'risk-empty', text: 'No risks selected. You can go back and choose some, or continue with only your own description and files.' }));
+        if (!n) sel.appendChild(h('p', { class: 'risk-empty', text: 'No risks selected yet.' }));
         sec.appendChild(sel);
-        if (w.extra.text.trim()) sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Other risks, in your own words' }), h('div', { class: 'v2-opt' }, clipped(w.extra.text.trim()))));
-        nav(function () { v3Go('extra', 0, 'back'); }, 'Continue', function () { v3Go('media'); });
+        var sugg = (w.suggest || []).filter(function (v) { return w.picks.indexOf(v) < 0; }).map(function (v) { return opts.filter(function (o) { return o.v === v; })[0]; }).filter(Boolean);
+        if (sugg.length) sec.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'v3-h', text: 'Suggested risks' }),
+          h('p', { class: 'help', text: 'Select potential risks we detected from your answers.' }), rows(sugg, 'v3-sugg-')));
+        sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn ghost act', id: 'v3-browse', onclick: function () { v3Go('choose'); }, text: 'Browse all risks' })));
+        nav(function () { qf().step = 'q'; qfGo('q', QF.length - 1, 'back'); }, 'Continue', function () { v3Go('extra'); });
       } else if (w.step === 'media') {
         headOf('Add documents and media', 'Optional. Add supporting documents and media that may help us identify more risks.');
         sec.appendChild(h('div', { class: 'start' }, v3Cards()));
@@ -3703,11 +3655,12 @@ button.v2-opt:hover { background: var(--muted); }
           sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Added' }), addedBox));
         }
         err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg }); err.hidden = !errMsg; sec.appendChild(err);
-        nav(function () { v3Go('selected', 0, 'back'); }, 'Continue', function () { if (n) v3Go('detail', 0); else v3Go('summary'); });
+        nav(function () { v3Go('extra', 0, 'back'); }, 'Continue', function () { if (n) v3Go('detail', 0); else v3Go('summary'); });
       } else {
         var busy1 = draftBusy && draftBusy.kind === 'first', lastOne = w.idx + 1 >= n;
         headOf('Risk details (' + (w.idx + 1) + '/' + n + ')', 'Provide details of the risk you selected. You can leave it empty and move on.');
         sec.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: v3Name(w.picks[w.idx]) })));
+        if ((w.why || {})[w.picks[w.idx]]) sec.appendChild(h('div', { class: 'field ctx' }, h('b', { text: 'Detected from your answer' }), clipped(w.why[w.picks[w.idx]])));
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
         if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
         var navRow = nav(function () {
@@ -3728,6 +3681,17 @@ button.v2-opt:hover { background: var(--muted); }
       state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
         : h('p', { class: 'help' }, 'Check what you are about to send. You can edit or remove anything before you submit. ',
         h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
+    if (!state.draft && state.qf) {
+      var ansBox = h('div', { class: 'v2-rows' });
+      QF.forEach(function (x, i) {
+        var val = state.qf.ans[x.id] ? qfAnswerText(x, state.qf.ans[x.id]) : '';
+        ansBox.appendChild(h('div', { class: 'v2-opt qf-row' },
+          h('div', { class: 'qf-qa' }, h('span', { class: 'qf-q', text: x.t }), val ? h('span', { class: 'qf-a', text: val }) : h('span', { class: 'qf-a none', text: 'Skipped' })),
+          h('button', { type: 'button', class: 'edit act', id: 'qf-edit-' + i, 'aria-label': (val ? 'Change' : 'Answer') + ': ' + x.t, onclick: function () { var W2 = qf(); W2.back = true; W2.step = 'q'; qfGo('q', i, 'back'); }, text: val ? 'Change' : 'Answer' })));
+      });
+      sec.appendChild(h('div', { class: 'sf-step qf-answers' }, h('h2', { class: 'intro-h', text: 'Your answers' }), ansBox));
+      sec.appendChild(h('h2', { class: 'intro-h', text: 'Risks' }));
+    }
     // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
     var shownItems = items.filter(function (it) { return !(state.draft && state.draft.id === it.id); });
     var anySources = shownItems.some(function (it) { return (it.thread || []).length; }), anyFiles = shownItems.some(function (it) { return it.files.length; });
@@ -3819,12 +3783,12 @@ button.v2-opt:hover { background: var(--muted); }
       sfShown = shown;
     } else {
       sfShown = 0;
-      if (!items.length) sec.lastChild.textContent = 'Nothing to submit yet. Go back to choose risks, describe one in your own words, or add files.';
+      if (!items.length) sec.lastChild.textContent = 'No risks on the list. You can still submit your answers, or add risks first.';
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
       sec.appendChild(err);
       buttons = h('div', { class: 'go' });
-      if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' item' : ' items') }));
+      buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit' }));
       buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'v3-back', onclick: function () {
         // What is in the table is what counts from here on, so the selection follows it.
         w.picks = items.filter(function (it) { return !it.unsorted && (it.picks || []).length; }).map(function (it) { return it.picks[0]; });
