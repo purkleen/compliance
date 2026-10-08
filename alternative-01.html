@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Risk Assessment Version 02</title>
+<title>Risk Assessment Alternative 01</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 html { color-scheme: light; }
@@ -445,26 +445,6 @@ button.pick-head:hover { background: var(--muted); }
 .start-card:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
 .start-card.over { border-style: dashed; border-color: var(--primary); }
 .start-card.on { border-color: var(--destructive); }
-.v2-search { display: flex; flex-direction: column; gap: 8px; }
-.v2-searchrow { display: flex; align-items: stretch; gap: 8px; }
-.v2-searchrow .start-searchbox { flex: 1; min-width: 0; }
-.v2-searchrow .btn { height: auto; }
-.v2-list { display: flex; flex-direction: column; gap: 12px; }
-.v2-rows { display: flex; flex-direction: column; gap: 8px; }
-.v2-opt { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 14px; font-weight: 500; }
-button.v2-opt { cursor: pointer; }
-button.v2-opt:hover { background: var(--muted); }
-.v2-opt .dot { flex: none; width: 16px; height: 16px; border: 1.5px solid var(--ring); border-radius: 50%; }
-.v2-opt .sf-txt { flex: 1; min-width: 0; }
-.v2-opt[aria-pressed="true"] { background: var(--muted); border-color: var(--ring); }
-.v2-opt[aria-pressed="true"] .dot { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--muted); }
-.v2-opt .edit { text-decoration: underline; }
-.v2-addrow { display: flex; gap: 8px; }
-.v2-addrow .line { flex: 1; min-width: 0; }
-.v2-or { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
-.v2-or::before, .v2-or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-.btn .ico { display: inline-flex; margin-right: 6px; }
-.risk-editor { display: flex; flex-direction: column; gap: 14px; }
 .intro-h { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
 .intro-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
 .intro-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
@@ -621,7 +601,7 @@ button.v2-opt:hover { background: var(--muted); }
 <script>
 (function () {
   // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
-  var CUR = 'version-02', inClaude = !!window.claude || /claude/.test(location.hostname);
+  var CUR = 'alternative-01', inClaude = !!window.claude || /claude/.test(location.hostname);
   var V = [
     { id: 'original', name: 'Original', file: 'original.html', url: 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' },
     { id: 'alternative-01', name: 'Alternative 01', file: 'alternative-01.html', url: 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' },
@@ -2585,7 +2565,7 @@ button.v2-opt:hover { background: var(--muted); }
   var sfShown = 0;
   // A link can be sent for one area: the page address ends in "#" plus the area's id. The form then opens already set
   // to that area, and the person only chooses risk categories and names.
-  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' : location.href.split('#')[0];
+  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' : location.href.split('#')[0];
   function linkArea() {
     var id = (location.hash || '').replace(/^#/, '');
     return id && areaTags().some(function (t) { return t.id === id; }) ? id : '';
@@ -2934,8 +2914,7 @@ button.v2-opt:hover { background: var(--muted); }
     search: '<path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
     upload: '<path d="M12 3v12m5-7l-5-5l-5 5m14 7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>',
     mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
-    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
-    circlePlus: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/>'
+    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>'
   };
   function icon(name, size) {
     var el = h('span', { class: 'ico', 'aria-hidden': 'true' });
@@ -2943,7 +2922,6 @@ button.v2-opt:hover { background: var(--muted); }
     return el;
   }
   function addUnsorted(kind, files, dur) {
-    if (state.v2) { state.v2.list = ''; state.v2.more = false; }
     state.items = state.items || [];
     state.items.push({ id: newId('i'), unsorted: true, kind: kind, dur: dur || 0, area: '', areas: [], picks: [], categories: [], risks: [], text: '', files: files, thread: [] });
     errMsg = '';
@@ -2979,24 +2957,18 @@ button.v2-opt:hover { background: var(--muted); }
       showError();
     });
   }
-  // ---- version-02: one risk at a time, picked from a plain list of risk names ----
-  function v2() { return state.v2 || (state.v2 = { list: '', open: {}, more: false }); }
-  // What can be picked: risk names, plus any category that has no risk names under it yet.
-  function v2Opts() {
-    var all = pickOptions();
-    return all.filter(function (o) { return o.kind === 'risk' || !all.some(function (r) { return r.kind === 'risk' && r.cat === o.v; }); });
-  }
-  function v2Own(name) {
-    var v = name.trim().slice(0, 120), known;
-    state.ownRisks = state.ownRisks || [];
-    known = state.ownRisks.filter(function (n) { return n.toLowerCase() === v.toLowerCase(); })[0];
-    if (!known) { state.ownRisks.push(v); known = v; }
-    return 'own:' + known;
-  }
-  // Search box whose matches appear right under it. Matches also on synonyms.
-  function v2Search(la, onPick, withButton, idp) {
-    var wrap = h('div', { class: 'v2-search' }), results = h('div', { class: 'sf-list start-results' }), all = v2Opts();
-    var search = h('input', { type: 'text', class: 'start-search', id: idp + 'search', autocomplete: 'off', placeholder: withButton ? 'Search' : 'Search for a risk, for example “bribery” or “salary”', 'aria-label': 'Search for a risk' });
+  function startBlock(hasItems, la) {
+    var wrap = h('div', { class: 'start' }), results = h('div', { class: 'sf-list start-results' }), all = pickOptions(), inClaude = !!window.claude, cards = h('div', { class: 'start-cards' });
+    var search = h('input', { type: 'text', class: 'start-search', id: 'start-search', autocomplete: 'off', placeholder: 'Search for a risk, for example “bribery” or “salary”', 'aria-label': 'Search for a risk' });
+    function openWith(v, areaId) {
+      state.draft = { picks: [v], open: {}, shown: true };
+      if (areaId && areaId !== la) state.draft.open[areaId] = true;
+      state.files.thoughts = [];
+      errMsg = ''; sfShown = 0;
+      render('stay');
+      var box = document.getElementById('f-thoughts');
+      if (box) box.focus();
+    }
     function show() {
       var needle = search.value.trim().toLowerCase(), hits = [], exact = false;
       results.replaceChildren();
@@ -3005,86 +2977,32 @@ button.v2-opt:hover { background: var(--muted); }
       all.forEach(function (o) {
         var name = o.l.toLowerCase(), syn = '';
         if (name === needle) exact = true;
-        if (name.indexOf(needle) < 0) syn = (SYN[o.v] || []).concat(SYN[o.cat] || []).filter(function (w) { return w.indexOf(needle) >= 0 || needle.indexOf(w) >= 0; })[0] || '';
+        if (name.indexOf(needle) < 0) syn = (SYN[o.v] || []).filter(function (w) { return w.indexOf(needle) >= 0 || needle.indexOf(w) >= 0; })[0] || '';
         if (name.indexOf(needle) >= 0 || syn) hits.push({ o: o, syn: syn });
       });
-      // Risks from the person's own area come first.
+      // Options from the person's own area come first.
       hits.sort(function (x, y) { return (y.o.area === la) - (x.o.area === la); });
       hits.slice(0, 8).forEach(function (hit, i) {
-        var o = hit.o;
-        results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'hit-' + i, onclick: function () { onPick(o.v, o.area); } },
-          h('span', { class: 'sf-txt' }, h('span', { text: o.l }), h('span', { class: 'fsub', text: tagName(o.area) + (hit.syn ? ' · also: ' + hit.syn : '') }))));
+        var o = hit.o, where = (o.kind === 'risk' ? tagName(o.cat) + ' · ' : '') + tagName(o.area);
+        results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: 'start-hit-' + i, onclick: function () { openWith(o.v, o.area); } },
+          h('span', { class: 'sf-txt' }, h('span', { text: o.l }), h('span', { class: 'fsub', text: where + (hit.syn ? ' · also: ' + hit.syn : '') }))));
       });
       if (!hits.length) results.appendChild(h('p', { class: 'tip start-none', text: 'Nothing in the list matches.' }));
-      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'own', onclick: function () { onPick(v2Own(search.value), ''); } },
-        h('span', { class: 'sf-txt', text: '+ Add “' + search.value.trim() + '” as your own risk' })));
+      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: 'start-own', onclick: function () {
+        var v = search.value.trim().slice(0, 120);
+        state.ownRisks = state.ownRisks || [];
+        if (!state.ownRisks.some(function (n) { return n.toLowerCase() === v.toLowerCase(); })) state.ownRisks.push(v);
+        openWith('own:' + v, '');
+      } }, h('span', { class: 'sf-txt', text: '+ Add “' + search.value.trim() + '” as your own risk' })));
     }
     search.addEventListener('input', show);
     search.addEventListener('keydown', function (e) {
       var first = results.querySelector('button');
-      if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
+      if (e.key === 'Enter' && first) { e.preventDefault(); first.click(); }
     });
     results.hidden = true;
-    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search),
-      withButton ? h('button', { type: 'button', class: 'btn act', id: idp + 'search-go', text: 'Search', onclick: function () { show(); search.focus(); } }) : null));
+    wrap.appendChild(h('div', { class: 'start-searchbox' }, icon('search', 18), search));
     wrap.appendChild(results);
-    return wrap;
-  }
-  function v2Rows(opts, sel, onPick, idp) {
-    var box = h('div', { class: 'v2-rows' });
-    opts.forEach(function (o, i) {
-      box.appendChild(h('button', { type: 'button', class: 'v2-opt act', id: idp + i, 'aria-pressed': o.v === sel ? 'true' : 'false', onclick: function () { onPick(o.v, o.area); } },
-        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l })));
-    });
-    return box;
-  }
-  // The risks to choose from: the person's own area first, then their own additions, an "add another" row, and, when asked for, every other area.
-  function v2List(la, mode, sel, onPick, idp) {
-    var st = v2(), wrap = h('div', { class: 'v2-list' }), all = v2Opts(), own = state.ownRisks || [], mine, others;
-    if (la) {
-      mine = all.filter(function (o) { return o.area === la; });
-      if (mine.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Risks in ' + tagName(la) }), v2Rows(mine, sel, onPick, idp + 'mine-')));
-    }
-    if (own.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Added by you' }),
-      v2Rows(own.map(function (n) { return { v: 'own:' + n, l: n, area: '' }; }), sel, onPick, idp + 'own-')));
-    var name = h('input', { type: 'text', class: 'line', id: idp + 'another', maxlength: '120', autocomplete: 'off', placeholder: 'Add another risk…', 'aria-label': 'Add another risk' });
-    var add = h('button', { type: 'button', class: 'btn act', id: idp + 'another-go', text: 'Add risk', onclick: function () { if (!name.value.trim()) { name.focus(); return; } onPick(v2Own(name.value), ''); } });
-    name.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
-    wrap.appendChild(h('div', { class: 'v2-addrow' }, name, add));
-    if (mode === 'all' || !la) {
-      others = areaTags().filter(function (t) { return t.id !== la && all.some(function (o) { return o.area === t.id; }); });
-      if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: la ? 'Other areas' : 'All areas' }));
-      others.forEach(function (t) {
-        var isOpen = !!st.open[t.id], opts = all.filter(function (o) { return o.area === t.id; });
-        var head = h('button', { type: 'button', class: 'pick-head combo-btn-like act', id: idp + 'area-' + t.id, 'aria-expanded': isOpen ? 'true' : 'false', onclick: function () { st.open[t.id] = !st.open[t.id]; render('stay'); } },
-          h('span', { text: t.name }), chevrons());
-        wrap.appendChild(h('div', { class: 'pick-group' }, head, isOpen ? v2Rows(opts, sel, onPick, idp + t.id + '-') : null));
-      });
-    }
-    return wrap;
-  }
-  function startBlock(hasItems, la) {
-    var st = v2(), wrap = h('div', { class: 'start' }), inClaude = !!window.claude, cards = h('div', { class: 'start-cards' });
-    function openWith(v) {
-      state.draft = { picks: [v], shown: true };
-      state.files.thoughts = [];
-      st.list = ''; st.more = false;
-      errMsg = ''; sfShown = 0;
-      render('fwd');
-      var box = document.getElementById('f-thoughts');
-      if (box) box.focus();
-    }
-    wrap.appendChild(v2Search(la, openWith, false, 'start-'));
-    if (!st.list) {
-      wrap.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn ghost act', id: 'start-add', onclick: function () { st.list = la ? 'mine' : 'all'; errMsg = ''; render('stay'); } }, icon('circlePlus', 16), 'Add new risk'),
-        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; errMsg = ''; render('stay'); }, text: 'Browse all risk options' })));
-    } else {
-      wrap.appendChild(v2List(la, st.list, '', openWith, 'start-'));
-      if (st.list === 'mine') wrap.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; render('stay'); }, text: 'Browse all risk options' })));
-    }
-    wrap.appendChild(h('div', { class: 'v2-or', text: 'OR' }));
     // Upload
     var up = h('input', { type: 'file', class: 'pick act', id: 'start-upload', multiple: true, accept: ACCEPT, 'aria-label': 'Upload documents or media' });
     function take(list) {
@@ -3113,13 +3031,29 @@ button.v2-opt:hover { background: var(--muted); }
     recCard.disabled = inClaude;
     if (inClaude) recCard.title = 'Recording works when this page is opened on its own, outside Claude';
     cards.appendChild(recCard);
+    // Create your own
+    var ownName = h('input', { type: 'text', class: 'line start-own-name', id: 'start-own-name', maxlength: '120', autocomplete: 'off', placeholder: 'Name the risk in your own words', 'aria-label': 'Name of your own risk' });
+    var ownGo = h('button', { type: 'button', class: 'btn act', id: 'start-own-go', text: 'Create', onclick: function () {
+      var v = ownName.value.trim().slice(0, 120);
+      if (!v) { ownName.focus(); return; }
+      var same = all.filter(function (o) { return o.l.toLowerCase() === v.toLowerCase(); })[0];
+      if (same) { openWith(same.v, same.area); return; }
+      state.ownRisks = state.ownRisks || [];
+      if (!state.ownRisks.some(function (n) { return n.toLowerCase() === v.toLowerCase(); })) state.ownRisks.push(v);
+      openWith('own:' + v, '');
+    } });
+    ownName.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); ownGo.click(); } });
+    cards.appendChild(h('div', { class: 'start-card start-own' }, icon('plus', 20),
+      h('span', { class: 'start-title', text: 'Create your own risk' }),
+      h('span', { class: 'tip', text: 'Not in the list? Give it a name and describe it. Compliance may edit or accept it later.' }),
+      h('div', { class: 'start-own-row' }, ownName, ownGo)));
     wrap.appendChild(cards);
     return wrap;
   }
   function draftAdd() {
     var d = state.draft, text = (d.text || '').trim(), reply = document.getElementById('f-reply'), token;
     if (draftBusy) return;
-    if (!(d.picks || []).length) { errMsg = 'Choose a risk from the list, or add your own, before adding this to the list.'; showError(); return; }
+    if (!(d.picks || []).length) { errMsg = 'Choose at least one option from the list, or add your own, before adding this risk.'; showError(); return; }
     derive(d);
     if (!text) { errMsg = 'Write a few words about this risk first.'; showError(); return; }
     // Already checked for this text: keep any reply typed but not sent, then add the risk.
@@ -3290,14 +3224,13 @@ button.v2-opt:hover { background: var(--muted); }
     sec.appendChild(h('div', { class: 'head' },
       la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) }),
         h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Change' })) : null,
-      h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Add new risk assessment' }),
-      state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
-        : h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
+      h('h1', { class: 'big', text: 'Add new risk assessment' }),
+      h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
         h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
     // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
     var shownItems = items.filter(function (it) { return !(state.draft && state.draft.id === it.id); });
     var anySources = shownItems.some(function (it) { return (it.thread || []).length; }), anyFiles = shownItems.some(function (it) { return it.files.length; });
-    if (shownItems.length && !state.draft) {
+    if (shownItems.length) {
       var head = h('tr', null, h('th', { scope: 'col', text: 'Area' }), h('th', { scope: 'col', text: 'Risk category' }), h('th', { scope: 'col', text: 'Risk name' }), h('th', { scope: 'col', text: 'Risk description' }));
       var body = h('tbody');
       if (anySources) head.appendChild(h('th', { scope: 'col', text: 'Sources' }));
@@ -3346,18 +3279,126 @@ button.v2-opt:hover { background: var(--muted); }
     if (state.draft) {
       editor = h('div', { class: 'risk-editor' });
       host = editor;
-      a.picks = (a.picks || []).slice(0, 1);
-      var byV = {}, sel = a.picks[0] || '', selName, setPick = function (v) { a.picks = [v]; a.changing = false; errMsg = ''; render('stay'); };
-      pickOptions().forEach(function (o) { byV[o.v] = o; });
-      selName = sel.indexOf('own:') === 0 ? sel.slice(4) : byV[sel] ? byV[sel].l : '';
-      editor.appendChild(v2Search(la, setPick, true, 'f-'));
-      if (selName) editor.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' },
-        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: selName }),
-        h('button', { type: 'button', class: 'edit act', id: 'f-change', 'aria-expanded': a.changing ? 'true' : 'false', onclick: function () { a.changing = !a.changing; render('stay'); }, text: a.changing ? 'close' : 'change' })));
-      if (!selName || a.changing) editor.appendChild(v2List(la, 'all', sel, setPick, 'f-'));
-      a.shown = true;
+      a.picks = a.picks || []; a.open = a.open || {};
+      var all = pickOptions(), byV = {}, rows = [], groups = [], nRow = 0, pickBody = h('div', { class: 'sf-body' }), search, addRow, noneMsg, picked;
+      all.forEach(function (o) { byV[o.v] = o; });
+      var ownNames = (state.ownRisks || []).slice();
+      a.picks.forEach(function (v) { if (v.indexOf('own:') === 0 && ownNames.indexOf(v.slice(4)) < 0) ownNames.push(v.slice(4)); });
+      var rerender = function () {
+        var had = document.activeElement && document.activeElement.id === 'f-pick-search', el;
+        render('stay');
+        el = document.getElementById('f-pick-search');
+        if (had && el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+      };
+      var toggle = function (v) {
+        var i = a.picks.indexOf(v);
+        if (i >= 0) a.picks.splice(i, 1); else a.picks.push(v);
+        errMsg = '';
+        rerender();
+      };
+      var optRow = function (o) {
+        var hint = h('span', { class: 'syn' }), el;
+        hint.hidden = true;
+        el = h('button', { type: 'button', class: 'sf-opt multi act' + (o.kind === 'risk' ? ' sub' : ''), id: 'f-pick-' + nRow++, 'aria-pressed': a.picks.indexOf(o.v) >= 0 ? 'true' : 'false', onclick: function () { toggle(o.v); } },
+          h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l }), hint);
+        rows.push({ o: o, el: el, hint: hint });
+        return el;
+      };
+      // One area's options: each category, with its risk names indented under it.
+      var areaGroup = function (areaId, title, collapsible) {
+        var opts = all.filter(function (o) { return o.area === areaId; }), listEl = h('div', { class: 'sf-list' }), headEl, n = 0, wrapEl;
+        if (!opts.length) return;
+        opts.filter(function (o) { return o.kind === 'cat'; }).forEach(function (c) {
+          listEl.appendChild(optRow(c));
+          opts.filter(function (o) { return o.kind === 'risk' && o.cat === c.v; }).forEach(function (r) { listEl.appendChild(optRow(r)); });
+        });
+        opts.forEach(function (o) { if (a.picks.indexOf(o.v) >= 0) n++; });
+        headEl = collapsible
+          ? h('button', { type: 'button', class: 'pick-head act', id: 'f-pick-area-' + areaId, 'aria-expanded': a.open[areaId] ? 'true' : 'false', onclick: function () { a.open[areaId] = !a.open[areaId]; rerender(); } },
+              h('span', null, title, n ? h('span', { class: 'combo-count', text: String(n) }) : null), chevrons())
+          : h('div', { class: 'pick-head fixed' }, h('span', { text: title }));
+        if (collapsible) headEl.classList.add('combo-btn-like');
+        wrapEl = h('div', { class: 'pick-group' }, headEl, listEl);
+        groups.push({ el: wrapEl, list: listEl, collapsible: collapsible, id: areaId });
+        pickBody.appendChild(wrapEl);
+      };
+      // What has been ticked so far, so it stays visible while searching or with areas folded away.
+      if (a.picks.length) {
+        picked = h('div', { class: 'chips picked' });
+        a.picks.forEach(function (v, i) {
+          var name = v.indexOf('own:') === 0 ? v.slice(4) : byV[v] ? byV[v].l : '';
+          if (name) picked.appendChild(h('button', { type: 'button', class: 'chip act', id: 'f-picked-' + i, 'aria-label': 'Remove ' + name, onclick: function () { toggle(v); } }, name, h('span', { 'aria-hidden': 'true', text: ' ×' })));
+        });
+        pickBody.appendChild(picked);
+      }
+      search = h('input', { type: 'text', class: 'line', id: 'f-pick-search', autocomplete: 'off', placeholder: 'Search, for example “bribery” or “salary”', 'aria-label': 'Search options' });
+      search.value = a.q || '';
+      pickBody.appendChild(search);
+      if (la) areaGroup(la, 'Your area: ' + tagName(la), false);
+      if (areaTags().some(function (t) { return t.id !== la; })) pickBody.appendChild(h('div', { class: 'pick-label', text: la ? 'Other areas' : 'All areas' }));
+      areaTags().forEach(function (t) { if (t.id !== la) areaGroup(t.id, t.name, true); });
+      if (ownNames.length) {
+        var ownList = h('div', { class: 'sf-list' }), ownWrap;
+        ownNames.forEach(function (n) { ownList.appendChild(optRow({ v: 'own:' + n, l: n, kind: 'own', area: '', cat: '' })); });
+        ownWrap = h('div', { class: 'pick-group' }, h('div', { class: 'pick-head fixed' }, h('span', { text: 'Added by you' })), ownList);
+        groups.push({ el: ownWrap, list: ownList, collapsible: false, id: 'own' });
+        pickBody.appendChild(ownWrap);
+      }
+      var addOwn = function () {
+        var v = search.value.trim().slice(0, 120), known;
+        if (!v) return;
+        state.ownRisks = state.ownRisks || [];
+        known = state.ownRisks.filter(function (n) { return n.toLowerCase() === v.toLowerCase(); })[0];
+        if (!known) { state.ownRisks.push(v); known = v; }
+        if (a.picks.indexOf('own:' + known) < 0) a.picks.push('own:' + known);
+        a.q = '';
+        errMsg = '';
+        render('stay');
+        var again = document.getElementById('f-pick-search');
+        if (again) again.focus();
+      };
+      addRow = h('button', { type: 'button', class: 'pick-add act', id: 'f-pick-add', onclick: addOwn });
+      noneMsg = h('p', { class: 'tip', text: 'Nothing in the list matches. You can add it as your own option.' });
+      pickBody.appendChild(noneMsg);
+      pickBody.appendChild(addRow);
+      pickBody.appendChild(h('span', { class: 'tip', text: 'Can’t find it? Type it in the search box and add it as your own option. Compliance may edit or accept it later.' }));
+      // Filtering happens in place so typing is never interrupted. A match on a synonym says which word matched.
+      var applySearch = function () {
+        var needle = search.value.trim().toLowerCase(), any = false, exact = false;
+        a.q = search.value;
+        rows.forEach(function (r) {
+          var name = r.o.l.toLowerCase(), syn = '', hit;
+          if (needle && name.indexOf(needle) < 0) syn = (SYN[r.o.v] || []).filter(function (w) { return w.indexOf(needle) >= 0 || needle.indexOf(w) >= 0; })[0] || '';
+          hit = !needle || name.indexOf(needle) >= 0 || !!syn;
+          r.el.hidden = !hit;
+          r.hint.hidden = !syn;
+          r.hint.textContent = syn ? 'also: ' + syn : '';
+          if (hit) any = true;
+          if (name === needle) exact = true;
+        });
+        groups.forEach(function (g) {
+          var has = [].some.call(g.list.children, function (c) { return !c.hidden; });
+          g.el.hidden = !!needle && !has;
+          g.list.hidden = needle ? !has : (g.collapsible && !a.open[g.id]);
+        });
+        noneMsg.hidden = !needle || any;
+        addRow.hidden = !needle || exact;
+        addRow.textContent = '+ Add “' + search.value.trim() + '” as your own option';
+      };
+      search.addEventListener('input', applySearch);
+      search.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); if (!addRow.hidden) addOwn(); }
+      });
+      applySearch();
+      step('What is the risk about?', 'Select one or more', pickBody);
+      if (a.picks.length) last.firstChild.appendChild(h('button', { type: 'button', class: 'edit act sf-clear', id: 'sf-clear', onclick: function () {
+        a.picks = []; a.q = '';
+        errMsg = '';
+        render('stay');
+      }, text: 'Clear selections' }));
       // Once the lower sections have appeared they stay, whatever is changed above them.
-      if (a.shown) {
+      if (a.picks.length || a.shown) {
+        a.shown = true;
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
         if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
       }
@@ -3385,19 +3426,18 @@ button.v2-opt:hover { background: var(--muted); }
       sfShown = shown;
     } else {
       sfShown = 0;
-      var more = !items.length || v2().more;
-      if (more) sec.appendChild(startBlock(items.length, la));
+      sec.appendChild(startBlock(items.length, la));
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
       sec.appendChild(err);
       buttons = h('div', { class: 'go' });
       if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' item' : ' items') }));
-      if (!more) buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () {
-        v2().more = true; v2().list = 'all';
+      buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () {
+        state.draft = {}; state.files.thoughts = [];
         errMsg = ''; sfShown = 0;
         render('stay');
       }, text: 'Browse all risk options' }));
-      if (buttons.children.length) sec.appendChild(buttons);
+      sec.appendChild(buttons);
     }
     open = requests.filter(function (r) { return r.status === 'open'; });
     if (open.length) {

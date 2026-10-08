@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Risk Assessment Version 02</title>
+<title>Regulatory Risk Assessment</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 html { color-scheme: light; }
@@ -96,7 +96,7 @@ main { flex: 1 0 auto; display: flex; padding-inline: 24px; padding-block: 16px;
 .head { display: flex; flex-direction: column; gap: 6px; }
 .num { font-family: var(--mono); font-size: 13px; line-height: calc(var(--qsize) * 1.3); color: var(--muted-foreground); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 h1 { font-weight: 600; font-size: var(--qsize); line-height: 1.3; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
-h1.big { font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; }
+h1.big { font-size: clamp(30px, 6.5vw, 40px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; }
 .help { color: var(--muted-foreground); font-size: 15px; margin: 0; max-width: 60ch; }
 
 /* Input, Textarea */
@@ -414,75 +414,6 @@ main.rvmode { padding-block: 4px 20px; }
 .row-actions .edit:last-child { margin-right: 0; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Alternative 01: one searchable list of options, the person's own area first */
-.my-area { max-width: 720px; }
-.pick-label { margin-top: 4px; color: var(--muted-foreground); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-.pick-group { display: flex; flex-direction: column; gap: 6px; }
-.pick-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 8px 2px; background: none; color: var(--foreground); border: 0; font-size: 14px; font-weight: 600; text-align: left; }
-button.pick-head { padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; }
-button.pick-head:hover { background: var(--muted); }
-.pick-head > span:first-child { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
-.pick-head[aria-expanded="true"] .combo-chev .down { display: none; }
-.pick-head[aria-expanded="true"] .combo-chev .up { display: block; }
-.sf-opt.sub { padding-left: 42px; }
-.sf-opt .syn { flex: none; color: var(--muted-foreground); font-size: 12px; }
-.chips.picked .chip { cursor: pointer; }
-.pick-add { align-self: flex-start; padding: 8px 12px; background: var(--background); color: var(--foreground); border: 1px dashed var(--ring); border-radius: var(--radius-md); font-size: 14px; font-weight: 500; text-align: left; cursor: pointer; }
-.pick-add:hover { background: var(--muted); }
-
-/* Start of the form: search, upload, or leave a recording */
-.start { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
-.start-searchbox { display: flex; align-items: center; gap: 10px; padding: 0 14px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); color: var(--muted-foreground); }
-.start-searchbox:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px var(--ring-soft); }
-.start-search { flex: 1; min-width: 0; height: 52px; background: transparent; color: var(--foreground); border: 0; font-size: 16px; }
-.start-search:focus { outline: none; }
-.start-search::placeholder { color: var(--muted-foreground); }
-.start-results .sf-txt { display: flex; flex-direction: column; gap: 2px; }
-.start-none { margin: 0; padding: 10px 14px; }
-.start-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-.start-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); cursor: pointer; }
-.start-card:hover:not(:disabled), .start-card.over { background: var(--muted); }
-.start-card:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
-.start-card.over { border-style: dashed; border-color: var(--primary); }
-.start-card.on { border-color: var(--destructive); }
-.v2-search { display: flex; flex-direction: column; gap: 8px; }
-.v2-searchrow { display: flex; align-items: stretch; gap: 8px; }
-.v2-searchrow .start-searchbox { flex: 1; min-width: 0; }
-.v2-searchrow .btn { height: auto; }
-.v2-list { display: flex; flex-direction: column; gap: 12px; }
-.v2-rows { display: flex; flex-direction: column; gap: 8px; }
-.v2-opt { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 14px; font-weight: 500; }
-button.v2-opt { cursor: pointer; }
-button.v2-opt:hover { background: var(--muted); }
-.v2-opt .dot { flex: none; width: 16px; height: 16px; border: 1.5px solid var(--ring); border-radius: 50%; }
-.v2-opt .sf-txt { flex: 1; min-width: 0; }
-.v2-opt[aria-pressed="true"] { background: var(--muted); border-color: var(--ring); }
-.v2-opt[aria-pressed="true"] .dot { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--muted); }
-.v2-opt .edit { text-decoration: underline; }
-.v2-addrow { display: flex; gap: 8px; }
-.v2-addrow .line { flex: 1; min-width: 0; }
-.v2-or { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
-.v2-or::before, .v2-or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-.btn .ico { display: inline-flex; margin-right: 6px; }
-.risk-editor { display: flex; flex-direction: column; gap: 14px; }
-.intro-h { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
-.intro-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
-.intro-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
-.intro-title { font-size: 15px; font-weight: 600; }
-.intro-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-.intro-steps li { display: flex; align-items: flex-start; gap: 12px; }
-.intro-n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 999px; background: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 500; }
-.intro-txt { display: flex; flex-direction: column; gap: 2px; max-width: 60ch; }
-.start-own { grid-column: 1 / -1; cursor: default; }
-.start-own:hover:not(:disabled) { background: var(--background); }
-.start-own:focus-within { outline: none; }
-.start-own-row { display: flex; gap: 8px; align-self: stretch; margin-top: 6px; }
-.start-own-row .line { flex: 1; min-width: 0; max-width: none; }
-.start-card:disabled { opacity: .5; cursor: default; }
-.start-title { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
-.start-title .at { font-family: var(--mono); font-size: 12px; font-weight: 500; }
-.ico { display: inline-grid; place-items: center; }
-
 /* Single-screen form: a list of risks, each added through a progressive-disclosure editor */
 .risk-list { display: flex; flex-direction: column; gap: 10px; }
 .risk-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 12px 14px; font-size: 14px; }
@@ -621,7 +552,7 @@ button.v2-opt:hover { background: var(--muted); }
 <script>
 (function () {
   // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
-  var CUR = 'version-02', inClaude = !!window.claude || /claude/.test(location.hostname);
+  var CUR = 'original', inClaude = !!window.claude || /claude/.test(location.hostname);
   var V = [
     { id: 'original', name: 'Original', file: 'original.html', url: 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' },
     { id: 'alternative-01', name: 'Alternative 01', file: 'alternative-01.html', url: 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' },
@@ -1667,7 +1598,7 @@ button.v2-opt:hover { background: var(--muted); }
     if (!list) {
       q = qByShort(a.row.label);
       var src = catsOf(a.row).length ? a.row : a.rec;
-      list = catsOf(src).length ? (src.matrixAreas && src.matrixAreas.length ? src.matrixAreas : [src.matrixArea]).concat(catsOf(src)) : q ? ['cat-main', q.cat] : [];
+      list = catsOf(src).length ? [src.matrixArea].concat(catsOf(src)) : q ? ['cat-main', q.cat] : [];
       var rowRisks = (src.matrixRisks || (src.matrixRisk ? [src.matrixRisk] : [])).map(function (id) { return 'risk-' + id; }).concat(src.matrixRiskTags || (src.matrixRiskTag ? [src.matrixRiskTag] : []));
       if (rowRisks.length) list = list.concat(rowRisks); else if (q) list.push('risk-' + q.id);
     }
@@ -2169,7 +2100,7 @@ button.v2-opt:hover { background: var(--muted); }
     sec.appendChild(note);
     if (!loaded) sec.appendChild(h('p', { class: 'tip', text: 'Checking for forms saved to your account\u2026' }));
     sec.appendChild(h('div', { class: 'go' },
-      h('button', { type: 'button', class: 'btn ghost sm act', id: 'restart', onclick: function () { resetForm(); state.started = false; justSubmitted = null; go('welcome', 'back'); }, text: '\u21ba Restart demo' })));
+      h('button', { type: 'button', class: 'btn ghost sm act', id: 'restart', onclick: function () { resetForm(); justSubmitted = null; go('welcome', 'back'); }, text: '\u21ba Restart demo' })));
   }
 
   function h(tag, attrs) {
@@ -2585,12 +2516,13 @@ button.v2-opt:hover { background: var(--muted); }
   var sfShown = 0;
   // A link can be sent for one area: the page address ends in "#" plus the area's id. The form then opens already set
   // to that area, and the person only chooses risk categories and names.
-  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' : location.href.split('#')[0];
+  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' : location.href.split('#')[0];
   function linkArea() {
     var id = (location.hash || '').replace(/^#/, '');
     return id && areaTags().some(function (t) { return t.id === id; }) ? id : '';
   }
   window.addEventListener('hashchange', function () {
+    if (state.draft && !state.draft.id) { state.draft = null; state.files.thoughts = []; }
     sfShown = 0;
     render('stay');
   });
@@ -2716,20 +2648,13 @@ button.v2-opt:hover { background: var(--muted); }
       // Risks in the same area sit together, in the order of the areas in the matrix.
       order = areaTags().map(function (t) { return t.id; });
       items.map(function (it, i) { return { it: it, i: i }; })
-        .sort(function (x, y) { return ((x.it.unsorted ? 99 : order.indexOf(x.it.area)) - (y.it.unsorted ? 99 : order.indexOf(y.it.area))) || (x.i - y.i); })
+        .sort(function (x, y) { return (order.indexOf(x.it.area) - order.indexOf(y.it.area)) || (x.i - y.i); })
         .forEach(function (x) {
           var it = x.it, rks = risksOf(it), added = rks.filter(function (r) { return r.own; }).map(function (r) { return r.name; }), row;
-          if (it.unsorted) {
-            var uk = 'unsorted:' + it.kind;
-            used[uk] = (used[uk] || 0) + 1;
-            row = { group: 'To be sorted', label: (it.kind === 'recording' ? 'Audio recording' : 'Uploaded files') + (used[uk] > 1 ? ' (' + used[uk] + ')' : ''), value: unsortedText(it), unsorted: true, files: it.files.map(function (f) { return f.name; }) };
-            rows.push(row);
-            return;
-          }
           var label = ((rks.length ? rks.map(function (r) { return r.short || r.name; }) : it.categories.map(tagName)).join(', ') || 'Risk').slice(0, 140);
           used[label] = (used[label] || 0) + 1;
           if (used[label] > 1) label += ' (' + used[label] + ')';
-          row = { group: it.area ? tagName(it.area) : 'No area', label: label, value: it.text, matrixArea: it.area, matrixAreas: (it.areas || []).slice(), matrixCats: it.categories.slice(), matrixCat: it.categories[0] || '',
+          row = { group: tagName(it.area), label: label, value: it.text, matrixArea: it.area, matrixCats: it.categories.slice(), matrixCat: it.categories[0] || '',
             matrixRisks: rks.filter(function (r) { return r.q; }).map(function (r) { return r.q.id; }), matrixRiskTags: rks.filter(function (r) { return r.tag; }).map(function (r) { return r.tag; }) };
           if (added.length) row.addedRisks = added;
           if (it.files.length) row.files = it.files.map(function (f) { return f.name; });
@@ -2737,8 +2662,8 @@ button.v2-opt:hover { background: var(--muted); }
           areas[it.area] = 1; it.categories.forEach(function (c) { cats[c] = 1; });
           rows.push(row);
         });
-      rec.title = 'Risk assessment' + (Object.keys(areas).length === 1 ? ': ' + tagName(Object.keys(areas)[0]) : '');
-      rec.matrixArea = Object.keys(areas).length === 1 ? Object.keys(areas)[0] : '';
+      rec.title = 'Risk assessment' + (Object.keys(areas).length === 1 ? ': ' + tagName(items[0].area) : '');
+      rec.matrixArea = Object.keys(areas).length === 1 ? items[0].area : '';
       rec.matrixCat = Object.keys(cats).length === 1 ? Object.keys(cats)[0] : '';
       rec.matrixRisk = '';
       rec.count = rows.length;
@@ -2824,8 +2749,7 @@ button.v2-opt:hover { background: var(--muted); }
   }
   function draftFinish() {
     var d = state.draft, item, i;
-    derive(d);
-    item = { id: d.id || newId('i'), area: d.area, areas: d.areas.slice(), picks: d.picks.slice(), categories: (d.categories || []).slice(), risks: (d.risks || []).slice(), text: (d.text || '').trim(), files: (state.files.thoughts || []).slice(),
+    item = { id: d.id || newId('i'), area: d.area, categories: (d.categories || []).slice(), risks: (d.risks || []).slice(), text: (d.text || '').trim(), files: (state.files.thoughts || []).slice(),
       fu: d.thread || null, thread: turnPairs(d.thread ? d.thread.turns : []) };
     state.items = state.items || [];
     i = state.items.map(function (x) { return x.id; }).indexOf(item.id);
@@ -2866,261 +2790,10 @@ button.v2-opt:hover { background: var(--muted); }
   }
   function risksOf(it) { return (it.risks || []).map(riskInfo).filter(Boolean); }
   function catsOf(x) { return x.matrixCats || (x.matrixCat ? [x.matrixCat] : []); }
-  // Alternative 01: one searchable list of options. An option is a risk category, a risk name, or something the person
-  // added themselves. Search also matches these synonyms, so "bribery" finds Anti-Corruption and "salary" finds equal pay.
-  var SYN = {
-    'sub-regulatory': ['law', 'legal', 'legislation', 'rules', 'directive', 'compliance'],
-    'sub-systemic': ['structural', 'emerging', 'unknown', 'unforeseen'],
-    'r_equalpay': ['salary', 'wage', 'pay gap', 'gender pay', 'remuneration', 'compensation'],
-    'r_aiact': ['artificial intelligence', 'machine learning', 'chatbot', 'algorithm', 'automation'],
-    'r_ecgt': ['green claims', 'environmental claims', 'sustainability', 'eco', 'climate'],
-    'r_labour': ['employment law', 'harassment', 'bullying', 'workplace', 'hr'],
-    'r_anticorruption': ['bribery', 'bribe', 'kickback', 'gifts', 'hospitality'],
-    'r_latepay': ['invoice', 'payment terms', 'overdue', 'suppliers paid late'],
-    'r_dynamic': ['changing rules', 'regulatory change', 'new requirements'],
-    'r_unknown': ['other', 'unforeseen', 'black swan', 'emerging'],
-    'sub-pharma': ['medicines', 'drug', 'healthcare', 'promotion', 'gmp'],
-    'sub-competition': ['antitrust', 'cartel', 'price fixing', 'consumer rights', 'unfair practices'],
-    'sub-greenwashing': ['green claims', 'environmental claims', 'sustainability', 'eco', 'climate'],
-    'sub-anticorruption': ['bribe', 'kickback', 'gifts', 'hospitality', 'fraud'],
-    'sub-aml': ['money laundering', 'sanctions', 'terrorist financing', 'kyc', 'cash'],
-    'sub-gambling': ['lottery', 'betting', 'prize draw', 'contest', 'games'],
-    'sub-esg': ['sustainability', 'csrd', 'environment', 'social', 'reporting'],
-    'sub-iso': ['standards', 'certification', 'audit', 'quality'],
-    'sub-ai': ['artificial intelligence', 'machine learning', 'chatbot', 'algorithm'],
-    'sub-coi': ['conflict', 'outside activity', 'related party', 'nepotism'],
-    'sub-external': ['lobbying', 'public officials', 'government', 'public affairs'],
-    'sub-disclosure': ['transparency', 'transfers of value', 'publication'],
-    'sub-contracting': ['contracts', 'clauses', 'agreements', 'terms'],
-    'sub-culture': ['ethics', 'values', 'training', 'awareness', 'tone from the top'],
-    'sub-governance': ['policies', 'procedures', 'controls', 'oversight', 'ownership'],
-    'sub-communication': ['messaging', 'internal comms', 'information flow'],
-    'sub-misconduct': ['fraud', 'theft', 'harassment', 'abuse', 'violation'],
-    'sub-reporting': ['whistleblowing', 'speak up', 'hotline', 'escalation'],
-    'sub-supplier': ['vendor', 'third party', 'contractor', 'due diligence'],
-    'sub-procurement': ['purchasing', 'tender', 'sourcing', 'vendor selection']
-  };
-  function pickOptions() {
-    var out = [], areaOf = {};
-    taxonomy.forEach(function (g) {
-      if (g.matrix === 'sub') g.tags.forEach(function (t) { areaOf[t.id] = t.parent || ''; out.push({ v: t.id, l: t.name, kind: 'cat', area: t.parent || '', cat: t.id }); });
-    });
-    Q.forEach(function (q) { if (q.type === 'risk' && q.cat) out.push({ v: q.id, l: q.title, kind: 'risk', area: areaOf[q.cat] || '', cat: q.cat }); });
-    taxonomy.forEach(function (g) {
-      if (g.matrix === 'risk') g.tags.forEach(function (t) { if (t.parent && areaOf[t.parent] !== undefined) out.push({ v: 'tag:' + t.id, l: t.name, kind: 'risk', area: areaOf[t.parent], cat: t.parent }); });
-    });
-    return out;
-  }
-  // Turn the ticked options into the area(s), categories and risk names the rest of the page works with.
-  function derive(d) {
-    var byV = {}, la = linkArea(), cats = [], risks = [], areas = [];
-    function add(list, x) { if (x && list.indexOf(x) < 0) list.push(x); }
-    pickOptions().forEach(function (o) { byV[o.v] = o; });
-    (d.picks || []).forEach(function (v) {
-      var o = byV[v];
-      if (v.indexOf('own:') === 0) { risks.push(v); return; }
-      if (!o) return;
-      add(cats, o.cat); add(areas, o.area);
-      if (o.kind === 'risk') risks.push(v);
-    });
-    d.categories = cats; d.risks = risks;
-    d.areas = areas.length ? areas : (la ? [la] : []);
-    if (la && d.areas.indexOf(la) > 0) { d.areas.splice(d.areas.indexOf(la), 1); d.areas.unshift(la); }
-    d.area = la && d.areas.indexOf(la) >= 0 ? la : d.areas[0] || '';
-  }
-  // The start of the form offers three ways in: search for a risk, upload documents or media, or leave an audio
-  // recording. Uploads and recordings are added as they are, marked "To be sorted", and turned into form entries later.
-  var ICONS = {
-    search: '<path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
-    upload: '<path d="M12 3v12m5-7l-5-5l-5 5m14 7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>',
-    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
-    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
-    circlePlus: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/>'
-  };
-  function icon(name, size) {
-    var el = h('span', { class: 'ico', 'aria-hidden': 'true' });
-    el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
-    return el;
-  }
-  function addUnsorted(kind, files, dur) {
-    if (state.v2) { state.v2.list = ''; state.v2.more = false; }
-    state.items = state.items || [];
-    state.items.push({ id: newId('i'), unsorted: true, kind: kind, dur: dur || 0, area: '', areas: [], picks: [], categories: [], risks: [], text: '', files: files, thread: [] });
-    errMsg = '';
-    render('stay');
-  }
-  function unsortedText(it) {
-    return it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + '), left to be sorted into the form later.' : 'Uploaded to be sorted into the form later.';
-  }
-  var recState = { on: false, mr: null, chunks: [], t0: 0, timer: null, stream: null };
-  function stopRecording() { if (recState.on && recState.mr && recState.mr.state !== 'inactive') recState.mr.stop(); }
-  function startRecording() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { errMsg = 'Recording is not supported in this browser. Upload an audio file instead.'; showError(); return; }
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
-      var mr = new MediaRecorder(stream);
-      recState = { on: true, mr: mr, chunks: [], t0: Date.now(), timer: null, stream: stream };
-      mr.ondataavailable = function (e) { if (e.data && e.data.size) recState.chunks.push(e.data); };
-      mr.onstop = function () {
-        var type = mr.mimeType || 'audio/webm', ext = /mp4|aac/.test(type) ? 'm4a' : /ogg/.test(type) ? 'ogg' : 'webm';
-        var dur = Math.max(1, Math.round((Date.now() - recState.t0) / 1000)), d = new Date();
-        var name = 'recording-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '-' + ('0' + d.getHours()).slice(-2) + ('0' + d.getMinutes()).slice(-2) + '.' + ext;
-        clearInterval(recState.timer);
-        stream.getTracks().forEach(function (t) { t.stop(); });
-        var file = new File(recState.chunks, name, { type: type.split(';')[0] });
-        recState = { on: false, mr: null, chunks: [], t0: 0, timer: null, stream: null };
-        addUnsorted('recording', [file], dur);
-      };
-      mr.start();
-      recState.timer = setInterval(function () { var el = document.getElementById('rec-time'); if (el) el.textContent = clock((Date.now() - recState.t0) / 1000); }, 500);
-      errMsg = '';
-      render('stay');
-    }, function () {
-      errMsg = 'The microphone is blocked for this page. Allow it in the browser’s address bar and try again, or upload an audio file instead.';
-      showError();
-    });
-  }
-  // ---- version-02: one risk at a time, picked from a plain list of risk names ----
-  function v2() { return state.v2 || (state.v2 = { list: '', open: {}, more: false }); }
-  // What can be picked: risk names, plus any category that has no risk names under it yet.
-  function v2Opts() {
-    var all = pickOptions();
-    return all.filter(function (o) { return o.kind === 'risk' || !all.some(function (r) { return r.kind === 'risk' && r.cat === o.v; }); });
-  }
-  function v2Own(name) {
-    var v = name.trim().slice(0, 120), known;
-    state.ownRisks = state.ownRisks || [];
-    known = state.ownRisks.filter(function (n) { return n.toLowerCase() === v.toLowerCase(); })[0];
-    if (!known) { state.ownRisks.push(v); known = v; }
-    return 'own:' + known;
-  }
-  // Search box whose matches appear right under it. Matches also on synonyms.
-  function v2Search(la, onPick, withButton, idp) {
-    var wrap = h('div', { class: 'v2-search' }), results = h('div', { class: 'sf-list start-results' }), all = v2Opts();
-    var search = h('input', { type: 'text', class: 'start-search', id: idp + 'search', autocomplete: 'off', placeholder: withButton ? 'Search' : 'Search for a risk, for example “bribery” or “salary”', 'aria-label': 'Search for a risk' });
-    function show() {
-      var needle = search.value.trim().toLowerCase(), hits = [], exact = false;
-      results.replaceChildren();
-      results.hidden = !needle;
-      if (!needle) return;
-      all.forEach(function (o) {
-        var name = o.l.toLowerCase(), syn = '';
-        if (name === needle) exact = true;
-        if (name.indexOf(needle) < 0) syn = (SYN[o.v] || []).concat(SYN[o.cat] || []).filter(function (w) { return w.indexOf(needle) >= 0 || needle.indexOf(w) >= 0; })[0] || '';
-        if (name.indexOf(needle) >= 0 || syn) hits.push({ o: o, syn: syn });
-      });
-      // Risks from the person's own area come first.
-      hits.sort(function (x, y) { return (y.o.area === la) - (x.o.area === la); });
-      hits.slice(0, 8).forEach(function (hit, i) {
-        var o = hit.o;
-        results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'hit-' + i, onclick: function () { onPick(o.v, o.area); } },
-          h('span', { class: 'sf-txt' }, h('span', { text: o.l }), h('span', { class: 'fsub', text: tagName(o.area) + (hit.syn ? ' · also: ' + hit.syn : '') }))));
-      });
-      if (!hits.length) results.appendChild(h('p', { class: 'tip start-none', text: 'Nothing in the list matches.' }));
-      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'own', onclick: function () { onPick(v2Own(search.value), ''); } },
-        h('span', { class: 'sf-txt', text: '+ Add “' + search.value.trim() + '” as your own risk' })));
-    }
-    search.addEventListener('input', show);
-    search.addEventListener('keydown', function (e) {
-      var first = results.querySelector('button');
-      if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
-    });
-    results.hidden = true;
-    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search),
-      withButton ? h('button', { type: 'button', class: 'btn act', id: idp + 'search-go', text: 'Search', onclick: function () { show(); search.focus(); } }) : null));
-    wrap.appendChild(results);
-    return wrap;
-  }
-  function v2Rows(opts, sel, onPick, idp) {
-    var box = h('div', { class: 'v2-rows' });
-    opts.forEach(function (o, i) {
-      box.appendChild(h('button', { type: 'button', class: 'v2-opt act', id: idp + i, 'aria-pressed': o.v === sel ? 'true' : 'false', onclick: function () { onPick(o.v, o.area); } },
-        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l })));
-    });
-    return box;
-  }
-  // The risks to choose from: the person's own area first, then their own additions, an "add another" row, and, when asked for, every other area.
-  function v2List(la, mode, sel, onPick, idp) {
-    var st = v2(), wrap = h('div', { class: 'v2-list' }), all = v2Opts(), own = state.ownRisks || [], mine, others;
-    if (la) {
-      mine = all.filter(function (o) { return o.area === la; });
-      if (mine.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Risks in ' + tagName(la) }), v2Rows(mine, sel, onPick, idp + 'mine-')));
-    }
-    if (own.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Added by you' }),
-      v2Rows(own.map(function (n) { return { v: 'own:' + n, l: n, area: '' }; }), sel, onPick, idp + 'own-')));
-    var name = h('input', { type: 'text', class: 'line', id: idp + 'another', maxlength: '120', autocomplete: 'off', placeholder: 'Add another risk…', 'aria-label': 'Add another risk' });
-    var add = h('button', { type: 'button', class: 'btn act', id: idp + 'another-go', text: 'Add risk', onclick: function () { if (!name.value.trim()) { name.focus(); return; } onPick(v2Own(name.value), ''); } });
-    name.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
-    wrap.appendChild(h('div', { class: 'v2-addrow' }, name, add));
-    if (mode === 'all' || !la) {
-      others = areaTags().filter(function (t) { return t.id !== la && all.some(function (o) { return o.area === t.id; }); });
-      if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: la ? 'Other areas' : 'All areas' }));
-      others.forEach(function (t) {
-        var isOpen = !!st.open[t.id], opts = all.filter(function (o) { return o.area === t.id; });
-        var head = h('button', { type: 'button', class: 'pick-head combo-btn-like act', id: idp + 'area-' + t.id, 'aria-expanded': isOpen ? 'true' : 'false', onclick: function () { st.open[t.id] = !st.open[t.id]; render('stay'); } },
-          h('span', { text: t.name }), chevrons());
-        wrap.appendChild(h('div', { class: 'pick-group' }, head, isOpen ? v2Rows(opts, sel, onPick, idp + t.id + '-') : null));
-      });
-    }
-    return wrap;
-  }
-  function startBlock(hasItems, la) {
-    var st = v2(), wrap = h('div', { class: 'start' }), inClaude = !!window.claude, cards = h('div', { class: 'start-cards' });
-    function openWith(v) {
-      state.draft = { picks: [v], shown: true };
-      state.files.thoughts = [];
-      st.list = ''; st.more = false;
-      errMsg = ''; sfShown = 0;
-      render('fwd');
-      var box = document.getElementById('f-thoughts');
-      if (box) box.focus();
-    }
-    wrap.appendChild(v2Search(la, openWith, false, 'start-'));
-    if (!st.list) {
-      wrap.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn ghost act', id: 'start-add', onclick: function () { st.list = la ? 'mine' : 'all'; errMsg = ''; render('stay'); } }, icon('circlePlus', 16), 'Add new risk'),
-        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; errMsg = ''; render('stay'); }, text: 'Browse all risk options' })));
-    } else {
-      wrap.appendChild(v2List(la, st.list, '', openWith, 'start-'));
-      if (st.list === 'mine') wrap.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; render('stay'); }, text: 'Browse all risk options' })));
-    }
-    wrap.appendChild(h('div', { class: 'v2-or', text: 'OR' }));
-    // Upload
-    var up = h('input', { type: 'file', class: 'pick act', id: 'start-upload', multiple: true, accept: ACCEPT, 'aria-label': 'Upload documents or media' });
-    function take(list) {
-      var ok = [], bad = '';
-      Array.prototype.forEach.call(list || [], function (f) {
-        if (!kindOf(f)) bad = '“' + f.name + '” is not a supported file type.';
-        else if (f.size > MAX_BYTES) bad = '“' + f.name + '” is larger than 100 MB.';
-        else if (ok.length < MAX_FILES) ok.push(f);
-      });
-      if (ok.length) addUnsorted('upload', ok, 0);
-      if (bad) { errMsg = bad; showError(); }
-    }
-    up.addEventListener('change', function (e) { take(e.target.files); e.target.value = ''; });
-    var upCard = h('label', { class: 'start-card', for: 'start-upload' }, up, icon('upload', 20),
-      h('span', { class: 'start-title', text: 'Upload documents or media' }),
-      h('span', { class: 'tip', text: 'Add files now and leave the details for later. You can also drop them here.' }));
-    upCard.addEventListener('dragover', function (e) { e.preventDefault(); upCard.classList.add('over'); });
-    upCard.addEventListener('dragleave', function () { upCard.classList.remove('over'); });
-    upCard.addEventListener('drop', function (e) { e.preventDefault(); upCard.classList.remove('over'); take(e.dataTransfer && e.dataTransfer.files); });
-    cards.appendChild(upCard);
-    // Recording
-    var recCard = h('button', { type: 'button', class: 'start-card act' + (recState.on ? ' on' : ''), id: 'start-record', onclick: function () { if (recState.on) stopRecording(); else startRecording(); } },
-      recState.on ? h('span', { class: 'rec-dot on', 'aria-hidden': 'true' }) : icon('mic', 20),
-      h('span', { class: 'start-title' }, recState.on ? 'Stop recording ' : 'Leave an audio recording', recState.on ? h('span', { id: 'rec-time', class: 'at', text: clock((Date.now() - recState.t0) / 1000) }) : null),
-      h('span', { class: 'tip', text: recState.on ? 'Recording… Say what you have seen, then press here to stop.' : 'Say it in your own words. It is saved as it is and sorted into the form later.' }));
-    recCard.disabled = inClaude;
-    if (inClaude) recCard.title = 'Recording works when this page is opened on its own, outside Claude';
-    cards.appendChild(recCard);
-    wrap.appendChild(cards);
-    return wrap;
-  }
   function draftAdd() {
     var d = state.draft, text = (d.text || '').trim(), reply = document.getElementById('f-reply'), token;
     if (draftBusy) return;
-    if (!(d.picks || []).length) { errMsg = 'Choose a risk from the list, or add your own, before adding this to the list.'; showError(); return; }
-    derive(d);
+    if (!d.area || !(d.categories || []).length) { errMsg = 'Choose ' + (d.area ? 'at least one risk category' : 'an area and at least one risk category') + ' before adding this risk.'; showError(); return; }
     if (!text) { errMsg = 'Write a few words about this risk first.'; showError(); return; }
     // Already checked for this text: keep any reply typed but not sent, then add the risk.
     if (d.thread && d.thread.src === text) {
@@ -3262,42 +2935,16 @@ button.v2-opt:hover { background: var(--muted); }
     }
     var items = state.items || (state.items = []), list = h('div', { class: 'risk-list' }), editor, buttons;
     var la = linkArea();
-    // Intro: shown first, explains why the person is asked and how the process goes.
-    if (!state.started) {
-      sec.classList.add('intro');
-      sec.appendChild(h('div', { class: 'head' },
-        la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) })) : null,
-        h('h1', { class: 'big', text: 'Help us see the risks you see' }),
-        h('p', { class: 'help', text: 'Compliance is building one picture of the regulatory and ethical risks across the company. That picture is only as good as what people in each area tell us, so we are asking you to add what you notice in your daily work.' })));
-      var why = h('div', { class: 'intro-why' });
-      [['You see it first', 'Problems show up in daily work long before they reach a report. Nobody in compliance knows your area the way you do.'],
-       ['It shapes what gets fixed', 'What you add goes into the company risk matrix, which is used to decide where controls, training and attention are needed.'],
-       ['It does not have to be polished', 'A few sentences, a document or a voice recording is enough. Compliance sorts it and comes back if something is unclear.']
-      ].forEach(function (w) { why.appendChild(h('div', { class: 'intro-card' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] }))); });
-      sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'Why we are asking you' }), why));
-      var how = h('ol', { class: 'intro-steps' });
-      [['Add a risk', 'Search the list, pick from your own area or another one, or create your own if nothing fits.'],
-       ['Say what you see', 'Write or dictate your thoughts and attach documents or media. Short on time? Upload files or leave an audio recording and it is sorted into the form later.'],
-       ['Answer a follow-up, if one comes up', 'The assistant may ask a short question to fill a gap. You can skip it.'],
-       ['Check the list and submit', 'You can edit or remove anything before you send it.'],
-       ['Compliance takes it from there', 'They review and tag what you sent, may ask another area to add what you could not, and may come back to you with questions.']
-      ].forEach(function (w, i) { how.appendChild(h('li', null, h('span', { class: 'intro-n', 'aria-hidden': 'true', text: String(i + 1) }), h('span', { class: 'intro-txt' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] })))); });
-      sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'How it works' }), how));
-      sec.appendChild(h('div', { class: 'meta' }, h('span', { text: 'A few minutes per risk' }), h('span', { text: 'Every part is optional' }), h('span', { text: 'Add as many risks as you like' })));
-      sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'intro-start', text: items.length || state.draft ? 'Back to your risks' : 'Start', onclick: function () { state.started = true; render('fwd'); } })));
-      return sec;
-    }
     sec.appendChild(h('div', { class: 'head' },
-      la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) }),
-        h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Change' })) : null,
-      h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Add new risk assessment' }),
-      state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
-        : h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
-        h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
+      la ? h('div', { class: 'badges' }, h('span', { class: 'tag', text: tagName(la) }),
+        h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Not your area? Choose another' })) : null,
+      h('h1', { class: 'big', text: 'Add new risk assessment' }),
+      h('p', { class: 'help', text: la ? 'Add the risks you see in this area, one at a time. Pick from the risk categories and risk names, or add your own.'
+        : 'Add the risks you want to raise, one at a time. You can add as many as you like, including several in the same area.' })));
     // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
     var shownItems = items.filter(function (it) { return !(state.draft && state.draft.id === it.id); });
     var anySources = shownItems.some(function (it) { return (it.thread || []).length; }), anyFiles = shownItems.some(function (it) { return it.files.length; });
-    if (shownItems.length && !state.draft) {
+    if (shownItems.length) {
       var head = h('tr', null, h('th', { scope: 'col', text: 'Area' }), h('th', { scope: 'col', text: 'Risk category' }), h('th', { scope: 'col', text: 'Risk name' }), h('th', { scope: 'col', text: 'Risk description' }));
       var body = h('tbody');
       if (anySources) head.appendChild(h('th', { scope: 'col', text: 'Sources' }));
@@ -3312,10 +2959,10 @@ button.v2-opt:hover { background: var(--muted); }
           return box;
         }
         tr = h('tr', { class: 'risk-row' },
-          h('td', null, (it.areas || [it.area]).filter(Boolean).length ? lines((it.areas || [it.area]).filter(Boolean).map(tagName)) : h('span', { class: 'none', text: '\u2014' })),
-          h('td', null, it.categories.length ? lines(it.categories.map(tagName)) : h('span', { class: 'none', text: '\u2014' })),
-          h('td', null, it.unsorted ? h('span', { class: 'tag ai', text: 'To be sorted' }) : rks.length ? lines(rks.map(function (r) { return r.name; })) : h('span', { class: 'none', text: '—' })),
-          h('td', { class: 'desc' }, clipped(it.unsorted ? unsortedText(it) : it.text)));
+          h('td', { text: tagName(it.area) }),
+          h('td', null, lines(it.categories.map(tagName))),
+          h('td', null, rks.length ? lines(rks.map(function (r) { return r.name; })) : h('span', { class: 'none', text: '—' })),
+          h('td', { class: 'desc' }, clipped(it.text)));
         if (anySources) {
           cell = h('td', { class: 'src-cell' });
           if ((it.thread || []).length) {
@@ -3328,7 +2975,7 @@ button.v2-opt:hover { background: var(--muted); }
         if (anyFiles) tr.appendChild(h('td', { class: 'file-cell' }, it.files.length ? lines(it.files.map(function (f) { return f.name; }), 'fname') : h('span', { class: 'none', text: '—' })));
         tr.appendChild(h('td', { class: 'row-actions' },
           h('button', { type: 'button', class: 'edit act', id: 'ri-edit-' + i, 'aria-label': 'Edit this risk', onclick: function () {
-            state.draft = { id: it.id, picks: (it.picks || []).slice(), area: it.area, categories: it.categories.slice(), risks: it.risks.slice(), text: it.text, thread: it.fu ? clone(it.fu) : null };
+            state.draft = { id: it.id, area: it.area, categories: it.categories.slice(), risks: it.risks.slice(), text: it.text, thread: it.fu ? clone(it.fu) : null };
             state.files.thoughts = it.files.slice();
             errMsg = ''; sfShown = 0;
             render('stay');
@@ -3346,18 +2993,73 @@ button.v2-opt:hover { background: var(--muted); }
     if (state.draft) {
       editor = h('div', { class: 'risk-editor' });
       host = editor;
-      a.picks = (a.picks || []).slice(0, 1);
-      var byV = {}, sel = a.picks[0] || '', selName, setPick = function (v) { a.picks = [v]; a.changing = false; errMsg = ''; render('stay'); };
-      pickOptions().forEach(function (o) { byV[o.v] = o; });
-      selName = sel.indexOf('own:') === 0 ? sel.slice(4) : byV[sel] ? byV[sel].l : '';
-      editor.appendChild(v2Search(la, setPick, true, 'f-'));
-      if (selName) editor.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' },
-        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: selName }),
-        h('button', { type: 'button', class: 'edit act', id: 'f-change', 'aria-expanded': a.changing ? 'true' : 'false', onclick: function () { a.changing = !a.changing; render('stay'); }, text: a.changing ? 'close' : 'change' })));
-      if (!selName || a.changing) editor.appendChild(v2List(la, 'all', sel, setPick, 'f-'));
-      a.shown = true;
+      a.categories = a.categories || []; a.risks = a.risks || [];
+      // Changing what is above keeps everything below on screen; only choices that no longer fit are dropped.
+      var keepOwn = function () { a.risks = a.risks.filter(function (v) { return v.indexOf('own:') === 0; }); };
+      var pruneRisks = function () {
+        var ok = {};
+        riskGroups(a.categories, a.risks).forEach(function (g) { g.items.forEach(function (o) { ok[o.v] = 1; }); });
+        a.risks = a.risks.filter(function (v) { return ok[v]; });
+      };
+      if (la) a.area = la;
+      else step('Area', '', combo(areaTags().map(function (t) { return { v: t.id, l: t.name }; }), a.area, 'f-area-', function (v) {
+        a.categories = []; keepOwn();
+        a.area = v;
+      }, 'Select an area'));
+      var clearBtn = (la ? a.categories.length : a.area) ? h('button', { type: 'button', class: 'edit act sf-clear', id: 'sf-clear', onclick: function () {
+        if (!la) delete a.area;
+        a.categories = []; keepOwn();
+        errMsg = '';
+        render('stay');
+      }, text: 'Clear selections' }) : null;
+      if (clearBtn && !la) last.firstChild.appendChild(clearBtn);
+      if (a.area || a.shown) step('Risk category', 'Select one or more', combo(a.area ? categoryChoices(a.area) : [], a.categories, 'f-category-', function (v) {
+        var i = a.categories.indexOf(v);
+        if (i >= 0) a.categories.splice(i, 1); else a.categories.push(v);
+        pruneRisks();
+      }, a.area ? 'Select risk categories' : 'Select an area first', true));
+      if (clearBtn && la && last) last.firstChild.appendChild(clearBtn);
       // Once the lower sections have appeared they stay, whatever is changed above them.
-      if (a.shown) {
+      if ((a.area && a.categories.length) || a.shown) {
+        a.shown = true;
+        var groups = riskGroups(a.categories, a.risks), nameBody = h('div', { class: 'sf-body' }), own, nOpt = 0;
+        groups.forEach(function (g) {
+          var listEl = h('div', { class: 'sf-list' });
+          g.items.forEach(function (o) {
+            var on = a.risks.indexOf(o.v) >= 0;
+            listEl.appendChild(h('button', { type: 'button', class: 'sf-opt multi act', id: 'f-risk-' + nOpt++, 'aria-pressed': on ? 'true' : 'false',
+              onclick: function () {
+                var i = a.risks.indexOf(o.v);
+                if (i >= 0) a.risks.splice(i, 1); else a.risks.push(o.v);
+                errMsg = '';
+                render('stay');
+              } },
+              h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l })));
+          });
+          nameBody.appendChild(h('div', { class: 'chip-area' }, groups.length > 1 || g.own ? h('span', { class: 'cap', text: g.cap }) : null, listEl));
+        });
+        var addOwn = function () {
+          var v = own.value.trim().slice(0, 120), known;
+          if (!v) return;
+          state.ownRisks = state.ownRisks || [];
+          known = state.ownRisks.filter(function (n) { return n.toLowerCase() === v.toLowerCase(); })[0];
+          if (!known) { state.ownRisks.push(v); known = v; }
+          if (a.risks.indexOf('own:' + known) < 0) a.risks.push('own:' + known);
+          a.riskDraft = '';
+          errMsg = '';
+          render('stay');
+          var again = document.getElementById('f-riskname');
+          if (again) again.focus();
+        };
+        var addBtn = h('button', { type: 'button', class: 'btn ghost act', id: 'f-riskname-add', onclick: addOwn, text: 'Add' });
+        own = h('input', { type: 'text', class: 'line', id: 'f-riskname', maxlength: '120', autocomplete: 'off', placeholder: groups.length ? 'Or add your own risk name' : 'Add your own risk name', 'aria-label': 'Your own risk name',
+          oninput: function (e) { a.riskDraft = e.target.value; addBtn.disabled = !e.target.value.trim(); },
+          onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); addOwn(); } } });
+        own.value = a.riskDraft || '';
+        addBtn.disabled = !own.value.trim();
+        nameBody.appendChild(h('div', { class: 'sf-own' }, own, addBtn));
+        nameBody.appendChild(h('span', { class: 'tip', text: 'Names you add are used as they are. Compliance may edit or accept them later.' }));
+        step('Risk name', 'Optional, select one or more', nameBody);
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
         if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
       }
@@ -3385,19 +3087,17 @@ button.v2-opt:hover { background: var(--muted); }
       sfShown = shown;
     } else {
       sfShown = 0;
-      var more = !items.length || v2().more;
-      if (more) sec.appendChild(startBlock(items.length, la));
+      buttons = h('div', { class: 'go' });
+      if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' risk' : ' risks') }));
+      buttons.appendChild(h('button', { type: 'button', class: 'btn act' + (items.length ? ' ghost' : ''), id: 'add-risk', onclick: function () {
+        state.draft = {}; state.files.thoughts = [];
+        errMsg = ''; sfShown = 0;
+        render('stay');
+      }, text: items.length ? '+ Add another risk' : '+ Add a risk' }));
+      sec.appendChild(buttons);
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
       sec.appendChild(err);
-      buttons = h('div', { class: 'go' });
-      if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' item' : ' items') }));
-      if (!more) buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () {
-        v2().more = true; v2().list = 'all';
-        errMsg = ''; sfShown = 0;
-        render('stay');
-      }, text: 'Browse all risk options' }));
-      if (buttons.children.length) sec.appendChild(buttons);
     }
     open = requests.filter(function (r) { return r.status === 'open'; });
     if (open.length) {
@@ -3426,7 +3126,6 @@ button.v2-opt:hover { background: var(--muted); }
       var oldList = stage.querySelector('.rv-list'), keep = oldList ? oldList.scrollTop : 0;
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stopDictation();
-      stopRecording();
       stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
