@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Regulatory Risk Assessment</title>
+<title>Risk Assessment Version 02</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 html { color-scheme: light; }
@@ -96,7 +96,7 @@ main { flex: 1 0 auto; display: flex; padding-inline: 24px; padding-block: 16px;
 .head { display: flex; flex-direction: column; gap: 6px; }
 .num { font-family: var(--mono); font-size: 13px; line-height: calc(var(--qsize) * 1.3); color: var(--muted-foreground); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 h1 { font-weight: 600; font-size: var(--qsize); line-height: 1.3; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
-h1.big { font-size: clamp(30px, 6.5vw, 40px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; }
+h1.big { font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; }
 .help { color: var(--muted-foreground); font-size: 15px; margin: 0; max-width: 60ch; }
 
 /* Input, Textarea */
@@ -288,8 +288,13 @@ main.rvmode { padding-block: 4px 20px; }
 .chip-edit button.ask { color: var(--destructive); font-size: 12px; font-weight: 500; }
 .tg-group { padding-bottom: 14px; }
 .tg-add { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.tg-add .line { height: 32px; max-width: 240px; font-size: 13px; }
+.rv-detail .tg-add .line { height: 32px; min-height: 0; max-width: 240px; font-size: 13px; }
 @media (max-width: 760px) { .rv.single .rv-detail { display: flex; } }
+
+.chip-areas, .tg-parts { display: flex; flex-direction: column; gap: 12px; }
+.chip-area, .tg-part { display: flex; flex-direction: column; gap: 6px; }
+.chip-area .cap, .tg-part .cap { color: var(--muted-foreground); font-size: 12px; font-weight: 500; }
+.tg-part + .tg-part { padding-top: 12px; border-top: 1px solid var(--border); }
 
 /* Labeling screen (after Label Studio): palette, text regions, regions panel */
 .c1 { --c: var(--c1); } .c2 { --c: var(--c2); } .c3 { --c: var(--c3); } .c4 { --c: var(--c4); } .c5 { --c: var(--c5); } .c6 { --c: var(--c6); }
@@ -346,6 +351,7 @@ main.rvmode { padding-block: 4px 20px; }
 .rv-row { scroll-margin-top: 16px; transition: box-shadow .3s; }
 .rv-row.flash { box-shadow: 0 0 0 2px var(--ring); border-radius: var(--radius-md); }
 
+.link-url { display: block; padding: 8px 10px; background: var(--muted); border-radius: var(--radius-md); font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; -webkit-user-select: all; user-select: all; }
 .row-srcs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 2px; }
 .row-srcs .cap { margin-right: 2px; color: var(--muted-foreground); font-size: 12px; }
 .src-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; height: 26px; padding: 0 10px 0 3px; background: var(--background); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; font-weight: 500; }
@@ -383,6 +389,172 @@ main.rvmode { padding-block: 4px 20px; }
 .diff > div { min-width: 0; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-size: 13px; }
 .diff .was { color: var(--muted-foreground); }
 .diff .cap { display: block; margin-bottom: 2px; color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
+/* Summary of the risks added so far, as a table that scrolls sideways on its own when the screen is narrow */
+.sf.has-table { max-width: 1560px; }
+.sf.has-table .head, .sf.has-table .risk-editor { max-width: 720px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.risk-table { width: 100%; min-width: 980px; border-collapse: collapse; font-size: 14px; }
+.risk-table th { padding: 10px 12px; text-align: left; white-space: nowrap; background: var(--muted); color: var(--muted-foreground); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; }
+.risk-table td { padding: 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
+.risk-table tbody tr:last-child td { border-bottom: 0; }
+.risk-table .desc { min-width: 300px; }
+.risk-table td:nth-child(1) { min-width: 150px; }
+.risk-table td:nth-child(2) { min-width: 140px; }
+.risk-table td:nth-child(3) { min-width: 240px; }
+.risk-table .none { color: var(--muted-foreground); }
+.cell-list { display: flex; flex-direction: column; gap: 6px; }
+.cell-list .fname { overflow-wrap: anywhere; }
+.src-cell { min-width: 180px; font-size: 13px; }
+.file-cell { min-width: 150px; font-size: 13px; }
+.src-cell b { display: block; font-weight: 500; }
+.src-cell .ans { display: block; color: var(--muted-foreground); }
+.row-actions { white-space: nowrap; }
+.row-actions .edit { margin-right: 12px; text-decoration: underline; }
+.row-actions .edit:last-child { margin-right: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Alternative 01: one searchable list of options, the person's own area first */
+.my-area { max-width: 720px; }
+.pick-label { margin-top: 4px; color: var(--muted-foreground); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.pick-group { display: flex; flex-direction: column; gap: 6px; }
+.pick-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 8px 2px; background: none; color: var(--foreground); border: 0; font-size: 14px; font-weight: 600; text-align: left; }
+button.pick-head { padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; }
+button.pick-head:hover { background: var(--muted); }
+.pick-head > span:first-child { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.pick-head[aria-expanded="true"] .combo-chev .down { display: none; }
+.pick-head[aria-expanded="true"] .combo-chev .up { display: block; }
+.sf-opt.sub { padding-left: 42px; }
+.sf-opt .syn { flex: none; color: var(--muted-foreground); font-size: 12px; }
+.chips.picked .chip { cursor: pointer; }
+.pick-add { align-self: flex-start; padding: 8px 12px; background: var(--background); color: var(--foreground); border: 1px dashed var(--ring); border-radius: var(--radius-md); font-size: 14px; font-weight: 500; text-align: left; cursor: pointer; }
+.pick-add:hover { background: var(--muted); }
+
+/* Start of the form: search, upload, or leave a recording */
+.start { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+.start-searchbox { display: flex; align-items: center; gap: 10px; padding: 0 14px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); color: var(--muted-foreground); }
+.start-searchbox:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px var(--ring-soft); }
+.start-search { flex: 1; min-width: 0; height: 52px; background: transparent; color: var(--foreground); border: 0; font-size: 16px; }
+.start-search:focus { outline: none; }
+.start-search::placeholder { color: var(--muted-foreground); }
+.start-results .sf-txt { display: flex; flex-direction: column; gap: 2px; }
+.start-none { margin: 0; padding: 10px 14px; }
+.start-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.start-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); cursor: pointer; }
+.start-card:hover:not(:disabled), .start-card.over { background: var(--muted); }
+.start-card:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
+.start-card.over { border-style: dashed; border-color: var(--primary); }
+.start-card.on { border-color: var(--destructive); }
+.v2-search { display: flex; flex-direction: column; gap: 8px; }
+.v2-searchrow { display: flex; align-items: stretch; gap: 8px; }
+.v2-searchrow .start-searchbox { flex: 1; min-width: 0; }
+.v2-searchrow .btn { height: auto; }
+.v2-list { display: flex; flex-direction: column; gap: 12px; }
+.v2-rows { display: flex; flex-direction: column; gap: 8px; }
+.v2-opt { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 14px; font-weight: 500; }
+button.v2-opt { cursor: pointer; }
+button.v2-opt:hover { background: var(--muted); }
+.v2-opt .dot { flex: none; width: 16px; height: 16px; border: 1.5px solid var(--ring); border-radius: 50%; }
+.v2-opt .sf-txt { flex: 1; min-width: 0; }
+.v2-opt[aria-pressed="true"] { background: var(--muted); border-color: var(--ring); }
+.v2-opt[aria-pressed="true"] .dot { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--muted); }
+.v2-opt .edit { text-decoration: underline; }
+.v2-addrow { display: flex; gap: 8px; }
+.v2-addrow .line { flex: 1; min-width: 0; }
+.v2-or { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
+.v2-or::before, .v2-or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.btn .ico { display: inline-flex; margin-right: 6px; }
+.risk-editor { display: flex; flex-direction: column; gap: 14px; }
+.intro-h { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.intro-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.intro-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.intro-title { font-size: 15px; font-weight: 600; }
+.intro-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.intro-steps li { display: flex; align-items: flex-start; gap: 12px; }
+.intro-n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 999px; background: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 500; }
+.intro-txt { display: flex; flex-direction: column; gap: 2px; max-width: 60ch; }
+.start-own { grid-column: 1 / -1; cursor: default; }
+.start-own:hover:not(:disabled) { background: var(--background); }
+.start-own:focus-within { outline: none; }
+.start-own-row { display: flex; gap: 8px; align-self: stretch; margin-top: 6px; }
+.start-own-row .line { flex: 1; min-width: 0; max-width: none; }
+.start-card:disabled { opacity: .5; cursor: default; }
+.start-title { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+.start-title .at { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+.ico { display: inline-grid; place-items: center; }
+
+/* Single-screen form: a list of risks, each added through a progressive-disclosure editor */
+.risk-list { display: flex; flex-direction: column; gap: 10px; }
+.risk-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 12px 14px; font-size: 14px; }
+.risk-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.risk-actions { display: flex; gap: 16px; margin-top: 2px; }
+.risk-actions .edit { text-decoration: underline; }
+.risk-empty { margin: 0; border: 1px dashed var(--ring); border-radius: var(--radius); padding: 22px 16px; color: var(--muted-foreground); font-size: 14px; text-align: center; }
+.risk-editor { display: flex; flex-direction: column; gap: 22px; }
+.sf { max-width: 720px; gap: 26px; }
+.sf-step { display: flex; flex-direction: column; gap: 10px; }
+.sf-step.reveal { animation: up .35s cubic-bezier(.2, .7, .2, 1); }
+.sf-label { display: flex; align-items: baseline; font-size: 14px; font-weight: 600; }
+.sf-clear { margin-left: auto; font-weight: 500; text-decoration: underline; }
+.sf-body { display: flex; flex-direction: column; gap: 12px; }
+.sf-label .opt-note { margin-left: 8px; color: var(--muted-foreground); font-weight: 400; font-size: 12px; }
+.chip.lg { min-height: 36px; padding: 7px 14px; font-size: 14px; }
+.sf-list { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sf-opt { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 14px; text-align: left; background: var(--background); color: var(--foreground); border: 0; border-bottom: 1px solid var(--border); font-size: 15px; cursor: pointer; }
+.sf-opt:last-child { border-bottom: 0; }
+.sf-opt:hover { background: var(--muted); }
+.sf-opt:focus-visible { outline-offset: -2px; }
+.sf-opt .dot { flex: none; width: 16px; height: 16px; border: 1.5px solid var(--ring); border-radius: 50%; }
+.sf-opt .sf-txt { flex: 1; min-width: 0; }
+.sf-opt[aria-pressed="true"] { font-weight: 500; }
+.sf-opt[aria-pressed="true"] .dot { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--background); }
+.sf-opt .chg { color: var(--muted-foreground); font-size: 13px; font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
+.sf .line { max-width: none; min-height: 150px; padding: 12px 14px; font-size: 16px; line-height: 1.5; }
+.sf input.line { height: 44px; min-height: 0; padding: 0 12px; font-size: 15px; }
+.sf-own { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sf-own .line { flex: 1 1 260px; }
+.proposal { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; }
+.rec-mic { display: inline-grid; place-items: center; }
+.think { display: flex; flex-direction: column; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: border-color .15s, box-shadow .15s; }
+.think:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px var(--ring-soft); }
+.sf .think .line { min-height: 120px; background: transparent; border: 0; box-shadow: none; resize: vertical; }
+.sf .think .line:focus { box-shadow: none; }
+.think-bar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 0 8px 8px 14px; }
+.think-bar .tip { flex: 1; min-width: 0; }
+.mic { flex: none; width: 34px; height: 34px; display: grid; place-items: center; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; }
+.mic:hover:not(:disabled) { background: var(--muted); }
+.mic[aria-pressed="true"] { background: var(--destructive); border-color: var(--destructive); }
+.mic[aria-pressed="true"] .rec-dot { background: var(--background); }
+.mic:disabled { opacity: .45; cursor: default; }
+.rec-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--destructive); }
+.rec-dot.on { border-radius: 2px; animation: blink 1.2s infinite both; }
+.attach-btn:disabled { opacity: .5; cursor: default; }
+.attach-btn[aria-pressed="true"] { border-color: var(--destructive); }
+@media (prefers-reduced-motion: reduce) { .rec-dot.on { animation: none; } }
+.combo { position: relative; }
+.combo-btn { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 44px; padding: 8px 12px; text-align: left; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); font-size: 15px; cursor: pointer; }
+.combo-btn:hover:not(:disabled) { background: var(--muted); }
+.combo-btn:disabled { cursor: default; opacity: .6; }
+.combo-btn[aria-expanded="true"] { border-color: var(--ring); box-shadow: 0 0 0 3px var(--ring-soft); }
+.combo-val { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.combo-count { flex: none; min-width: 20px; padding: 1px 6px; background: var(--muted); border-radius: 10px; font-size: 12px; font-weight: 600; text-align: center; }
+.sf-opt.multi .dot { border-radius: 4px; }
+.combo-val.ph, .combo-chev { color: var(--muted-foreground); }
+.combo-chev { flex: none; display: inline-grid; place-items: center; }
+.combo-chev .up, .combo-btn[aria-expanded="true"] .combo-chev .down { display: none; }
+.combo-btn[aria-expanded="true"] .combo-chev .up { display: block; }
+.combo-pop { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); display: flex; flex-direction: column; gap: 4px; padding: 6px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 10px 28px rgba(0, 0, 0, .16); }
+.combo-search { box-sizing: border-box; width: 100%; height: 36px; padding: 0 10px; background: transparent; color: inherit; border: 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.combo-search:focus { outline: none; }
+.combo-search::placeholder { color: var(--muted-foreground); }
+.combo-list { display: flex; flex-direction: column; max-height: 264px; overflow-y: auto; }
+.combo-opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; text-align: left; background: transparent; color: inherit; border: 0; border-radius: var(--radius-md); font-size: 14px; cursor: pointer; }
+.combo-opt:hover, .combo-opt.active { background: var(--muted); }
+.combo-opt[aria-selected="true"] { font-weight: 600; }
+.combo-empty { margin: 0; padding: 10px; color: var(--muted-foreground); font-size: 13px; }
+.sf .ctx { max-width: none; }
+.sf .follow { max-width: none; }
+@media (prefers-reduced-motion: reduce) { .sf-step.reveal { animation: none; } }
 
 /* Checkbox + signature */
 .sign { display: flex; flex-direction: column; gap: 20px; }
@@ -467,11 +639,23 @@ main.rvmode { padding-block: 4px 20px; }
   function key(v) { return v && typeof v === 'object' ? JSON.stringify(v) : String(v); }
   function riskHas(v) { return !!v && RISK_FIELDS.some(function (f) { return (v[f[0]] || '').trim(); }); }
   function risk(id, sub, short, title, help) {
-    return { id: id, type: 'risk', sub: sub, short: short, title: title, help: help || RISK_HELP, ai: true, aiWhen: riskHas, fallback: RISK_FOLLOW };
+    var cat = sub === 'Systemic' ? 'sub-systemic' : 'sub-regulatory';
+    return { id: id, type: 'risk', sub: sub, cat: cat, short: short, title: title, help: help || RISK_HELP, ai: true, aiWhen: riskHas, fallback: RISK_FOLLOW,
+      when: function (a) { return a.category === cat; } };
+  }
+  // The person first picks where their input belongs in the matrix; the risks asked depend on the category.
+  function categoryChoices(area) {
+    var out = [];
+    area = area || state.answers.area;
+    taxonomy.forEach(function (g) {
+      if (g.matrix === 'sub') g.tags.forEach(function (t) { if (t.parent === area) out.push({ v: t.id, l: t.name }); });
+    });
+    return out;
   }
   var Q = [
-    { id: 'name', type: 'text', short: 'Full name', title: 'First, what is your full name?', help: 'We use your name and email to confirm who submitted this assessment.', ph: 'Type your answer here…', ac: 'name' },
-    { id: 'email', type: 'email', short: 'Work email', title: 'Thanks, {first}. What is your work email?', ph: 'name@company.com', ac: 'email' },
+    { id: 'area', type: 'choice', short: 'Area', title: 'Which area of the risk matrix is your input about?', help: 'Pick one. The next question narrows it down to a risk category.',
+      opts: function () { return areaTags().map(function (t) { return { v: t.id, l: t.name }; }); } },
+    { id: 'category', type: 'choice', short: 'Risk category', title: 'Which risk category does it fall under?', help: 'These are the categories in the area you picked.', opts: categoryChoices },
     risk('r_equalpay', 'Regulatory', 'Equal pay transparency', 'Non-compliance with equal pay transparency requirements'),
     risk('r_aiact', 'Regulatory', 'AI Act ethical obligations', 'Non-compliance with AI Act ethical obligations'),
     risk('r_ecgt', 'Regulatory', 'Greenwashing (ECGT Directive)', 'Non-compliance with greenwashing regulations (ECGT Directive)'),
@@ -479,11 +663,17 @@ main.rvmode { padding-block: 4px 20px; }
     risk('r_anticorruption', 'Regulatory', 'EU Anti-Corruption Directive', 'Non-compliance with the upcoming EU Anti-Corruption Directive'),
     risk('r_latepay', 'Regulatory', 'Late-payment regulations', 'Insufficient monitoring of the ongoing EU work on new late-payment regulations'),
     risk('r_dynamic', 'Regulatory', 'Dynamic regulatory environment', 'Dynamic regulatory environment in the area of compliance'),
-    risk('r_unknown', 'Systemic', 'Unknown unknowns', 'Unknown unknowns', 'Risks nobody has named yet. Is there anything on the horizon in your area that this matrix does not cover? Every field is optional.')
+    risk('r_unknown', 'Systemic', 'Unknown unknowns', 'Unknown unknowns', 'Risks nobody has named yet. Is there anything on the horizon in your area that this matrix does not cover? Every field is optional.'),
+    // Categories with no risks listed yet get one open risk question.
+    { id: 'r_custom', type: 'risk', generic: true, sub: '', short: 'Risk in this category', title: 'What risk do you see in this category?', help: RISK_HELP, ai: true, aiWhen: riskHas, fallback: RISK_FOLLOW,
+      when: function (a) { return !!a.category && !Q.some(function (q) { return q.cat === a.category; }); } }
   ];
+  var META = 'About you';
+  function groupTitle(name) { return name === META ? 'Area and risk category' : name; }
 
   var GROUPS = [
-    ['About you', ['name', 'email']],
+    [META, ['area', 'category']],
+    ['Risk input', ['r_custom']],
     ['Regulatory risks', ['r_equalpay', 'r_aiact', 'r_ecgt', 'r_labour', 'r_anticorruption', 'r_latepay', 'r_dynamic']],
     ['Systemic risks', ['r_unknown']]
   ];
@@ -518,7 +708,7 @@ main.rvmode { padding-block: 4px 20px; }
   // Example submissions for the reviewer screen. They are labelled "Example" and never stored.
   function example(n, name, email, when, input) {
     var rows = [{ group: 'About you', label: 'Full name', value: name }, { group: 'About you', label: 'Work email', value: email }], filled = 0;
-    Q.filter(function (q) { return q.type === 'risk'; }).forEach(function (q) {
+    Q.filter(function (q) { return q.type === 'risk' && !q.generic; }).forEach(function (q) {
       var it = input[q.id], row = { group: q.sub === 'Systemic' ? 'Systemic risks' : 'Regulatory risks', label: q.short, value: 'No input' };
       if (it) {
         row.value = RISK_FIELDS.filter(function (f) { return it[f[0]]; }).map(function (f) { return f[1] + ': ' + it[f[0]]; }).join('\n');
@@ -704,12 +894,12 @@ main.rvmode { padding-block: 4px 20px; }
     state.mode = 'form';
     go('welcome', 'fwd');
   }
-  function resetForm() { state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editLog = {}; state.editing = false; }
+  function resetForm() { state.items = []; state.draft = null; state.ownRisks = []; state.answers = {}; state.files = {}; state.fu = {}; state.edited = {}; state.editLog = {}; state.editing = false; }
   function submit() {
     var vis = visible(), now = new Date(), rows = [];
     GROUPS.forEach(function (g) {
       vis.filter(function (x) { return g[1].indexOf(x.id) >= 0; }).forEach(function (x) {
-        var row = { group: g[0], label: x.short, value: display(x) }, from = x.type === 'risk' ? reqRisk(x.id) : null;
+        var row = { group: g[0], label: x.generic ? tagName(state.answers.category) : x.short, value: display(x) }, from = x.type === 'risk' ? reqRisk(x.id) : null;
         if (from) row.context = from.context || 'No input';
         if (fuActive(x)) row.thread = pairs(x);
         if ((state.files[x.id] || []).length) row.files = state.files[x.id].map(function (f) { return f.name; });
@@ -719,7 +909,8 @@ main.rvmode { padding-block: 4px 20px; }
       });
     });
     var rec = {
-      kind: 'submission', id: 's' + now.getTime(), title: 'Risk assessment: ' + MATRIX,
+      kind: 'submission', id: 's' + now.getTime(), title: 'Risk assessment: ' + (state.answers.area ? tagName(state.answers.area) : MATRIX),
+      matrixArea: state.answers.area || '', matrixCat: state.answers.category || '',
       ref: 'RSK-' + now.getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000)),
       submittedAt: now.getTime(), rows: rows,
       risks: vis.filter(function (x) { return x.type === 'risk' && riskHas(state.answers[x.id]); }).length,
@@ -799,12 +990,12 @@ main.rvmode { padding-block: 4px 20px; }
     newPage();
     para(rec.title, 42, '700', INK, 6);
     para('Submitted ' + stamp(rec.submittedAt) + '  \u00B7  Reference ' + rec.ref, 21, '400', MUTED, 6);
-    para(rec.total ? 'Input on ' + rec.risks + ' of ' + rec.total + ' risks' : rec.flags ? rec.flags + ' answers routed to Compliance for follow-up' : 'No answers needed follow-up from Compliance', 21, '400', MUTED, 6);
+    para(rec.simple ? (rec.count > 1 ? rec.count + ' risks' : [tagName(rec.matrixArea), tagName(rec.matrixCat)].filter(Boolean).join(' \u203A ') || 'General thoughts') : rec.total ? 'Input on ' + rec.risks + ' of ' + rec.total + ' risks' : rec.flags ? rec.flags + ' answers routed to Compliance for follow-up' : 'No answers needed follow-up from Compliance', 21, '400', MUTED, 6);
     if (rec.example) para('Example record with sample data.', 21, '400', MUTED, 6);
     y += 22;
     var group = null;
     rec.rows.forEach(function (r) {
-      if (r.group !== group) { group = r.group; y += 8; rule(); para(group, 26, '600', INK, 14); }
+      if (r.group !== group) { group = r.group; y += 8; rule(); para(groupTitle(group), 26, '600', INK, 14); }
       para(r.label, 19, '400', MUTED, 2);
       para(r.value || '\u2014', 23, '500', INK, 4);
       (r.thread || (r.fq ? [{ q: r.fq, a: r.fa }] : [])).forEach(function (t) {
@@ -857,7 +1048,7 @@ main.rvmode { padding-block: 4px 20px; }
     }).then(function () { btn.disabled = false; btn.textContent = label; });
   }
   // Reviewer screen: every submitted form on the left, a text summary of the selected one on the right.
-  var rv = { sel: null, detail: false, note: '', regen: null, srcClosed: false }, rvEditing = false;
+  var rv = { sel: null, detail: false, note: '', regen: null, srcClosed: false, links: false }, rvEditing = false;
   function rowValue(r, label) {
     var row = r.rows.filter(function (x) { return x.label === label; })[0];
     return row && row.value ? row.value : '';
@@ -916,7 +1107,8 @@ main.rvmode { padding-block: 4px 20px; }
         clips.push(src);
       });
     });
-    if (!rec.total) say('An earlier form with ' + body.length + (body.length === 1 ? ' answer' : ' answers'));
+    if (rec.simple && filled.length) say(rec.count > 1 ? name + ' raised ' + filled.length + ' risks: ' : name + ' shared general thoughts on ');
+    else if (!rec.total) say('An earlier form with ' + body.length + (body.length === 1 ? ' answer' : ' answers'));
     else if (!filled.length) say(name + ' did not add input on any of the ' + rec.total + ' risks');
     else say(name + ' gave input on ' + filled.length + ' of ' + rec.total + ' risks: ');
     if (rec.total) filled.forEach(function (src, k) { say((k ? ', ' : '') + src.title); p.appendChild(cite(src)); });
@@ -964,7 +1156,7 @@ main.rvmode { padding-block: 4px 20px; }
       });
       box.appendChild(h('p', { class: 'tip', text: 'Asked by the AI follow-up straight after this answer was given.' }));
     } else {
-      box.appendChild(h('p', { class: 'tip', text: 'Form answer from ' + (rowValue(rec, 'Full name') || 'Unnamed') + ', submitted ' + stamp(rec.submittedAt) + ', reference ' + rec.ref + '. This section shows it in full.' }));
+      box.appendChild(h('p', { class: 'tip', text: 'Form answer from ' + (rowValue(rec, 'Full name') || 'Anonymous') + ', submitted ' + stamp(rec.submittedAt) + ', reference ' + rec.ref + '. This section shows it in full.' }));
     }
     box.hidden = true;
     return box;
@@ -972,7 +1164,7 @@ main.rvmode { padding-block: 4px 20px; }
   // History of changes for one submission: when it was submitted, edited, sent on and answered. Newest first.
   function historyOf(rec) {
     var name = rowValue(rec, 'Full name') || 'The submitter', events = [], logged = rec.history || [];
-    events.push({ at: rec.submittedAt, kind: 'submit', title: 'Submitted by ' + name + (rec.responseTo ? ' as ' + rec.area + ' input for ' + rec.responseTo : '') });
+    events.push({ at: rec.submittedAt, kind: 'submit', title: (rowValue(rec, 'Full name') ? 'Submitted by ' + name : 'Submitted') + (rec.responseTo ? ' as ' + rec.area + ' input for ' + rec.responseTo : '') });
     rec.rows.forEach(function (r) {
       var lab = labMeta[rec.id + '|' + r.label];
       if (r.edits && r.edits.length) r.edits.forEach(function (e) {
@@ -994,7 +1186,7 @@ main.rvmode { padding-block: 4px 20px; }
       if (r.reviewed && !logged.some(function (e) { return e.label === r.label && Math.abs(e.at - r.reviewed) < 2000; })) events.push({ at: r.reviewed, kind: 'edit', title: 'A reviewer edited “' + r.label + '”' });
     });
     logged.forEach(function (e) {
-      events.push({ at: e.at, kind: 'edit', title: (store && e.by && e.by === store.uid ? 'You' : 'A reviewer') + ' edited “' + e.label + '”', from: e.from, to: e.to });
+      events.push({ at: e.at, kind: 'edit', title: (store && e.by && e.by === store.uid ? 'You' : 'A reviewer') + (e.action ? ' ' + e.action : ' edited “' + e.label + '”'), from: e.from, to: e.to });
     });
     requests.forEach(function (q) {
       if (!q.from || q.from.id !== rec.id) return;
@@ -1015,6 +1207,32 @@ main.rvmode { padding-block: 4px 20px; }
     });
     return h('div', { class: 'hist-wrap', id: 'rv-history' },
       h('h2', { class: 'grp' }, 'History of changes', h('span', { class: 'opt-note', text: events.length + (events.length === 1 ? ' entry' : ' entries') })), list);
+  }
+  // Taking a submitter's own risk name into the matrix: it joins the Risk column under its category, is offered in the
+  // form from then on, and can be renamed like any other tag in the tag manager.
+  function acceptRisk(rec, r) {
+    var g = taxonomy.filter(function (x) { return x.matrix === 'risk'; })[0], parent = catsOf(r)[0] || '';
+    var names = (r.addedRisks || (r.addedRisk || r.proposedRisk ? [r.addedRisk || r.proposedRisk] : [])).filter(function (n) { return (r.acceptedRisks || []).indexOf(n) < 0; });
+    var changed = false;
+    if (!g || !names.length) return;
+    r.matrixRiskTags = r.matrixRiskTags || [];
+    r.acceptedRisks = r.acceptedRisks || [];
+    names.forEach(function (name) {
+      var tag = g.tags.filter(function (t) { return t.parent === parent && t.name.toLowerCase() === name.toLowerCase(); })[0];
+      if (!tag) { tag = { id: newId('t'), name: name.slice(0, 120), parent: parent }; g.tags.push(tag); changed = true; }
+      if (r.matrixRiskTags.indexOf(tag.id) < 0) r.matrixRiskTags.push(tag.id);
+      r.acceptedRisks.push(name);
+    });
+    if (changed) saveTaxonomy();
+    rec.history = (rec.history || []).concat([{ at: Date.now(), by: store ? store.uid : '', label: r.label,
+      action: 'added the risk ' + (names.length === 1 ? 'name' : 'names') + ' “' + names.join('”, “') + '” to the matrix' }]).slice(-100);
+    persistEdit(rec).then(function () {
+      rv.note = (names.length === 1 ? 'Risk name' : 'Risk names') + ' added to the matrix. You can rename them in the tag manager.';
+      render('stay');
+    }, function () {
+      rv.note = 'This could not be saved. You may not have permission.';
+      render('stay');
+    });
   }
   function saveReview(rec) {
     var changed = false;
@@ -1047,7 +1265,7 @@ main.rvmode { padding-block: 4px 20px; }
   function startRegen(rec, target) {
     var include = {}, rg;
     rec.rows.forEach(function (r, i) {
-      if (r.group !== 'About you' && qByShort(r.label)) include[i] = !!(r.value && r.value !== 'No input');
+      if (r.group !== 'About you') include[i] = !!(r.value && r.value !== 'No input');
     });
     rg = rv.regen = { recId: rec.id, step: 1, include: include, target: target === 'person' ? 'person' : 'area', area: '', note: '', brief: briefFor(rec), ai: false, sent: null,
       person: { name: rowValue(rec, 'Full name'), email: rowValue(rec, 'Work email') } };
@@ -1072,12 +1290,13 @@ main.rvmode { padding-block: 4px 20px; }
     var rg = rv.regen, now = Date.now(), risks = [];
     rec.rows.forEach(function (r, i) {
       var q = qByShort(r.label);
-      if (q && rg.include[i]) risks.push({ id: q.id, label: r.label, context: r.value || 'No input' });
+      if (rg.include[i]) risks.push({ id: q ? q.id : 'row' + i, label: r.label, context: r.value || 'No input' });
     });
     rg.sent = {
       kind: 'request', id: 'r' + now, ref: 'REQ-' + new Date(now).getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000)),
       createdAt: now, status: 'open', area: rg.target === 'person' ? rg.person.name.trim() : rg.area, note: rg.note.trim(), brief: rg.brief,
-      from: { id: rec.id, ref: rec.ref, name: rowValue(rec, 'Full name') || 'A colleague' }, risks: risks
+      from: { id: rec.id, ref: rec.ref, name: rowValue(rec, 'Full name') || 'A colleague' }, risks: risks,
+      matrixArea: rec.matrixArea || '', matrixCat: rec.matrixCat || '', matrixRisk: rec.matrixRisk || ''
     };
     if (rg.target === 'person') rg.sent.person = { name: rg.person.name.trim(), email: rg.person.email.trim() };
     saveRequest(rg.sent);
@@ -1157,8 +1376,41 @@ main.rvmode { padding-block: 4px 20px; }
     }
     return pane;
   }
+  // One link per area, to send to the people responsible for it.
+  function linksPane(pane) {
+    var note = h('p', { class: 'tip', id: 'links-note', role: 'status' });
+    note.hidden = true;
+    pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'rv-back', onclick: function () { rv.detail = false; rv.links = false; render('stay'); }, text: '← All forms' }));
+    pane.appendChild(h('div', { class: 'head' },
+      h('h1', { text: 'Links for each area' }),
+      h('p', { class: 'help', text: 'Send a link to the people who look after an area. The form they open is already set to that area, so they only pick risk categories and risk names and write their thoughts.' })));
+    pane.appendChild(note);
+    areaTags().forEach(function (t, i) {
+      var url = SHARE_BASE + '#' + t.id, code = h('code', { class: 'link-url', id: 'link-' + i, text: url });
+      pane.appendChild(h('div', { class: 'rv-row' }, h('h3', { text: t.name }), code,
+        h('div', { class: 'go' },
+          h('button', { type: 'button', class: 'btn sm act', id: 'link-copy-' + i, onclick: function () {
+            function fallback() {
+              var r = document.createRange();
+              r.selectNodeContents(code);
+              window.getSelection().removeAllRanges();
+              window.getSelection().addRange(r);
+              note.textContent = 'The link is selected. Press Ctrl or Cmd + C to copy it.';
+              note.hidden = false;
+            }
+            if (!navigator.clipboard || !navigator.clipboard.writeText) { fallback(); return; }
+            navigator.clipboard.writeText(url).then(function () {
+              note.textContent = 'Link for “' + t.name + '” copied.';
+              note.hidden = false;
+            }, fallback);
+          }, text: 'Copy link' }),
+          h('button', { type: 'button', class: 'btn ghost sm act', id: 'link-open-' + i, onclick: function () { location.hash = t.id; setMode('form'); }, text: 'Open the form for this area' }))));
+    });
+    return pane;
+  }
   function detailPane(rec) {
     var pane = h('div', { class: 'rv-detail' }), group = null, actions;
+    if (rv.links) return linksPane(pane);
     if (!rec) { pane.appendChild(h('p', { class: 'help', text: 'No forms have been submitted yet.' })); return pane; }
     if (rv.regen && rv.regen.recId !== rec.id) rv.regen = null;
     if (rv.regen) {
@@ -1167,8 +1419,8 @@ main.rvmode { padding-block: 4px 20px; }
     }
     pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'rv-back', onclick: function () { rv.detail = false; rvEditing = false; rv.note = ''; render('stay'); }, text: '← All forms' }));
     pane.appendChild(h('div', { class: 'head' },
-      h('h1', null, rowValue(rec, 'Full name') || 'Unnamed'),
-      h('p', { class: 'help', text: [rowValue(rec, 'Work email'), 'Submitted ' + stamp(rec.submittedAt), rec.ref].filter(Boolean).join(' · ') })));
+      h('h1', null, rowValue(rec, 'Full name') || 'Anonymous'),
+      h('p', { class: 'help', text: [rowValue(rec, 'Work email'), rec.count > 1 ? rec.count + ' risks' : rec.matrixCat ? tagName(rec.matrixArea) + ' › ' + tagName(rec.matrixCat) : '', 'Submitted ' + stamp(rec.submittedAt), rec.ref].filter(Boolean).join(' · ') })));
     var srcs = summaryWithSources(rec, pane);
     if (rec.responseTo) pane.appendChild(h('p', { class: 'rv-sub', text: rec.area + ' input, added in response to ' + rec.responseTo + '.' }));
     requests.filter(function (r) { return r.from && r.from.id === rec.id; }).forEach(function (r) {
@@ -1201,6 +1453,15 @@ main.rvmode { padding-block: 4px 20px; }
       if (r.group === 'About you') return;
       if (r.group !== group) { group = r.group; pane.appendChild(h('h2', { class: 'grp', text: group })); }
       row = h('div', { class: 'rv-row', id: 'rv-row-' + i }, h('h3', { text: r.label }));
+      var rowCats = catsOf(r), rowAdded = r.addedRisks || (r.addedRisk || r.proposedRisk ? [r.addedRisk || r.proposedRisk] : []);
+      if (rowCats.length && r.label !== rowCats.map(tagName).join(', ')) row.appendChild(h('p', { class: 'rv-sub', text: (rowCats.length === 1 ? 'Risk category: ' : 'Risk categories: ') + rowCats.map(tagName).join(', ') }));
+      if (rowAdded.length) {
+        var waiting = rowAdded.filter(function (n) { return (r.acceptedRisks || []).indexOf(n) < 0; });
+        var prop = h('div', { class: 'proposal' }, h('span', { class: 'tip', text: (rowAdded.length === 1 ? 'Risk name added by the submitter: ' : 'Risk names added by the submitter: ') + rowAdded.join(', ') + '.' }));
+        if (!waiting.length || (r.matrixRiskTag && rowAdded.length === 1)) prop.appendChild(h('span', { class: 'tag done', text: 'In the matrix' }));
+        else if (!rvEditing) prop.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rk-ok-' + i, onclick: function () { acceptRisk(rec, r); }, text: 'Add to matrix' }));
+        row.appendChild(prop);
+      }
       if (r.context) row.appendChild(h('p', { class: 'rv-sub', text: 'Original input:\n' + r.context }));
       if (rvEditing) {
         ta = h('textarea', { class: 'line', id: 'rv-f-' + i, rows: '4', 'aria-label': r.label });
@@ -1232,7 +1493,7 @@ main.rvmode { padding-block: 4px 20px; }
               link.setAttribute('aria-expanded', open ? 'true' : 'false');
             } },
             h('span', { class: 'src-ico ' + x.kind, 'aria-hidden': 'true', text: x.badge }),
-            h('span', { class: 't', text: x.kind === 'answer' ? (rowValue(rec, 'Full name') || 'Unnamed') + ' · ' + rec.ref : x.kind === 'followup' ? x.type : x.title }),
+            h('span', { class: 't', text: x.kind === 'answer' ? (rowValue(rec, 'Full name') || 'Anonymous') + ' · ' + rec.ref : x.kind === 'followup' ? x.type : x.title }),
             x.clip ? h('span', { class: 'at', text: clock(x.clip.at) }) : null,
             h('span', { class: 'n', text: String(x.n) }));
           views.push({ view: view, link: link });
@@ -1252,14 +1513,15 @@ main.rvmode { padding-block: 4px 20px; }
     var list = h('div', { class: 'rv-list' });
     rv.sel = cur ? cur.id : null;
     list.appendChild(h('div', { class: 'rv-head' }, h('h2', { class: 'grp', text: 'Submitted forms' }), h('span', { class: 'tag', text: String(all.length) })));
+    list.appendChild(h('div', { class: 'rv-pad' }, h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-links', 'aria-pressed': rv.links ? 'true' : 'false', onclick: function () { rv.links = true; rv.detail = true; rv.regen = null; rvEditing = false; render('fwd'); }, text: 'Links for each area' })));
     if (!loaded) list.appendChild(h('p', { class: 'tip rv-pad', text: 'Loading submitted forms…' }));
     else if (store && !store.admin) list.appendChild(h('p', { class: 'tip rv-pad', text: 'You can see your own forms here. Editors and the owner of this page see everyone’s.' }));
     all.forEach(function (r) {
       var item = h('button', { type: 'button', class: 'rv-item act', id: 'rv-' + r.id, 'aria-current': cur && r.id === cur.id ? 'true' : null,
-        onclick: function () { rv.sel = r.id; rv.detail = true; rv.note = ''; rv.regen = null; render('fwd'); } },
-        h('span', { class: 'rv-name' }, rowValue(r, 'Full name') || 'Unnamed'),
+        onclick: function () { rv.sel = r.id; rv.detail = true; rv.note = ''; rv.regen = null; rv.links = false; render('fwd'); } },
+        h('span', { class: 'rv-name' }, rowValue(r, 'Full name') || 'Anonymous'),
         h('span', { class: 'fsub', text: stamp(r.submittedAt) + ' · ' + r.ref }),
-        h('span', { class: 'fsub', text: (r.responseTo ? r.area + ' input for ' + r.responseTo + ' \u00B7 ' : '') + (r.total ? r.risks + ' of ' + r.total + ' risks' : 'Earlier form') }));
+        h('span', { class: 'fsub', text: (r.responseTo ? r.area + ' input for ' + r.responseTo + ' \u00B7 ' : '') + (r.simple ? simpleLabel(r) : (r.matrixCat ? tagName(r.matrixCat) + ' \u00B7 ' : '') + (r.total ? r.risks + ' of ' + r.total + ' risks' : 'Earlier form')) }));
       item.disabled = rvEditing && !(cur && r.id === cur.id);
       list.appendChild(item);
     });
@@ -1271,10 +1533,20 @@ main.rvmode { padding-block: 4px 20px; }
   // so an answer's tags say where it fits in the matrix.
   function defaultTaxonomy() {
     function tags(list) { return list.map(function (t) { return { id: t[0], name: t[1] }; }); }
+    // The five areas of the risk matrix and the risk categories inside each.
+    var AREAS_MATRIX = [
+      ['cat-main', 'Upcoming Legal and Systemic Changes', [['sub-regulatory', 'Regulatory'], ['sub-systemic', 'Systemic']]],
+      ['cat-current', 'Current Regulations & Ethical standards', [['sub-pharma', 'Pharmaceutical Law / industry standards'], ['sub-competition', 'Competition and Consumer Protection'], ['sub-greenwashing', 'Greenwashing'], ['sub-anticorruption', 'Anti-Corruption and Bribery'], ['sub-aml', 'AML & Financial Integrity'], ['sub-gambling', 'Gambling Act'], ['sub-esg', 'ESG & Non-Financial Reporting'], ['sub-iso', 'ISO'], ['sub-ai', 'AI'], ['sub-coi', 'Conflicts of Interest'], ['sub-external', 'External Affairs'], ['sub-disclosure', 'Disclosure'], ['sub-contracting', 'Contracting & Legal Clauses']]],
+      ['cat-integrity', 'Integrity & Cultural Inconsistency Across the Organisation', [['sub-culture', 'Organisational Culture & Employee Awareness'], ['sub-governance', 'Governance & Internal Processes'], ['sub-communication', 'Communication']]],
+      ['cat-misconduct', 'Undetected Employee Misconduct & Ineffective Reporting Governance', [['sub-misconduct', 'Employee Misconduct'], ['sub-reporting', 'Reporting Governance']]],
+      ['cat-supplier', 'Supplier Non-Compliance & Vulnerabilities in Procurement Governance', [['sub-supplier', 'Supplier Non-Compliance'], ['sub-procurement', 'Procurement Governance']]]
+    ];
+    var cats = [];
+    AREAS_MATRIX.forEach(function (a) { a[2].forEach(function (c) { cats.push({ id: c[0], name: c[1], parent: a[0] }); }); });
     return [
-      { id: 'g-category', name: 'Matrix category', matrix: 'category', tags: tags([['cat-main', MATRIX]]) },
-      { id: 'g-sub', name: 'Subcategory', matrix: 'sub', tags: tags([['sub-regulatory', 'Regulatory'], ['sub-systemic', 'Systemic']]) },
-      { id: 'g-risk', name: 'Risk', matrix: 'risk', tags: Q.filter(function (q) { return q.type === 'risk'; }).map(function (q) { return { id: 'risk-' + q.id, name: q.title }; }) },
+      { id: 'g-category', name: 'Area', matrix: 'category', tags: tags(AREAS_MATRIX) },
+      { id: 'g-sub', name: 'Risk category', matrix: 'sub', tags: cats },
+      { id: 'g-risk', name: 'Risk', matrix: 'risk', tags: Q.filter(function (q) { return q.type === 'risk' && !q.generic; }).map(function (q) { return { id: 'risk-' + q.id, name: q.title }; }) },
       { id: 'g-source', name: 'Risk source', tags: tags([['src-eu', 'EU regulation'], ['src-national', 'National law'], ['src-process', 'Internal process'], ['src-third', 'Third party'], ['src-systems', 'Systems and data'], ['src-people', 'People and skills']]) },
       { id: 'g-driver', name: 'Risk driver', tags: tags([['drv-owner', 'No clear owner'], ['drv-legacy', 'Legacy agreements'], ['drv-training', 'Training gap'], ['drv-tooling', 'Tooling gap'], ['drv-data', 'Data quality'], ['drv-turnover', 'Staff turnover']]) },
       { id: 'g-opp', name: 'Opportunity', tags: tags([['opp-efficiency', 'Efficiency'], ['opp-trust', 'Reputation and trust'], ['opp-talent', 'Talent and retention'], ['opp-cost', 'Cost saving'], ['opp-data', 'Better data']]) }
@@ -1355,7 +1627,10 @@ main.rvmode { padding-block: 4px 20px; }
     var q, list = tagMap[a.key];
     if (!list) {
       q = qByShort(a.row.label);
-      list = q ? ['cat-main', q.sub === 'Systemic' ? 'sub-systemic' : 'sub-regulatory', 'risk-' + q.id] : [];
+      var src = catsOf(a.row).length ? a.row : a.rec;
+      list = catsOf(src).length ? (src.matrixAreas && src.matrixAreas.length ? src.matrixAreas : [src.matrixArea]).concat(catsOf(src)) : q ? ['cat-main', q.cat] : [];
+      var rowRisks = (src.matrixRisks || (src.matrixRisk ? [src.matrixRisk] : [])).map(function (id) { return 'risk-' + id; }).concat(src.matrixRiskTags || (src.matrixRiskTag ? [src.matrixRiskTag] : []));
+      if (rowRisks.length) list = list.concat(rowRisks); else if (q) list.push('risk-' + q.id);
     }
     return list.filter(tagExists);
   }
@@ -1387,8 +1662,11 @@ main.rvmode { padding-block: 4px 20px; }
   }
   function toggleTag(a, id) {
     var list = tagsOf(a).slice(), i = list.indexOf(id);
+    var parent = null;
+    taxonomy.forEach(function (g) { g.tags.forEach(function (t) { if (t.id === id && t.parent && tagExists(t.parent)) parent = t.parent; }); });
     logLab(a.key, { type: 'tags', add: i >= 0 ? [] : [tagName(id)], del: i >= 0 ? [tagName(id)] : [] });
     if (i >= 0) list.splice(i, 1); else list.push(id);
+    if (i < 0 && parent && list.indexOf(parent) < 0) { list.push(parent); logLab(a.key, { type: 'tags', add: [tagName(parent)], del: [] }); }
     tagMap[a.key] = list;
     tg.note = '';
     saveTagging();
@@ -1402,8 +1680,8 @@ main.rvmode { padding-block: 4px 20px; }
       return out;
     }
     var risks = names('risk');
-    if (!risks.length) return 'Not placed in the matrix yet. Pick a risk tag to place it.';
-    return (names('category').join(', ') || 'No category') + ' › ' + (names('sub').join(', ') || 'No subcategory') + ' › ' + risks.join(', ');
+    if (!risks.length && !names('sub').length && !names('category').length) return 'Not placed in the matrix yet. Pick an area and risk category to place it.';
+    return (names('category').join(', ') || 'No area') + ' › ' + (names('sub').join(', ') || 'No risk category') + ' › ' + (risks.join(', ') || 'No specific risk');
   }
   function suggestTags(a, btn) {
     btn.disabled = true; btn.textContent = 'Thinking…';
@@ -1428,6 +1706,37 @@ main.rvmode { padding-block: 4px 20px; }
       render('stay');
     });
   }
+  function areaTags() {
+    var g = taxonomy.filter(function (x) { return x.matrix === 'category'; })[0];
+    return g ? g.tags : [];
+  }
+  // Risk categories are listed under the area they belong to; anything without an area goes under "No area".
+  function byArea(g) {
+    var areas = areaTags(), out = [], known = {};
+    areas.forEach(function (ar) {
+      known[ar.id] = true;
+      out.push({ area: ar, tags: g.tags.filter(function (t) { return t.parent === ar.id; }) });
+    });
+    out.push({ area: null, tags: g.tags.filter(function (t) { return !t.parent || !known[t.parent]; }) });
+    return out;
+  }
+  function chipGroup(g, ids, a, prefix) {
+    var wrap;
+    function chips(list) {
+      var box = h('div', { class: 'chips' });
+      list.forEach(function (t) {
+        box.appendChild(h('button', { type: 'button', class: 'chip act', id: prefix + t.id, 'aria-pressed': ids.indexOf(t.id) >= 0 ? 'true' : 'false', onclick: function () { toggleTag(a, t.id); }, text: t.name }));
+      });
+      return box;
+    }
+    if (g.matrix !== 'sub') return chips(g.tags);
+    wrap = h('div', { class: 'chip-areas' });
+    byArea(g).forEach(function (part) {
+      if (!part.tags.length) return;
+      wrap.appendChild(h('div', { class: 'chip-area' }, h('span', { class: 'cap', text: part.area ? part.area.name : 'No area' }), chips(part.tags)));
+    });
+    return wrap;
+  }
   function tagDetail(a) {
     var pane = h('div', { class: 'rv-detail' }), ids, note, ai;
     if (!a) { pane.appendChild(h('p', { class: 'help', text: 'There are no answers to tag yet. Answers appear here once a form with risk input is submitted.' })); return pane; }
@@ -1435,7 +1744,7 @@ main.rvmode { padding-block: 4px 20px; }
     pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'tg-back', onclick: function () { tg.detail = false; render('stay'); }, text: '← All answers' }));
     pane.appendChild(h('div', { class: 'head' },
       h('h1', { text: a.row.label }),
-      h('p', { class: 'help', text: [rowValue(a.rec, 'Full name') || 'Unnamed', 'Submitted ' + stamp(a.rec.submittedAt), a.rec.ref].join(' · ') })));
+      h('p', { class: 'help', text: [rowValue(a.rec, 'Full name') || 'Anonymous', 'Submitted ' + stamp(a.rec.submittedAt), a.rec.ref].join(' · ') })));
     pane.appendChild(h('p', { class: 'rv-text', text: a.row.value }));
     (a.row.thread || []).forEach(function (t) {
       pane.appendChild(h('p', { class: 'rv-sub', text: 'Follow-up: ' + t.q + '\n' + (t.a || 'Not answered') }));
@@ -1448,10 +1757,7 @@ main.rvmode { padding-block: 4px 20px; }
     note.hidden = !tg.note;
     pane.appendChild(note);
     taxonomy.forEach(function (g) {
-      var chips = h('div', { class: 'chips' });
-      g.tags.forEach(function (t) {
-        chips.appendChild(h('button', { type: 'button', class: 'chip act', id: 'tg-' + g.id + '-' + t.id, 'aria-pressed': ids.indexOf(t.id) >= 0 ? 'true' : 'false', onclick: function () { toggleTag(a, t.id); }, text: t.name }));
-      });
+      var chips = chipGroup(g, ids, a, 'tg-' + g.id + '-');
       pane.appendChild(h('div', { class: 'rv-row' }, h('h3', null, g.name, g.matrix ? h('span', { class: 'opt-note', text: 'Matrix column' }) : null), chips));
     });
     return pane;
@@ -1461,37 +1767,54 @@ main.rvmode { padding-block: 4px 20px; }
     var pane = h('div', { class: 'rv-detail' }), note, addGroup, addGroupBtn;
     pane.appendChild(h('div', { class: 'head' },
       h('h1', { text: 'Tag manager' }),
-      h('p', { class: 'help', text: 'Add, rename or remove the tags used on answers. The first three groups are the columns of the risk matrix, so tags in them decide where an answer lands. The number beside a tag is how many answers use it.' })));
+      h('p', { class: 'help', text: 'Add, rename or remove the tags used on answers. The first three groups are the columns of the risk matrix (area, risk category and risk), so tags in them decide where an answer lands. Risk categories are listed under the area they belong to. The number beside a tag is how many answers use it.' })));
     note = h('p', { class: 'tip', id: 'tg-note', role: 'status', text: tg.note });
     note.hidden = !tg.note;
     pane.appendChild(note);
     taxonomy.forEach(function (g) {
-      var chips = h('div', { class: 'chips' }), input, addBtn, head;
-      function add() {
-        var name = input.value.trim();
-        if (!name) return;
-        g.tags.push({ id: newId('t'), name: name.slice(0, 120) });
-        tg.note = ''; saveTaxonomy(); render('stay');
-      }
-      g.tags.forEach(function (t) {
+      var head, body = h('div', { class: 'tg-parts' });
+      function tagChip(t) {
         var used = tagUse(t.id), asking = tg.confirm === t.id;
-        var name = h('input', { type: 'text', id: 'tn-' + t.id, 'aria-label': 'Tag name', size: String(Math.max(6, Math.min(t.name.length + 1, 46))),
+        var name = h('input', { type: 'text', id: 'tn-' + t.id, 'aria-label': 'Tag name', size: String(Math.max(6, Math.min(t.name.length + 1, 70))),
           onchange: function (e) { var v = e.target.value.trim(); if (v && v !== t.name) { t.name = v.slice(0, 120); saveTaxonomy(); } render('stay'); } });
         name.value = t.name;
-        chips.appendChild(h('span', { class: 'chip-edit' }, name, h('span', { class: 'n', title: 'Answers using this tag', text: String(used) }),
+        return h('span', { class: 'chip-edit' }, name, h('span', { class: 'n', title: 'Answers using this tag', text: String(used) }),
           h('button', { type: 'button', class: 'act' + (asking ? ' ask' : ''), id: 'td-' + t.id, 'aria-label': 'Delete tag ' + t.name, text: asking ? 'Remove from ' + used + (used === 1 ? ' answer?' : ' answers?') : '×', onclick: function () {
             if (used && !asking) { tg.confirm = t.id; render('stay'); return; }
             g.tags = g.tags.filter(function (x) { return x.id !== t.id; });
             Object.keys(tagMap).forEach(function (k) { tagMap[k] = tagMap[k].filter(function (id) { return id !== t.id; }); });
             tg.confirm = null; tg.note = '';
             saveTaxonomy(); saveTagging(); render('stay');
-          } })));
-      });
-      input = h('input', { type: 'text', class: 'line', id: 'ta-' + g.id, placeholder: 'New tag', 'aria-label': 'New tag in ' + g.name, onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } } });
-      addBtn = h('button', { type: 'button', class: 'btn ghost sm act', id: 'tb-' + g.id, onclick: add, text: 'Add tag' });
+          } }));
+      }
+      // One list of tags with its own "add" row; for risk categories there is one per area.
+      function part(list, parent, key, caption, placeholder) {
+        var chips = h('div', { class: 'chips' }), input, box;
+        function add() {
+          var name = input.value.trim(), tag;
+          if (!name) return;
+          tag = { id: newId('t'), name: name.slice(0, 120) };
+          if (parent) tag.parent = parent;
+          g.tags.push(tag);
+          tg.note = ''; saveTaxonomy(); render('stay');
+        }
+        list.forEach(function (t) { chips.appendChild(tagChip(t)); });
+        input = h('input', { type: 'text', class: 'line', id: 'ta-' + key, placeholder: placeholder, 'aria-label': placeholder + (caption ? ' in ' + caption : ' in ' + g.name), onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } } });
+        box = h('div', { class: 'tg-part' }, caption ? h('span', { class: 'cap', text: caption }) : null, chips,
+          h('div', { class: 'tg-add' }, input, h('button', { type: 'button', class: 'btn ghost sm act', id: 'tb-' + key, onclick: add, text: g.matrix === 'sub' ? 'Add category' : g.matrix === 'category' ? 'Add area' : 'Add tag' })));
+        return box;
+      }
+      if (g.matrix === 'sub') {
+        byArea(g).forEach(function (p) {
+          if (!p.area && !p.tags.length) return;
+          body.appendChild(part(p.tags, p.area ? p.area.id : '', g.id + '-' + (p.area ? p.area.id : 'none'), p.area ? p.area.name : 'No area', 'New risk category'));
+        });
+      } else {
+        body.appendChild(part(g.tags, '', g.id, '', g.matrix === 'category' ? 'New area' : 'New tag'));
+      }
       head = h('h2', { class: 'grp' }, g.name, g.matrix ? h('span', { class: 'opt-note', text: 'Matrix column' }) : null);
-      pane.appendChild(h('div', { class: 'block tg-group' }, head, chips, h('div', { class: 'tg-add' }, input, addBtn,
-        g.matrix ? null : h('button', { type: 'button', class: 'edit act', id: 'tgd-' + g.id, onclick: function () {
+      pane.appendChild(h('div', { class: 'block tg-group' }, head, body,
+        g.matrix ? null : h('div', { class: 'tg-add' }, h('button', { type: 'button', class: 'edit act', id: 'tgd-' + g.id, onclick: function () {
           if (tg.confirm !== g.id) { tg.confirm = g.id; render('stay'); return; }
           taxonomy = taxonomy.filter(function (x) { return x.id !== g.id; });
           tg.confirm = null; saveTaxonomy(); render('stay');
@@ -1528,7 +1851,7 @@ main.rvmode { padding-block: 4px 20px; }
       list.appendChild(h('button', { type: 'button', class: 'rv-item act', id: 'tga-' + i, 'aria-current': cur && a.key === cur.key ? 'true' : null,
         onclick: function () { tg.sel = a.key; tg.detail = true; tg.note = ''; render('fwd'); } },
         h('span', { class: 'rv-name', text: a.row.label }),
-        h('span', { class: 'fsub', text: (rowValue(a.rec, 'Full name') || 'Unnamed') + ' · ' + a.rec.ref }),
+        h('span', { class: 'fsub', text: (rowValue(a.rec, 'Full name') || 'Anonymous') + ' · ' + a.rec.ref }),
         h('span', { class: 'fsub', text: n + (n === 1 ? ' tag' : ' tags') + (tagMap[a.key] ? '' : ' · suggested') })));
     });
     split.appendChild(list);
@@ -1677,7 +2000,7 @@ main.rvmode { padding-block: 4px 20px; }
     textEl.addEventListener('mouseup', grab);
     textEl.addEventListener('touchend', function () { setTimeout(grab, 0); });
     main.appendChild(h('div', { class: 'head' }, h('h1', { text: a.row.label }),
-      h('p', { class: 'help', text: [rowValue(a.rec, 'Full name') || 'Unnamed', 'Submitted ' + stamp(a.rec.submittedAt), a.rec.ref].join(' · ') })));
+      h('p', { class: 'help', text: [rowValue(a.rec, 'Full name') || 'Anonymous', 'Submitted ' + stamp(a.rec.submittedAt), a.rec.ref].join(' · ') })));
     main.appendChild(textEl);
     (a.row.thread || []).forEach(function (t) {
       main.appendChild(h('p', { class: 'rv-sub', text: 'Follow-up: ' + t.q + '\n' + (t.a || 'Not answered') }));
@@ -1687,10 +2010,7 @@ main.rvmode { padding-block: 4px 20px; }
     taxonomy.forEach(function (g) {
       var chips;
       if (!g.matrix) return;
-      chips = h('div', { class: 'chips' });
-      g.tags.forEach(function (t) {
-        chips.appendChild(h('button', { type: 'button', class: 'chip act', id: 'lb-c-' + t.id, 'aria-pressed': ids.indexOf(t.id) >= 0 ? 'true' : 'false', onclick: function () { toggleTag(a, t.id); }, text: t.name }));
-      });
+      chips = chipGroup(g, ids, a, 'lb-c-');
       main.appendChild(h('div', { class: 'rv-row' }, h('h3', { text: g.name }), chips));
     });
     note = h('p', { class: 'tip', id: 'lb-note', role: 'status', text: lb.note });
@@ -1739,7 +2059,7 @@ main.rvmode { padding-block: 4px 20px; }
       list.appendChild(h('button', { type: 'button', class: 'rv-item act', id: 'lbt-' + i, 'aria-current': cur && a.key === cur.key ? 'true' : null,
         onclick: function () { lb.sel = a.key; lb.detail = true; lb.note = ''; lb.region = null; lb.pending = null; render('fwd'); } },
         h('span', { class: 'rv-name' }, h('span', { class: 'st ' + (m.status || 'todo'), title: m.status === 'submitted' ? 'Submitted' : m.status === 'skipped' ? 'Skipped' : 'To label', text: m.status === 'submitted' ? '✓' : m.status === 'skipped' ? '–' : '' }), a.row.label),
-        h('span', { class: 'fsub', text: (rowValue(a.rec, 'Full name') || 'Unnamed') + ' · ' + a.rec.ref }),
+        h('span', { class: 'fsub', text: (rowValue(a.rec, 'Full name') || 'Anonymous') + ' · ' + a.rec.ref }),
         h('span', { class: 'fsub', text: n + (n === 1 ? ' region' : ' regions') + ' · ' + tagsOf(a).length + ' tags' })));
     });
     split.appendChild(list);
@@ -1766,8 +2086,9 @@ main.rvmode { padding-block: 4px 20px; }
     clearTimeout(autoTimer);
     if (busy) { busy.dead = true; if (busy.ctl) busy.ctl.abort(); busy = null; }
     if (chatBusy) { chatBusy.dead = true; if (chatBusy.ctl) chatBusy.ctl.abort(); chatBusy = null; }
+    stopDraftBusy();
     state.mode = mode;
-    rvEditing = false; rv.detail = false; rv.note = ''; rv.regen = null;
+    rvEditing = false; rv.detail = false; rv.note = ''; rv.regen = null; rv.links = false;
     tg.detail = false; tg.note = ''; tg.confirm = null;
     lb.detail = false; lb.note = ''; lb.pending = null; lb.region = null;
     render('fwd');
@@ -1799,7 +2120,7 @@ main.rvmode { padding-block: 4px 20px; }
         h('div', { class: 'ftext' },
           h('div', { class: 'ftitle' }, r.title),
           h('div', { class: 'fsub', text: 'Submitted ' + stamp(r.submittedAt) + ' \u00B7 ' + r.ref })),
-        h('span', { class: 'tag ai', text: r.total ? r.risks + ' of ' + r.total + ' risks' : r.flags ? r.flags + ' for follow-up' : 'No follow-up' }),
+        h('span', { class: 'tag ai', text: r.simple ? simpleLabel(r) : r.total ? r.risks + ' of ' + r.total + ' risks' : r.flags ? r.flags + ' for follow-up' : 'No follow-up' }),
         h('button', { type: 'button', class: 'btn ghost sm act', id: 'regen-' + r.id, onclick: function () { state.mode = 'review'; rv.sel = r.id; startRegen(r); }, text: 'Send to another area' }),
         h('button', { type: 'button', class: 'btn ghost sm act', id: 'pdf-' + r.id, 'aria-label': 'Download ' + r.title + ' as PDF', onclick: function (e) { downloadPdf(r, e.currentTarget); }, text: 'Download PDF' })));
     });
@@ -1809,7 +2130,7 @@ main.rvmode { padding-block: 4px 20px; }
     sec.appendChild(note);
     if (!loaded) sec.appendChild(h('p', { class: 'tip', text: 'Checking for forms saved to your account\u2026' }));
     sec.appendChild(h('div', { class: 'go' },
-      h('button', { type: 'button', class: 'btn ghost sm act', id: 'restart', onclick: function () { resetForm(); justSubmitted = null; go('welcome', 'back'); }, text: '\u21ba Restart demo' })));
+      h('button', { type: 'button', class: 'btn ghost sm act', id: 'restart', onclick: function () { resetForm(); state.started = false; justSubmitted = null; go('welcome', 'back'); }, text: '\u21ba Restart demo' })));
   }
 
   function h(tag, attrs) {
@@ -1829,7 +2150,7 @@ main.rvmode { padding-block: 4px 20px; }
 
   function visible() {
     return Q.filter(function (q) {
-      if (state.req && q.type === 'risk' && !reqRisk(q.id)) return false;
+      if (state.req) return q.type === 'risk' && !!reqRisk(q.id);
       return !q.when || q.when(state.answers);
     });
   }
@@ -1839,7 +2160,7 @@ main.rvmode { padding-block: 4px 20px; }
   function fill(s) { return s.replace('{first}', first()); }
   function opts(q) {
     if (q.type === 'yesno') return YESNO;
-    return q.opts.map(function (o, i) {
+    return (typeof q.opts === 'function' ? q.opts() : q.opts).map(function (o, i) {
       var v = typeof o === 'string' ? o : o.v, l = typeof o === 'string' ? o : o.l;
       return { v: v, l: l, k: String.fromCharCode(65 + i) };
     });
@@ -1856,7 +2177,7 @@ main.rvmode { padding-block: 4px 20px; }
       case 'sign':
         if (!a.declareOk) return 'Tick the box to confirm your answers.';
         return (a.signature || '').trim() ? '' : 'Type your full name to sign.';
-      default: return v || q.optional ? '' : 'Please make a selection.';
+      default: return v || q.optional || (q.type === 'choice' && !opts(q).length) ? '' : 'Please make a selection.';
     }
   }
 
@@ -1864,6 +2185,7 @@ main.rvmode { padding-block: 4px 20px; }
     clearTimeout(autoTimer);
     if (busy) { var t = busy; busy = null; t.dead = true; if (t.ctl) t.ctl.abort(); }
     if (chatBusy) { var c = chatBusy; chatBusy = null; c.dead = true; if (c.ctl) c.ctl.abort(); }
+    stopDraftBusy();
     errMsg = '';
     state.at = id;
     render(dir || 'fwd');
@@ -2068,6 +2390,7 @@ main.rvmode { padding-block: 4px 20px; }
       else { cur = cur.filter(function (x) { return x !== 'none'; }); cur.push(v); }
       a[q.id] = cur;
     } else {
+      if (q.id === 'area' && a.area !== v) delete a.category;
       a[q.id] = v;
     }
     clearError();
@@ -2218,22 +2541,866 @@ main.rvmode { padding-block: 4px 20px; }
     return String(v || '').trim();
   }
 
+  // The form is one screen with progressive disclosure: area, then risk category, then (where the matrix lists
+  // risks for that category) an optional specific risk, then a single box for general thoughts.
+  var sfShown = 0;
+  // A link can be sent for one area: the page address ends in "#" plus the area's id. The form then opens already set
+  // to that area, and the person only chooses risk categories and names.
+  var SHARE_BASE = window.claude ? 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' : location.href.split('#')[0];
+  function linkArea() {
+    var id = (location.hash || '').replace(/^#/, '');
+    return id && areaTags().some(function (t) { return t.id === id; }) ? id : '';
+  }
+  window.addEventListener('hashchange', function () {
+    sfShown = 0;
+    render('stay');
+  });
+  // Lucide chevron-down and chevron-up; the stylesheet shows the one that matches the dropdown's open state.
+  function chevrons() {
+    var el = h('span', { class: 'combo-chev', 'aria-hidden': 'true' });
+    el.innerHTML = '<svg class="down" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9l6 6l6-6"/></svg>'
+      + '<svg class="up" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18 15l-6-6l-6 6"/></svg>';
+    return el;
+  }
+  function closeCombos() {
+    document.querySelectorAll('.combo-pop').forEach(function (p) {
+      p.hidden = true;
+      if (p.previousSibling) p.previousSibling.setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.addEventListener('click', function (e) {
+    if (!(e.target.closest && e.target.closest('.combo'))) closeCombos();
+  });
+  // Dictation for "Your thoughts": the browser's speech recognition turns what is said into text in the box.
+  // It needs the microphone, which a page inside Claude is not given, so there it is switched off with a note.
+  var dict = { on: false, r: null, target: null };
+  function dictStatus(text) { var el = document.getElementById('f-rec-status'); if (el) { el.textContent = text; el.hidden = !text; } }
+  function syncDictBtn() {
+    var b = document.getElementById('f-rec'), mic;
+    if (!b) return;
+    mic = h('span', { class: 'rec-mic', 'aria-hidden': 'true' });
+    mic.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>';
+    b.replaceChildren(dict.on ? h('span', { class: 'rec-dot on', 'aria-hidden': 'true' }) : mic);
+    b.setAttribute('aria-pressed', dict.on ? 'true' : 'false');
+    b.setAttribute('aria-label', dict.on ? 'Stop recording' : 'Record');
+    b.title = b.disabled ? 'Recording works when this page is opened on its own, outside Claude' : dict.on ? 'Stop recording' : 'Record: speak and it is added as text';
+  }
+  function stopDictation() {
+    var r = dict.r;
+    dict.on = false; dict.r = null;
+    if (r) { try { r.stop(); } catch (e) {} }
+  }
+  function toggleDictation(target) {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition, r;
+    if (dict.on) { stopDictation(); syncDictBtn(); dictStatus('Stopped. What you said is in the box above.'); return; }
+    if (!SR) { dictStatus('Recording is not supported in this browser. Try Chrome, Edge or Safari, or type instead.'); return; }
+    r = new SR();
+    r.continuous = true; r.interimResults = true; r.lang = navigator.language || 'en-GB';
+    r.onresult = function (e) {
+      var interim = '', i, t, box;
+      for (i = e.resultIndex; i < e.results.length; i++) {
+        t = e.results[i][0].transcript;
+        if (!e.results[i].isFinal) { interim += t; continue; }
+        t = t.trim();
+        if (!t) continue;
+        dict.target.text = ((dict.target.text || '').replace(/\s+$/, '') + ' ' + t).trim();
+        box = document.getElementById('f-thoughts');
+        if (box) { box.value = dict.target.text; box.scrollTop = box.scrollHeight; }
+        clearError();
+      }
+      dictStatus(interim ? 'Hearing: ' + interim : 'Listening… Speak, then press Stop recording.');
+    };
+    r.onerror = function (e) {
+      if (dict.r !== r) return;
+      dict.on = false; dict.r = null;
+      syncDictBtn();
+      dictStatus(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'The microphone is blocked for this page. Allow it in the browser’s address bar and try again, or type instead.'
+        : e.error === 'no-speech' ? 'Nothing was heard. Press Record and try again.'
+        : e.error === 'network' ? 'Speech recognition needs an internet connection. Try again, or type instead.'
+        : 'Recording stopped (' + e.error + ').');
+    };
+    r.onend = function () { if (dict.r === r) { dict.on = false; dict.r = null; syncDictBtn(); dictStatus('Stopped. What you said is in the box above.'); } };
+    dict.target = target; dict.r = r; dict.on = true;
+    try { r.start(); } catch (err) { dict.on = false; dict.r = null; dictStatus('Recording could not start. Try again.'); }
+    syncDictBtn();
+    if (dict.on) dictStatus('Listening… Speak, then press Stop recording.');
+  }
+  // The microphone button sits inside the text box, bottom right, with its status line to the left of it.
+  function dictationBar(target) {
+    var inClaude = !!window.claude, btn = h('button', { type: 'button', class: 'mic act', id: 'f-rec', 'aria-pressed': 'false', 'aria-label': 'Record', onclick: function () { toggleDictation(target); } });
+    var note = !inClaude && dict.on ? 'Listening\u2026 Speak, then press Stop recording.' : '';
+    var status = h('span', { class: 'tip', id: 'f-rec-status', role: 'status', text: note });
+    btn.disabled = inClaude;
+    status.hidden = !note;
+    setTimeout(syncDictBtn, 0);
+    return h('div', { class: 'think-bar' }, status, btn);
+  }
+  function storeSubmission(rec) {
+    records.unshift(rec);
+    justSubmitted = rec.id;
+    dashNote = '';
+    storeP.then(function (s) {
+      if (!s) { writeLocal(); return; }
+      return sharedReadyP.then(function () {
+        if (sharedFail) throw new Error('store unavailable');
+        rec.owner = s.uid; rec.shared = true;
+        return saveDoc(s.uid);
+      });
+    }).catch(function () {
+      delete rec.owner; delete rec.shared;
+      writeLocal();
+      dashNote = 'This form could not be saved to your account, so it is kept in this browser only.';
+      if (state.at === 'dashboard') render('stay');
+    });
+    resetForm();
+    state.req = null;
+    sfShown = 0;
+    go('dashboard', 'fwd');
+  }
+  function submitSimple() {
+    var a = state.answers, req = state.req, now = new Date(), text = (a.text || '').trim(), rows = [], rec, answered, items, order, used = {}, areas = {}, cats = {};
+    rec = { kind: 'submission', simple: true, id: 's' + now.getTime(), ref: 'RSK-' + now.getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000)), submittedAt: now.getTime() };
+    if (req) {
+      if (!text) { errMsg = 'Write a few words before you submit.'; showError(); return; }
+      rec.title = 'Risk assessment: ' + (req.matrixArea ? tagName(req.matrixArea) : MATRIX) + ' (' + req.area + ' input)';
+      rec.matrixArea = req.matrixArea || ''; rec.matrixCat = req.matrixCat || ''; rec.matrixRisk = req.matrixRisk || '';
+      rec.area = req.area; rec.responseTo = req.from.ref;
+      rows.push({ group: 'Risk input', label: req.risks.length === 1 ? req.risks[0].label : 'Input on ' + req.risks.length + ' answers', value: text,
+        context: req.risks.map(function (r) { return r.label + ':\n' + r.context; }).join('\n\n') });
+      if ((state.files.thoughts || []).length) rows[0].files = state.files.thoughts.map(function (f) { return f.name; });
+      answered = clone(req);
+      answered.status = 'answered'; answered.answeredRef = rec.ref; answered.answeredAt = now.getTime();
+      saveRequest(answered);
+    } else {
+      items = state.items || [];
+      if (!items.length) { errMsg = 'Add at least one risk before you submit.'; showError(); return; }
+      // Risks in the same area sit together, in the order of the areas in the matrix.
+      order = areaTags().map(function (t) { return t.id; });
+      items.map(function (it, i) { return { it: it, i: i }; })
+        .sort(function (x, y) { return ((x.it.unsorted ? 99 : order.indexOf(x.it.area)) - (y.it.unsorted ? 99 : order.indexOf(y.it.area))) || (x.i - y.i); })
+        .forEach(function (x) {
+          var it = x.it, rks = risksOf(it), added = rks.filter(function (r) { return r.own; }).map(function (r) { return r.name; }), row;
+          if (it.unsorted) {
+            var uk = 'unsorted:' + it.kind;
+            used[uk] = (used[uk] || 0) + 1;
+            row = { group: 'To be sorted', label: (it.kind === 'recording' ? 'Audio recording' : 'Uploaded files') + (used[uk] > 1 ? ' (' + used[uk] + ')' : ''), value: unsortedText(it), unsorted: true, files: it.files.map(function (f) { return f.name; }) };
+            rows.push(row);
+            return;
+          }
+          var label = ((rks.length ? rks.map(function (r) { return r.short || r.name; }) : it.categories.map(tagName)).join(', ') || 'Risk').slice(0, 140);
+          used[label] = (used[label] || 0) + 1;
+          if (used[label] > 1) label += ' (' + used[label] + ')';
+          row = { group: it.area ? tagName(it.area) : 'No area', label: label, value: it.text, matrixArea: it.area, matrixAreas: (it.areas || []).slice(), matrixCats: it.categories.slice(), matrixCat: it.categories[0] || '',
+            matrixRisks: rks.filter(function (r) { return r.q; }).map(function (r) { return r.q.id; }), matrixRiskTags: rks.filter(function (r) { return r.tag; }).map(function (r) { return r.tag; }) };
+          if (added.length) row.addedRisks = added;
+          if (it.files.length) row.files = it.files.map(function (f) { return f.name; });
+          if ((it.thread || []).length) row.thread = it.thread;
+          areas[it.area] = 1; it.categories.forEach(function (c) { cats[c] = 1; });
+          rows.push(row);
+        });
+      rec.title = 'Risk assessment' + (Object.keys(areas).length === 1 ? ': ' + tagName(Object.keys(areas)[0]) : '');
+      rec.matrixArea = Object.keys(areas).length === 1 ? Object.keys(areas)[0] : '';
+      rec.matrixCat = Object.keys(cats).length === 1 ? Object.keys(cats)[0] : '';
+      rec.matrixRisk = '';
+      rec.count = rows.length;
+    }
+    rec.risks = rec.total = rows.length;
+    rec.rows = rows;
+    storeSubmission(rec);
+  }
+  // What a submitted list-style form is about, in a few words.
+  function simpleLabel(r) {
+    if (r.count > 1) return r.count + ' risks';
+    return tagName(r.matrixCat || (r.rows[r.rows.length - 1] || {}).matrixCat || '') || 'General thoughts';
+  }
+  // AI follow-up for a risk being added: after the person writes their thoughts, Claude decides whether a
+  // follow-up question is needed. If so it appears as a short chat under the text box; answering is optional.
+  var draftBusy = null;
+  function stopDraftBusy() {
+    if (!draftBusy) return;
+    draftBusy.dead = true;
+    if (draftBusy.ctl) draftBusy.ctl.abort();
+    draftBusy = null;
+  }
+  function turnPairs(turns) {
+    var out = [];
+    (turns || []).forEach(function (t) {
+      if (t.role === 'ai') out.push({ q: t.text, a: '' });
+      else if (t.role === 'me' && out.length) out[out.length - 1].a += (out[out.length - 1].a ? '\n' : '') + t.text;
+    });
+    return out;
+  }
+  // done(question or null, source). Without Claude (the standalone page) a scripted example is used, and only for short answers.
+  function draftQuestion(d, text, turns, source, token, done) {
+    var asked = turns.filter(function (t) { return t.role === 'ai'; }).length, rks = risksOf(d);
+    if (asked >= MAX_FU) { done(null, source); return; }
+    if (source === 'sample') { setTimeout(function () { if (!token.dead) done(RISK_FOLLOW[asked] || null, 'sample'); }, 700); return; }
+    sampleP.then(function (sample) {
+      if (token.dead) return;
+      if (!sample) { done(!asked && text.length < 140 ? RISK_FOLLOW[0] : null, 'sample'); return; }
+      state.answers.__draft = text;
+      token.ctl = new AbortController();
+      sample.json(followUpPrompt({ id: '__draft', type: 'long', title: (rks.length ? rks.map(function (r) { return r.name; }) : (d.categories || []).map(tagName)).join(', ') + ' (area: ' + tagName(d.area) + ')' }, turns),
+        { modelTier: 'quick', cache: false, signal: token.ctl.signal }).then(function (r) {
+        var q = r && typeof r.followup === 'string' ? r.followup.trim().slice(0, 240) : '';
+        done(q || null, 'ai');
+      }, function (e) {
+        if (e && e.code === 'cancelled') return;
+        done(null, source || 'ai');
+      });
+    });
+  }
+  function draftReply() {
+    var d = state.draft, box = document.getElementById('f-reply'), text = box ? box.value.trim() : '', token;
+    if (!d || !d.thread || d.thread.done || draftBusy || !text) return;
+    d.thread.turns.push({ role: 'me', text: text.slice(0, 2000) });
+    token = draftBusy = { kind: 'chat' };
+    render('stay');
+    draftQuestion(d, d.thread.src, d.thread.turns, d.thread.source, token, function (q) {
+      if (draftBusy !== token) return;
+      draftBusy = null;
+      if (q) d.thread.turns.push({ role: 'ai', text: q });
+      else { d.thread.turns.push({ role: 'end', text: 'Thanks, that covers it. You can add this risk to the list.' }); d.thread.done = true; }
+      if (state.draft === d && state.mode === 'form') { render('stay'); var r = document.getElementById('f-reply'); if (r) r.focus(); }
+    });
+  }
+  function draftChat(d) {
+    var block = h('div', { class: 'field follow', id: 'fu-block' }), log = h('div', { class: 'log', role: 'log', 'aria-live': 'polite' }), box, send;
+    function mark() { return h('span', { class: 'who', 'aria-hidden': 'true', text: '✦' }); }
+    d.thread.turns.forEach(function (t) {
+      log.appendChild(t.role === 'me' ? h('div', { class: 'msg me' }, h('p', { text: t.text }))
+        : h('div', { class: 'msg ai' + (t.role === 'end' ? ' end' : '') }, mark(), h('p', { text: t.text })));
+    });
+    if (draftBusy && draftBusy.kind === 'chat') log.appendChild(h('div', { class: 'msg ai' }, mark(), h('p', { class: 'dots', 'aria-label': 'Thinking' }, h('i'), h('i'), h('i'))));
+    block.appendChild(h('div', { class: 'badges' }, h('span', { class: 'tag ai', text: d.thread.source === 'ai' ? '✦ AI follow-up' : '✦ Example AI follow-up' }), h('span', { class: 'tip', text: 'Optional' })));
+    block.appendChild(log);
+    if (d.thread.done) return block;
+    box = h('textarea', { class: 'reply', id: 'f-reply', rows: '1', placeholder: 'Reply… (optional)', 'aria-label': 'Reply to the follow-up question',
+      oninput: function () { box.style.height = 'auto'; box.style.height = Math.min(box.scrollHeight, 160) + 'px'; },
+      onkeydown: function (e) { if (e.key === 'Enter' && !e.shiftKey && box.value.trim()) { e.preventDefault(); draftReply(); } } });
+    send = h('button', { type: 'button', class: 'send act', id: 'f-reply-send', 'aria-label': 'Send reply', text: '↑', onclick: draftReply });
+    box.disabled = send.disabled = !!draftBusy;
+    block.appendChild(h('div', { class: 'composer' }, box, send));
+    return block;
+  }
+  function draftFinish() {
+    var d = state.draft, item, i;
+    derive(d);
+    item = { id: d.id || newId('i'), area: d.area, areas: d.areas.slice(), picks: d.picks.slice(), categories: (d.categories || []).slice(), risks: (d.risks || []).slice(), text: (d.text || '').trim(), files: (state.files.thoughts || []).slice(),
+      fu: d.thread || null, thread: turnPairs(d.thread ? d.thread.turns : []) };
+    state.items = state.items || [];
+    i = state.items.map(function (x) { return x.id; }).indexOf(item.id);
+    if (i >= 0) state.items[i] = item; else state.items.push(item);
+    state.draft = null; state.files.thoughts = [];
+    errMsg = ''; sfShown = 0;
+    render('stay');
+  }
+  function draftSkip() {
+    var d = state.draft;
+    if (!d || !draftBusy) return;
+    stopDraftBusy();
+    d.thread = { src: (d.text || '').trim(), source: 'skipped', turns: [], done: true };
+    draftFinish();
+  }
+  // Risk names offered for the chosen categories, grouped by category: the ones listed in the matrix, names already
+  // accepted into it, and names the person has added themselves during this form.
+  function riskGroups(cats, selected) {
+    var out = [], own = (state.ownRisks || []).slice();
+    (cats || []).forEach(function (cat) {
+      var items = Q.filter(function (q) { return q.type === 'risk' && q.cat === cat; }).map(function (q) { return { v: q.id, l: q.title }; });
+      taxonomy.forEach(function (g) {
+        if (g.matrix === 'risk') g.tags.forEach(function (t) { if (t.parent === cat) items.push({ v: 'tag:' + t.id, l: t.name }); });
+      });
+      if (items.length) out.push({ cap: tagName(cat), items: items });
+    });
+    (selected || []).forEach(function (v) { if (v.indexOf('own:') === 0 && own.indexOf(v.slice(4)) < 0) own.push(v.slice(4)); });
+    if (own.length) out.push({ cap: 'Added by you', own: true, items: own.map(function (n) { return { v: 'own:' + n, l: n }; }) });
+    return out;
+  }
+  function riskInfo(v) {
+    var q;
+    if (!v) return null;
+    if (v.indexOf('own:') === 0) return { name: v.slice(4), own: true };
+    if (v.indexOf('tag:') === 0) return { name: tagName(v.slice(4)), tag: v.slice(4) };
+    q = Q.filter(function (x) { return x.id === v; })[0];
+    return q ? { name: q.title, short: q.short, q: q } : null;
+  }
+  function risksOf(it) { return (it.risks || []).map(riskInfo).filter(Boolean); }
+  function catsOf(x) { return x.matrixCats || (x.matrixCat ? [x.matrixCat] : []); }
+  // Alternative 01: one searchable list of options. An option is a risk category, a risk name, or something the person
+  // added themselves. Search also matches these synonyms, so "bribery" finds Anti-Corruption and "salary" finds equal pay.
+  var SYN = {
+    'sub-regulatory': ['law', 'legal', 'legislation', 'rules', 'directive', 'compliance'],
+    'sub-systemic': ['structural', 'emerging', 'unknown', 'unforeseen'],
+    'r_equalpay': ['salary', 'wage', 'pay gap', 'gender pay', 'remuneration', 'compensation'],
+    'r_aiact': ['artificial intelligence', 'machine learning', 'chatbot', 'algorithm', 'automation'],
+    'r_ecgt': ['green claims', 'environmental claims', 'sustainability', 'eco', 'climate'],
+    'r_labour': ['employment law', 'harassment', 'bullying', 'workplace', 'hr'],
+    'r_anticorruption': ['bribery', 'bribe', 'kickback', 'gifts', 'hospitality'],
+    'r_latepay': ['invoice', 'payment terms', 'overdue', 'suppliers paid late'],
+    'r_dynamic': ['changing rules', 'regulatory change', 'new requirements'],
+    'r_unknown': ['other', 'unforeseen', 'black swan', 'emerging'],
+    'sub-pharma': ['medicines', 'drug', 'healthcare', 'promotion', 'gmp'],
+    'sub-competition': ['antitrust', 'cartel', 'price fixing', 'consumer rights', 'unfair practices'],
+    'sub-greenwashing': ['green claims', 'environmental claims', 'sustainability', 'eco', 'climate'],
+    'sub-anticorruption': ['bribe', 'kickback', 'gifts', 'hospitality', 'fraud'],
+    'sub-aml': ['money laundering', 'sanctions', 'terrorist financing', 'kyc', 'cash'],
+    'sub-gambling': ['lottery', 'betting', 'prize draw', 'contest', 'games'],
+    'sub-esg': ['sustainability', 'csrd', 'environment', 'social', 'reporting'],
+    'sub-iso': ['standards', 'certification', 'audit', 'quality'],
+    'sub-ai': ['artificial intelligence', 'machine learning', 'chatbot', 'algorithm'],
+    'sub-coi': ['conflict', 'outside activity', 'related party', 'nepotism'],
+    'sub-external': ['lobbying', 'public officials', 'government', 'public affairs'],
+    'sub-disclosure': ['transparency', 'transfers of value', 'publication'],
+    'sub-contracting': ['contracts', 'clauses', 'agreements', 'terms'],
+    'sub-culture': ['ethics', 'values', 'training', 'awareness', 'tone from the top'],
+    'sub-governance': ['policies', 'procedures', 'controls', 'oversight', 'ownership'],
+    'sub-communication': ['messaging', 'internal comms', 'information flow'],
+    'sub-misconduct': ['fraud', 'theft', 'harassment', 'abuse', 'violation'],
+    'sub-reporting': ['whistleblowing', 'speak up', 'hotline', 'escalation'],
+    'sub-supplier': ['vendor', 'third party', 'contractor', 'due diligence'],
+    'sub-procurement': ['purchasing', 'tender', 'sourcing', 'vendor selection']
+  };
+  function pickOptions() {
+    var out = [], areaOf = {};
+    taxonomy.forEach(function (g) {
+      if (g.matrix === 'sub') g.tags.forEach(function (t) { areaOf[t.id] = t.parent || ''; out.push({ v: t.id, l: t.name, kind: 'cat', area: t.parent || '', cat: t.id }); });
+    });
+    Q.forEach(function (q) { if (q.type === 'risk' && q.cat) out.push({ v: q.id, l: q.title, kind: 'risk', area: areaOf[q.cat] || '', cat: q.cat }); });
+    taxonomy.forEach(function (g) {
+      if (g.matrix === 'risk') g.tags.forEach(function (t) { if (t.parent && areaOf[t.parent] !== undefined) out.push({ v: 'tag:' + t.id, l: t.name, kind: 'risk', area: areaOf[t.parent], cat: t.parent }); });
+    });
+    return out;
+  }
+  // Turn the ticked options into the area(s), categories and risk names the rest of the page works with.
+  function derive(d) {
+    var byV = {}, la = linkArea(), cats = [], risks = [], areas = [];
+    function add(list, x) { if (x && list.indexOf(x) < 0) list.push(x); }
+    pickOptions().forEach(function (o) { byV[o.v] = o; });
+    (d.picks || []).forEach(function (v) {
+      var o = byV[v];
+      if (v.indexOf('own:') === 0) { risks.push(v); return; }
+      if (!o) return;
+      add(cats, o.cat); add(areas, o.area);
+      if (o.kind === 'risk') risks.push(v);
+    });
+    d.categories = cats; d.risks = risks;
+    d.areas = areas.length ? areas : (la ? [la] : []);
+    if (la && d.areas.indexOf(la) > 0) { d.areas.splice(d.areas.indexOf(la), 1); d.areas.unshift(la); }
+    d.area = la && d.areas.indexOf(la) >= 0 ? la : d.areas[0] || '';
+  }
+  // The start of the form offers three ways in: search for a risk, upload documents or media, or leave an audio
+  // recording. Uploads and recordings are added as they are, marked "To be sorted", and turned into form entries later.
+  var ICONS = {
+    search: '<path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
+    upload: '<path d="M12 3v12m5-7l-5-5l-5 5m14 7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>',
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
+    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+    circlePlus: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/>'
+  };
+  function icon(name, size) {
+    var el = h('span', { class: 'ico', 'aria-hidden': 'true' });
+    el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+    return el;
+  }
+  function addUnsorted(kind, files, dur) {
+    if (state.v2) { state.v2.list = ''; state.v2.more = false; }
+    state.items = state.items || [];
+    state.items.push({ id: newId('i'), unsorted: true, kind: kind, dur: dur || 0, area: '', areas: [], picks: [], categories: [], risks: [], text: '', files: files, thread: [] });
+    errMsg = '';
+    render('stay');
+  }
+  function unsortedText(it) {
+    return it.kind === 'recording' ? 'Audio recording (' + clock(it.dur) + '), left to be sorted into the form later.' : 'Uploaded to be sorted into the form later.';
+  }
+  var recState = { on: false, mr: null, chunks: [], t0: 0, timer: null, stream: null };
+  function stopRecording() { if (recState.on && recState.mr && recState.mr.state !== 'inactive') recState.mr.stop(); }
+  function startRecording() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { errMsg = 'Recording is not supported in this browser. Upload an audio file instead.'; showError(); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      var mr = new MediaRecorder(stream);
+      recState = { on: true, mr: mr, chunks: [], t0: Date.now(), timer: null, stream: stream };
+      mr.ondataavailable = function (e) { if (e.data && e.data.size) recState.chunks.push(e.data); };
+      mr.onstop = function () {
+        var type = mr.mimeType || 'audio/webm', ext = /mp4|aac/.test(type) ? 'm4a' : /ogg/.test(type) ? 'ogg' : 'webm';
+        var dur = Math.max(1, Math.round((Date.now() - recState.t0) / 1000)), d = new Date();
+        var name = 'recording-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '-' + ('0' + d.getHours()).slice(-2) + ('0' + d.getMinutes()).slice(-2) + '.' + ext;
+        clearInterval(recState.timer);
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        var file = new File(recState.chunks, name, { type: type.split(';')[0] });
+        recState = { on: false, mr: null, chunks: [], t0: 0, timer: null, stream: null };
+        addUnsorted('recording', [file], dur);
+      };
+      mr.start();
+      recState.timer = setInterval(function () { var el = document.getElementById('rec-time'); if (el) el.textContent = clock((Date.now() - recState.t0) / 1000); }, 500);
+      errMsg = '';
+      render('stay');
+    }, function () {
+      errMsg = 'The microphone is blocked for this page. Allow it in the browser’s address bar and try again, or upload an audio file instead.';
+      showError();
+    });
+  }
+  // ---- version-02: one risk at a time, picked from a plain list of risk names ----
+  function v2() { return state.v2 || (state.v2 = { list: '', open: {}, more: false }); }
+  // What can be picked: risk names, plus any category that has no risk names under it yet.
+  function v2Opts() {
+    var all = pickOptions();
+    return all.filter(function (o) { return o.kind === 'risk' || !all.some(function (r) { return r.kind === 'risk' && r.cat === o.v; }); });
+  }
+  function v2Own(name) {
+    var v = name.trim().slice(0, 120), known;
+    state.ownRisks = state.ownRisks || [];
+    known = state.ownRisks.filter(function (n) { return n.toLowerCase() === v.toLowerCase(); })[0];
+    if (!known) { state.ownRisks.push(v); known = v; }
+    return 'own:' + known;
+  }
+  // Search box whose matches appear right under it. Matches also on synonyms.
+  function v2Search(la, onPick, withButton, idp) {
+    var wrap = h('div', { class: 'v2-search' }), results = h('div', { class: 'sf-list start-results' }), all = v2Opts();
+    var search = h('input', { type: 'text', class: 'start-search', id: idp + 'search', autocomplete: 'off', placeholder: withButton ? 'Search' : 'Search for a risk, for example “bribery” or “salary”', 'aria-label': 'Search for a risk' });
+    function show() {
+      var needle = search.value.trim().toLowerCase(), hits = [], exact = false;
+      results.replaceChildren();
+      results.hidden = !needle;
+      if (!needle) return;
+      all.forEach(function (o) {
+        var name = o.l.toLowerCase(), syn = '';
+        if (name === needle) exact = true;
+        if (name.indexOf(needle) < 0) syn = (SYN[o.v] || []).concat(SYN[o.cat] || []).filter(function (w) { return w.indexOf(needle) >= 0 || needle.indexOf(w) >= 0; })[0] || '';
+        if (name.indexOf(needle) >= 0 || syn) hits.push({ o: o, syn: syn });
+      });
+      // Risks from the person's own area come first.
+      hits.sort(function (x, y) { return (y.o.area === la) - (x.o.area === la); });
+      hits.slice(0, 8).forEach(function (hit, i) {
+        var o = hit.o;
+        results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'hit-' + i, onclick: function () { onPick(o.v, o.area); } },
+          h('span', { class: 'sf-txt' }, h('span', { text: o.l }), h('span', { class: 'fsub', text: tagName(o.area) + (hit.syn ? ' · also: ' + hit.syn : '') }))));
+      });
+      if (!hits.length) results.appendChild(h('p', { class: 'tip start-none', text: 'Nothing in the list matches.' }));
+      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'own', onclick: function () { onPick(v2Own(search.value), ''); } },
+        h('span', { class: 'sf-txt', text: '+ Add “' + search.value.trim() + '” as your own risk' })));
+    }
+    search.addEventListener('input', show);
+    search.addEventListener('keydown', function (e) {
+      var first = results.querySelector('button');
+      if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
+    });
+    results.hidden = true;
+    wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search),
+      withButton ? h('button', { type: 'button', class: 'btn act', id: idp + 'search-go', text: 'Search', onclick: function () { show(); search.focus(); } }) : null));
+    wrap.appendChild(results);
+    return wrap;
+  }
+  function v2Rows(opts, sel, onPick, idp) {
+    var box = h('div', { class: 'v2-rows' });
+    opts.forEach(function (o, i) {
+      box.appendChild(h('button', { type: 'button', class: 'v2-opt act', id: idp + i, 'aria-pressed': o.v === sel ? 'true' : 'false', onclick: function () { onPick(o.v, o.area); } },
+        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l })));
+    });
+    return box;
+  }
+  // The risks to choose from: the person's own area first, then their own additions, an "add another" row, and, when asked for, every other area.
+  function v2List(la, mode, sel, onPick, idp) {
+    var st = v2(), wrap = h('div', { class: 'v2-list' }), all = v2Opts(), own = state.ownRisks || [], mine, others;
+    if (la) {
+      mine = all.filter(function (o) { return o.area === la; });
+      if (mine.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Risks in ' + tagName(la) }), v2Rows(mine, sel, onPick, idp + 'mine-')));
+    }
+    if (own.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Added by you' }),
+      v2Rows(own.map(function (n) { return { v: 'own:' + n, l: n, area: '' }; }), sel, onPick, idp + 'own-')));
+    var name = h('input', { type: 'text', class: 'line', id: idp + 'another', maxlength: '120', autocomplete: 'off', placeholder: 'Add another risk…', 'aria-label': 'Add another risk' });
+    var add = h('button', { type: 'button', class: 'btn act', id: idp + 'another-go', text: 'Add risk', onclick: function () { if (!name.value.trim()) { name.focus(); return; } onPick(v2Own(name.value), ''); } });
+    name.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
+    wrap.appendChild(h('div', { class: 'v2-addrow' }, name, add));
+    if (mode === 'all' || !la) {
+      others = areaTags().filter(function (t) { return t.id !== la && all.some(function (o) { return o.area === t.id; }); });
+      if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: la ? 'Other areas' : 'All areas' }));
+      others.forEach(function (t) {
+        var isOpen = !!st.open[t.id], opts = all.filter(function (o) { return o.area === t.id; });
+        var head = h('button', { type: 'button', class: 'pick-head combo-btn-like act', id: idp + 'area-' + t.id, 'aria-expanded': isOpen ? 'true' : 'false', onclick: function () { st.open[t.id] = !st.open[t.id]; render('stay'); } },
+          h('span', { text: t.name }), chevrons());
+        wrap.appendChild(h('div', { class: 'pick-group' }, head, isOpen ? v2Rows(opts, sel, onPick, idp + t.id + '-') : null));
+      });
+    }
+    return wrap;
+  }
+  function startBlock(hasItems, la) {
+    var st = v2(), wrap = h('div', { class: 'start' }), inClaude = !!window.claude, cards = h('div', { class: 'start-cards' });
+    function openWith(v) {
+      state.draft = { picks: [v], shown: true };
+      state.files.thoughts = [];
+      st.list = ''; st.more = false;
+      errMsg = ''; sfShown = 0;
+      render('fwd');
+      var box = document.getElementById('f-thoughts');
+      if (box) box.focus();
+    }
+    wrap.appendChild(v2Search(la, openWith, false, 'start-'));
+    if (!st.list) {
+      wrap.appendChild(h('div', { class: 'go' },
+        h('button', { type: 'button', class: 'btn ghost act', id: 'start-add', onclick: function () { st.list = la ? 'mine' : 'all'; errMsg = ''; render('stay'); } }, icon('circlePlus', 16), 'Add new risk'),
+        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; errMsg = ''; render('stay'); }, text: 'Browse all risk options' })));
+    } else {
+      wrap.appendChild(v2List(la, st.list, '', openWith, 'start-'));
+      if (st.list === 'mine') wrap.appendChild(h('div', { class: 'go' },
+        h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; render('stay'); }, text: 'Browse all risk options' })));
+    }
+    wrap.appendChild(h('div', { class: 'v2-or', text: 'OR' }));
+    // Upload
+    var up = h('input', { type: 'file', class: 'pick act', id: 'start-upload', multiple: true, accept: ACCEPT, 'aria-label': 'Upload documents or media' });
+    function take(list) {
+      var ok = [], bad = '';
+      Array.prototype.forEach.call(list || [], function (f) {
+        if (!kindOf(f)) bad = '“' + f.name + '” is not a supported file type.';
+        else if (f.size > MAX_BYTES) bad = '“' + f.name + '” is larger than 100 MB.';
+        else if (ok.length < MAX_FILES) ok.push(f);
+      });
+      if (ok.length) addUnsorted('upload', ok, 0);
+      if (bad) { errMsg = bad; showError(); }
+    }
+    up.addEventListener('change', function (e) { take(e.target.files); e.target.value = ''; });
+    var upCard = h('label', { class: 'start-card', for: 'start-upload' }, up, icon('upload', 20),
+      h('span', { class: 'start-title', text: 'Upload documents or media' }),
+      h('span', { class: 'tip', text: 'Add files now and leave the details for later. You can also drop them here.' }));
+    upCard.addEventListener('dragover', function (e) { e.preventDefault(); upCard.classList.add('over'); });
+    upCard.addEventListener('dragleave', function () { upCard.classList.remove('over'); });
+    upCard.addEventListener('drop', function (e) { e.preventDefault(); upCard.classList.remove('over'); take(e.dataTransfer && e.dataTransfer.files); });
+    cards.appendChild(upCard);
+    // Recording
+    var recCard = h('button', { type: 'button', class: 'start-card act' + (recState.on ? ' on' : ''), id: 'start-record', onclick: function () { if (recState.on) stopRecording(); else startRecording(); } },
+      recState.on ? h('span', { class: 'rec-dot on', 'aria-hidden': 'true' }) : icon('mic', 20),
+      h('span', { class: 'start-title' }, recState.on ? 'Stop recording ' : 'Leave an audio recording', recState.on ? h('span', { id: 'rec-time', class: 'at', text: clock((Date.now() - recState.t0) / 1000) }) : null),
+      h('span', { class: 'tip', text: recState.on ? 'Recording… Say what you have seen, then press here to stop.' : 'Say it in your own words. It is saved as it is and sorted into the form later.' }));
+    recCard.disabled = inClaude;
+    if (inClaude) recCard.title = 'Recording works when this page is opened on its own, outside Claude';
+    cards.appendChild(recCard);
+    wrap.appendChild(cards);
+    return wrap;
+  }
+  function draftAdd() {
+    var d = state.draft, text = (d.text || '').trim(), reply = document.getElementById('f-reply'), token;
+    if (draftBusy) return;
+    if (!(d.picks || []).length) { errMsg = 'Choose a risk from the list, or add your own, before adding this to the list.'; showError(); return; }
+    derive(d);
+    if (!text) { errMsg = 'Write a few words about this risk first.'; showError(); return; }
+    // Already checked for this text: keep any reply typed but not sent, then add the risk.
+    if (d.thread && d.thread.src === text) {
+      if (reply && reply.value.trim() && !d.thread.done) d.thread.turns.push({ role: 'me', text: reply.value.trim().slice(0, 2000) });
+      draftFinish();
+      return;
+    }
+    d.thread = null;
+    token = draftBusy = { kind: 'first' };
+    errMsg = '';
+    render('stay');
+    draftQuestion(d, text, [], null, token, function (q, source) {
+      if (draftBusy !== token) return;
+      draftBusy = null;
+      d.thread = { src: text, source: source, turns: q ? [{ role: 'ai', text: q }] : [], done: !q };
+      if (!q) { draftFinish(); return; }
+      render('stay');
+      var r = document.getElementById('f-reply');
+      if (r) r.focus();
+    });
+  }
+  function simpleForm() {
+    var req = state.req, a = req ? state.answers : (state.draft || {}), sec = h('section', { class: 'q sf' }), host = sec, shown = 0, last = null, box, err, open;
+    function step(label, note, body) {
+      last = h('div', { class: 'sf-step' }, h('div', { class: 'sf-label' }, label, note ? h('span', { class: 'opt-note', text: note }) : null), body);
+      host.appendChild(last);
+      shown++;
+    }
+    function chips(list, current, prefix, pick) {
+      var row = h('div', { class: 'sf-list' }), picked = list.some(function (o) { return o.v === current; });
+      // A plain list, one option per row. Once something is picked the other rows go away; clicking the picked row brings them back.
+      list.forEach(function (o, i) {
+        var on = current === o.v;
+        if (picked && !on) return;
+        row.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: prefix + i, 'aria-pressed': on ? 'true' : 'false',
+          onclick: function () { errMsg = ''; pick(o.v); render('stay'); } },
+          h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: o.l }), on ? h('span', { class: 'chg', text: 'Change' }) : null));
+      });
+      return row;
+    }
+    // A dropdown with a search box: click to open, type to filter, arrows and Enter to choose, Esc to close.
+    function combo(list, current, prefix, pick, placeholder, multi) {
+      function isSel(o) { return multi ? current.indexOf(o.v) >= 0 : o.v === current; }
+      var chosen = list.filter(isSel), sel = chosen[0], opts = [], active = -1;
+      var wrap = h('div', { class: 'combo' }), pop = h('div', { class: 'combo-pop' }), items = h('div', { class: 'combo-list', role: 'listbox', 'aria-label': placeholder });
+      var search = h('input', { type: 'text', class: 'combo-search', id: prefix + 'search', placeholder: 'Search…', autocomplete: 'off', 'aria-label': 'Search' });
+      var none = h('p', { class: 'combo-empty', text: 'No matches.' });
+      var btn = h('button', { type: 'button', class: 'combo-btn act', id: prefix + 'btn', 'aria-haspopup': 'listbox', 'aria-expanded': 'false' },
+        h('span', { class: 'combo-val' + (sel ? '' : ' ph'), text: sel ? chosen.map(function (o) { return o.l; }).join(', ') : placeholder }),
+        multi && chosen.length > 1 ? h('span', { class: 'combo-count', text: String(chosen.length) }) : null,
+        chevrons());
+      function shown() { return opts.filter(function (o) { return !o.el.hidden; }); }
+      function setActive(i) {
+        var vis = shown();
+        opts.forEach(function (o) { o.el.classList.remove('active'); });
+        if (!vis.length) { active = -1; return; }
+        active = (i + vis.length) % vis.length;
+        vis[active].el.classList.add('active');
+        if (vis[active].el.scrollIntoView) vis[active].el.scrollIntoView({ block: 'nearest' });
+      }
+      function filter() {
+        var needle = search.value.trim().toLowerCase(), n = 0;
+        opts.forEach(function (o) { o.el.hidden = !!needle && o.l.toLowerCase().indexOf(needle) < 0; if (!o.el.hidden) n++; });
+        none.hidden = n > 0;
+        setActive(0);
+      }
+      function open(show) {
+        if (show) closeCombos();
+        pop.hidden = !show;
+        btn.setAttribute('aria-expanded', show ? 'true' : 'false');
+        if (show) { search.value = ''; filter(); search.focus(); }
+      }
+      function choose(v) {
+        var b;
+        if (multi) {
+          // Stay open so several can be ticked one after another.
+          errMsg = '';
+          pick(v);
+          render('stay');
+          b = document.getElementById(prefix + 'btn');
+          if (b) b.click();
+          return;
+        }
+        if (v === current) { open(false); btn.focus(); return; }
+        errMsg = '';
+        pick(v);
+        render('stay');
+        b = document.getElementById(prefix + 'btn');
+        if (b && !document.activeElement.matches('textarea, input')) b.focus();
+      }
+      list.forEach(function (o, i) {
+        var el = h('button', { type: 'button', class: 'combo-opt act', id: prefix + i, role: 'option', 'aria-selected': isSel(o) ? 'true' : 'false', onclick: function () { choose(o.v); } },
+          h('span', { class: 'sf-txt', text: o.l }), isSel(o) ? h('span', { 'aria-hidden': 'true', text: '✓' }) : null);
+        opts.push({ el: el, l: o.l, v: o.v });
+        items.appendChild(el);
+      });
+      btn.disabled = !list.length;
+      btn.addEventListener('click', function () { open(pop.hidden); });
+      search.addEventListener('input', filter);
+      search.addEventListener('keydown', function (e) {
+        var vis = shown();
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (vis[active]) choose(vis[active].v); }
+        else if (e.key === 'Escape') { e.preventDefault(); open(false); btn.focus(); }
+      });
+      pop.hidden = true; none.hidden = true;
+      pop.appendChild(search); pop.appendChild(items); pop.appendChild(none);
+      wrap.appendChild(btn); wrap.appendChild(pop);
+      return wrap;
+    }
+    function thoughts(placeholder) {
+      box = h('textarea', { class: 'line', id: 'f-thoughts', rows: '6', placeholder: placeholder, 'aria-label': 'Your thoughts',
+        oninput: function (e) {
+          var fb = document.getElementById('fu-block');
+          a.text = e.target.value; clearError();
+          if (fb && a.thread) fb.hidden = a.thread.src !== e.target.value.trim();
+        },
+        onkeydown: function (e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); (req ? submitSimple : draftAdd)(); } } });
+      box.value = a.text || '';
+      err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
+      err.hidden = !errMsg;
+      return h('div', { class: 'sf-body' }, h('div', { class: 'think' }, box, dictationBar(a)), attachRow({ id: 'thoughts' }, sec), err);
+    }
+    if (req) {
+      sec.appendChild(h('div', { class: 'head' },
+        h('div', { class: 'badges' }, h('span', { class: 'tag', text: req.area }), h('span', { class: 'tip', text: req.ref })),
+        h('h1', { class: 'big', text: req.area + ': your input is needed' }),
+        h('p', { class: 'help', text: req.brief }),
+        req.note ? h('p', { class: 'help', text: 'Message from the sender: ' + req.note }) : null));
+      req.risks.forEach(function (r) {
+        sec.appendChild(h('div', { class: 'field ctx' }, h('b', { text: r.label + ', already submitted by ' + req.from.name }), clipped(r.context || 'No input')));
+      });
+      step('Your thoughts', '', thoughts('Add what you know about this. Anything goes.'));
+      sec.appendChild(h('div', { class: 'go' },
+        h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit' }),
+        h('button', { type: 'button', class: 'btn ghost act', id: 'resp-cancel', onclick: function () { resetForm(); state.req = null; sfShown = 0; go('welcome', 'back'); }, text: 'Cancel' })));
+      return sec;
+    }
+    var items = state.items || (state.items = []), list = h('div', { class: 'risk-list' }), editor, buttons;
+    var la = linkArea();
+    // Intro: shown first, explains why the person is asked and how the process goes.
+    if (!state.started) {
+      sec.classList.add('intro');
+      sec.appendChild(h('div', { class: 'head' },
+        la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) })) : null,
+        h('h1', { class: 'big', text: 'Help us see the risks you see' }),
+        h('p', { class: 'help', text: 'Compliance is building one picture of the regulatory and ethical risks across the company. That picture is only as good as what people in each area tell us, so we are asking you to add what you notice in your daily work.' })));
+      var why = h('div', { class: 'intro-why' });
+      [['You see it first', 'Problems show up in daily work long before they reach a report. Nobody in compliance knows your area the way you do.'],
+       ['It shapes what gets fixed', 'What you add goes into the company risk matrix, which is used to decide where controls, training and attention are needed.'],
+       ['It does not have to be polished', 'A few sentences, a document or a voice recording is enough. Compliance sorts it and comes back if something is unclear.']
+      ].forEach(function (w) { why.appendChild(h('div', { class: 'intro-card' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] }))); });
+      sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'Why we are asking you' }), why));
+      var how = h('ol', { class: 'intro-steps' });
+      [['Add a risk', 'Search the list, pick from your own area or another one, or create your own if nothing fits.'],
+       ['Say what you see', 'Write or dictate your thoughts and attach documents or media. Short on time? Upload files or leave an audio recording and it is sorted into the form later.'],
+       ['Answer a follow-up, if one comes up', 'The assistant may ask a short question to fill a gap. You can skip it.'],
+       ['Check the list and submit', 'You can edit or remove anything before you send it.'],
+       ['Compliance takes it from there', 'They review and tag what you sent, may ask another area to add what you could not, and may come back to you with questions.']
+      ].forEach(function (w, i) { how.appendChild(h('li', null, h('span', { class: 'intro-n', 'aria-hidden': 'true', text: String(i + 1) }), h('span', { class: 'intro-txt' }, h('span', { class: 'intro-title', text: w[0] }), h('span', { class: 'tip', text: w[1] })))); });
+      sec.appendChild(h('div', { class: 'sf-step' }, h('h2', { class: 'intro-h', text: 'How it works' }), how));
+      sec.appendChild(h('div', { class: 'meta' }, h('span', { text: 'A few minutes per risk' }), h('span', { text: 'Every part is optional' }), h('span', { text: 'Add as many risks as you like' })));
+      sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'intro-start', text: items.length || state.draft ? 'Back to your risks' : 'Start', onclick: function () { state.started = true; render('fwd'); } })));
+      return sec;
+    }
+    sec.appendChild(h('div', { class: 'head' },
+      la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) }),
+        h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Change' })) : null,
+      h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Add new risk assessment' }),
+      state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
+        : h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
+        h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
+    // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
+    var shownItems = items.filter(function (it) { return !(state.draft && state.draft.id === it.id); });
+    var anySources = shownItems.some(function (it) { return (it.thread || []).length; }), anyFiles = shownItems.some(function (it) { return it.files.length; });
+    if (shownItems.length && !state.draft) {
+      var head = h('tr', null, h('th', { scope: 'col', text: 'Area' }), h('th', { scope: 'col', text: 'Risk category' }), h('th', { scope: 'col', text: 'Risk name' }), h('th', { scope: 'col', text: 'Risk description' }));
+      var body = h('tbody');
+      if (anySources) head.appendChild(h('th', { scope: 'col', text: 'Sources' }));
+      if (anyFiles) head.appendChild(h('th', { scope: 'col', text: 'Files' }));
+      head.appendChild(h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })));
+      items.forEach(function (it, i) {
+        var rks = risksOf(it), tr, cell;
+        if (state.draft && state.draft.id === it.id) return;
+        function lines(list, cls) {
+          var box = h('div', { class: 'cell-list' });
+          list.forEach(function (t) { box.appendChild(h('span', { class: cls || null, text: t })); });
+          return box;
+        }
+        tr = h('tr', { class: 'risk-row' },
+          h('td', null, (it.areas || [it.area]).filter(Boolean).length ? lines((it.areas || [it.area]).filter(Boolean).map(tagName)) : h('span', { class: 'none', text: '\u2014' })),
+          h('td', null, it.categories.length ? lines(it.categories.map(tagName)) : h('span', { class: 'none', text: '\u2014' })),
+          h('td', null, it.unsorted ? h('span', { class: 'tag ai', text: 'To be sorted' }) : rks.length ? lines(rks.map(function (r) { return r.name; })) : h('span', { class: 'none', text: '—' })),
+          h('td', { class: 'desc' }, clipped(it.unsorted ? unsortedText(it) : it.text)));
+        if (anySources) {
+          cell = h('td', { class: 'src-cell' });
+          if ((it.thread || []).length) {
+            var box = h('div', { class: 'cell-list' });
+            it.thread.forEach(function (t) { box.appendChild(h('span', null, h('b', { text: t.q }), h('span', { class: 'ans', text: t.a || 'Not answered' }))); });
+            cell.appendChild(box);
+          } else cell.appendChild(h('span', { class: 'none', text: '—' }));
+          tr.appendChild(cell);
+        }
+        if (anyFiles) tr.appendChild(h('td', { class: 'file-cell' }, it.files.length ? lines(it.files.map(function (f) { return f.name; }), 'fname') : h('span', { class: 'none', text: '—' })));
+        tr.appendChild(h('td', { class: 'row-actions' },
+          h('button', { type: 'button', class: 'edit act', id: 'ri-edit-' + i, 'aria-label': 'Edit this risk', onclick: function () {
+            state.draft = { id: it.id, picks: (it.picks || []).slice(), area: it.area, categories: it.categories.slice(), risks: it.risks.slice(), text: it.text, thread: it.fu ? clone(it.fu) : null };
+            state.files.thoughts = it.files.slice();
+            errMsg = ''; sfShown = 0;
+            render('stay');
+          }, text: 'Edit' }),
+          h('button', { type: 'button', class: 'edit act', id: 'ri-del-' + i, 'aria-label': 'Remove this risk', onclick: function () {
+            state.items = items.filter(function (x) { return x !== it; });
+            errMsg = '';
+            render('stay');
+          }, text: 'Remove' })));
+        body.appendChild(tr);
+      });
+      sec.classList.add('has-table');
+      sec.appendChild(h('div', { class: 'table-wrap' }, h('table', { class: 'risk-table' }, h('thead', null, head), body)));
+    } else if (!state.draft) sec.appendChild(h('p', { class: 'risk-empty', text: 'No risks added yet.' }));
+    if (state.draft) {
+      editor = h('div', { class: 'risk-editor' });
+      host = editor;
+      a.picks = (a.picks || []).slice(0, 1);
+      var byV = {}, sel = a.picks[0] || '', selName, setPick = function (v) { a.picks = [v]; a.changing = false; errMsg = ''; render('stay'); };
+      pickOptions().forEach(function (o) { byV[o.v] = o; });
+      selName = sel.indexOf('own:') === 0 ? sel.slice(4) : byV[sel] ? byV[sel].l : '';
+      editor.appendChild(v2Search(la, setPick, true, 'f-'));
+      if (selName) editor.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' },
+        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: selName }),
+        h('button', { type: 'button', class: 'edit act', id: 'f-change', 'aria-expanded': a.changing ? 'true' : 'false', onclick: function () { a.changing = !a.changing; render('stay'); }, text: a.changing ? 'close' : 'change' })));
+      if (!selName || a.changing) editor.appendChild(v2List(la, 'all', sel, setPick, 'f-'));
+      a.shown = true;
+      // Once the lower sections have appeared they stay, whatever is changed above them.
+      if (a.shown) {
+        step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
+        if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
+      }
+      buttons = h('div', { class: 'go' });
+      if (a.shown) {
+        var okBtn = h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: draftAdd, text: draftBusy && draftBusy.kind === 'first' ? 'Checking your answer\u2026' : state.draft.id ? 'Save changes' : 'Add to list' });
+        okBtn.disabled = !!(draftBusy && draftBusy.kind === 'first');
+        buttons.appendChild(okBtn);
+        if (draftBusy && draftBusy.kind === 'first') buttons.appendChild(h('button', { type: 'button', class: 'edit act', id: 'skip-ai', onclick: draftSkip, text: 'Skip follow-up' }));
+      }
+      buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'draft-cancel', onclick: function () {
+        stopDraftBusy();
+        state.draft = null; state.files.thoughts = [];
+        errMsg = ''; sfShown = 0;
+        render('stay');
+      }, text: 'Cancel' }));
+      editor.appendChild(buttons);
+      host = sec;
+      sec.appendChild(editor);
+      // Animate only the section that has just been revealed, and put the cursor in the text box when it appears.
+      if (shown > sfShown && sfShown && last) {
+        last.classList.add('reveal');
+        if (box && last.contains(box)) setTimeout(function () { if (!document.querySelector('.combo-pop:not([hidden])')) box.focus(); }, 0);
+      }
+      sfShown = shown;
+    } else {
+      sfShown = 0;
+      var more = !items.length || v2().more;
+      if (more) sec.appendChild(startBlock(items.length, la));
+      err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
+      err.hidden = !errMsg;
+      sec.appendChild(err);
+      buttons = h('div', { class: 'go' });
+      if (items.length) buttons.appendChild(h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit ' + items.length + (items.length === 1 ? ' item' : ' items') }));
+      if (!more) buttons.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () {
+        v2().more = true; v2().list = 'all';
+        errMsg = ''; sfShown = 0;
+        render('stay');
+      }, text: 'Browse all risk options' }));
+      if (buttons.children.length) sec.appendChild(buttons);
+    }
+    open = requests.filter(function (r) { return r.status === 'open'; });
+    if (open.length) {
+      var waiting = h('div', { class: 'flist' });
+      open.forEach(function (r) {
+        waiting.appendChild(h('div', { class: 'frow' },
+          h('div', { class: 'ftext' },
+            h('div', { class: 'ftitle' }, r.area),
+            h('div', { class: 'fsub', text: (r.person ? r.person.email + ' · ' : '') + 'From ' + r.from.name + ' · sent ' + stamp(r.createdAt) })),
+          h('button', { type: 'button', class: 'btn ghost sm act', id: 'resp-' + r.id, onclick: function () { startRespond(r); }, text: 'Respond as ' + r.area })));
+      });
+      sec.appendChild(h('div', { class: 'block' }, h('h2', { class: 'grp', text: 'Waiting for input' }), waiting));
+    }
+    return sec;
+  }
   function render(dir) {
     var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', other = review || tagging || labeling;
     document.getElementById('tab-form').setAttribute('aria-selected', other ? 'false' : 'true');
     document.getElementById('tab-review').setAttribute('aria-selected', review ? 'true' : 'false');
     document.getElementById('tab-tags').setAttribute('aria-selected', tagging ? 'true' : 'false');
     document.getElementById('tab-label').setAttribute('aria-selected', labeling ? 'true' : 'false');
-    document.querySelector('.foot').hidden = other;
-    document.querySelector('.rail').hidden = other;
+    document.querySelector('.foot').hidden = true;
+    document.querySelector('.rail').hidden = true;
     stage.classList.toggle('rvmode', other);
     if (other) {
       var oldList = stage.querySelector('.rv-list'), keep = oldList ? oldList.scrollTop : 0;
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
+      stopDictation();
+      stopRecording();
       stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
+      stage.querySelectorAll('.clip').forEach(function (c) {
+        if (c.scrollHeight > c.clientHeight + 2 && c.nextSibling) c.nextSibling.hidden = false;
+      });
+      return;
+    }
+    if (state.at !== 'dashboard') {
+      stage.replaceChildren(simpleForm());
+      if (dict.on && !document.getElementById('f-thoughts')) stopDictation();
+      if (dir !== 'stay') window.scrollTo(0, 0);
       stage.querySelectorAll('.clip').forEach(function (c) {
         if (c.scrollHeight > c.clientHeight + 2 && c.nextSibling) c.nextSibling.hidden = false;
       });
@@ -2256,15 +3423,14 @@ main.rvmode { padding-block: 4px 20px; }
       respRow.appendChild(h('button', { type: 'button', class: 'btn ghost act', id: 'resp-cancel', onclick: function () { resetForm(); state.req = null; go('welcome', 'back'); }, text: 'Cancel' }));
       sec.appendChild(respRow);
     } else if (state.at === 'welcome') {
-      var nRisks = Q.filter(function (x) { return x.type === 'risk'; }).length;
       var open = requests.filter(function (r) { return r.status === 'open'; });
       sec.appendChild(h('div', { class: 'head' },
-        h('h1', { class: 'big', text: 'Risk assessment: upcoming legal and systemic changes' }),
-        h('p', { class: 'help', text: 'Tell us how each risk in this part of the matrix looks from your area: what it is, what drives it, where it comes from and any opportunities. After your name and email, every question is optional.' })));
+        h('h1', { class: 'big', text: 'Risk assessment' }),
+        h('p', { class: 'help', text: 'Pick the area and risk category your input belongs to, then tell us about the risk: what it is, what drives it, where it comes from and any opportunities. Every question is optional, and the form does not ask who you are.' })));
       sec.appendChild(h('div', { class: 'meta' },
-        h('span', { text: nRisks + ' risks' }),
+        h('span', { text: areaTags().length + ' areas' }),
         h('span', { text: 'About 10 minutes' }),
-        h('span', { text: 'Skip any risk you have nothing to add to' })));
+        h('span', { text: 'One area and category per form' })));
       sec.appendChild(okRow('Start', ''));
       if (open.length) {
         var waiting = h('div', { class: 'flist' });
@@ -2290,7 +3456,7 @@ main.rvmode { padding-block: 4px 20px; }
         var dl = h('dl', { class: 'review' });
         rows.forEach(function (x) {
           dl.appendChild(h('div', null,
-            h('dt', { text: x.short }),
+            h('dt', { text: x.generic ? tagName(state.answers.category) : x.short }),
             h('dd', null, clipped(display(x)), (state.files[x.id] || []).length ? h('span', { class: 'att-note', text: 'Attached: ' + state.files[x.id].map(function (f) { return f.name; }).join(', ') }) : null,
               state.edited[x.id] ? h('span', { class: 'att-note', text: 'Edited ' + stamp(state.edited[x.id]) }) : null),
             h('button', { type: 'button', class: 'edit act', id: 'edit-' + x.id, 'aria-label': 'Edit ' + x.short, onclick: function () { state.editing = true; go(x.id, 'back'); }, text: 'Edit' })));
@@ -2301,7 +3467,7 @@ main.rvmode { padding-block: 4px 20px; }
               h('span')));
           });
         });
-        sec.appendChild(h('div', { class: 'block' }, h('h2', { class: 'grp', text: g[0] }), dl));
+        sec.appendChild(h('div', { class: 'block' }, h('h2', { class: 'grp', text: groupTitle(g[0]) }), dl));
       });
       sec.appendChild(okRow('Submit', ''));
     } else if (state.at === 'dashboard') {
@@ -2312,7 +3478,7 @@ main.rvmode { padding-block: 4px 20px; }
       if (dir !== 'stay') { snap = sig(q); snapText = display(q); snapEmpty = q.type !== 'sign' && q.type !== 'risk' && state.answers[q.id] == null; }
       sec.appendChild(h('div', { class: 'num' }, String(n), h('span', { 'aria-hidden': 'true', text: '→' })));
       sec.appendChild(h('div', { class: 'head' },
-        q.type === 'risk' ? h('div', { class: 'badges' }, h('span', { class: 'tag', text: q.sub }), h('span', { class: 'tip', text: MATRIX })) : null,
+        q.type === 'risk' ? h('div', { class: 'badges' }, h('span', { class: 'tag', text: state.answers.category ? tagName(state.answers.category) : q.sub }), h('span', { class: 'tip', text: state.answers.area ? tagName(state.answers.area) : MATRIX })) : null,
         h('h1', { text: fill(q.title) }),
         q.help ? h('p', { class: 'help', text: state.req && q.type === 'risk' ? (state.req.person ? 'Add or correct what you know about this risk. Every field is optional.' : 'Add what ' + state.req.area + ' knows about this risk. Every field is optional.') : q.help }) : null));
       var ctx = q.type === 'risk' ? reqRisk(q.id) : null;
@@ -2384,7 +3550,7 @@ main.rvmode { padding-block: 4px 20px; }
   document.getElementById('next').addEventListener('click', next);
 
   document.addEventListener('keydown', function (e) {
-    if (e.metaKey || e.ctrlKey || e.altKey || state.mode !== 'form') return;
+    if (e.metaKey || e.ctrlKey || e.altKey || state.mode !== 'form' || !qById(state.at)) return;
     var t = e.target, tag = t.tagName, typing = tag === 'TEXTAREA' || (tag === 'INPUT' && t.type !== 'checkbox');
     if (e.key === 'Enter') {
       if (tag === 'TEXTAREA' && e.shiftKey) return;
