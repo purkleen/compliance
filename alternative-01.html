@@ -445,6 +445,14 @@ button.pick-head:hover { background: var(--muted); }
 .start-card:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
 .start-card.over { border-style: dashed; border-color: var(--primary); }
 .start-card.on { border-color: var(--destructive); }
+.start-card .ico svg { overflow: visible; }
+@keyframes upload-arrow { 0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-in; } 40% { transform: translateY(-12px); opacity: 0; animation-timing-function: step-end; } 40.01% { transform: translateY(12px); opacity: 0; animation-timing-function: ease-out; } 80%, 100% { transform: translateY(0); opacity: 1; } }
+label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animation: upload-arrow 1s infinite; }
+@media (prefers-reduced-motion: reduce) { label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animation: none; } }
+.magnifier-group { transform-box: fill-box; transform-origin: 13px 13px; }
+@keyframes magnifier { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(1px, -1px) rotate(-5deg); } 50% { transform: translate(0, -2px) rotate(5deg); } 75% { transform: translate(-1px, -1px) rotate(-5deg); } }
+.start-searchbox:hover .magnifier-group { animation: magnifier 1s ease-in-out; }
+@media (prefers-reduced-motion: reduce) { .start-searchbox:hover .magnifier-group { animation: none; } }
 .intro-h { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
 .intro-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
 .intro-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
@@ -605,7 +613,8 @@ button.pick-head:hover { background: var(--muted); }
   var V = [
     { id: 'original', name: 'Original', file: 'original.html', url: 'https://claude.ai/artifact/P9NUZVaa3FRbPYj2fFso3b' },
     { id: 'alternative-01', name: 'Alternative 01', file: 'alternative-01.html', url: 'https://claude.ai/artifact/EKXy2fHD2i3wuFa5x8qtYU' },
-    { id: 'version-02', name: 'Version 02', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' }
+    { id: 'version-02', name: 'Version 02', file: 'version-02.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
+    { id: 'version-03', name: 'Version 03', file: 'index.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
   V.forEach(function (v) {
@@ -2911,14 +2920,18 @@ button.pick-head:hover { background: var(--muted); }
   // The start of the form offers three ways in: search for a risk, upload documents or media, or leave an audio
   // recording. Uploads and recordings are added as they are, marked "To be sorted", and turned into form entries later.
   var ICONS = {
-    search: '<path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
-    upload: '<path d="M12 3v12m5-7l-5-5l-5 5m14 7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>',
+    // Magnifier from itshover.com (32-unit grid); it wiggles when the search box is hovered.
+    search: '<g class="magnifier-group"><path d="m21.393,18.565l7.021,7.021c.781.781.781,2.047,0,2.828h0c-.781.781-2.047.781-2.828,0l-7.021-7.021"/><circle cx="13" cy="13" r="10" stroke-linecap="square"/></g>',
+    // Upload from itshover.com; the arrow flies up and comes back in while the upload card is hovered.
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><g class="arrow-group"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/></g>',
     mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
     plus: '<path d="M5 12h14"/><path d="M12 5v14"/>'
   };
   function icon(name, size) {
     var el = h('span', { class: 'ico', 'aria-hidden': 'true' });
-    el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+    el.innerHTML = name === 'search'
+      ? '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.667" stroke-miterlimit="10" style="overflow: visible">' + ICONS[name] + '</svg>'
+      : '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
     return el;
   }
   function addUnsorted(kind, files, dur) {
