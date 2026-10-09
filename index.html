@@ -620,6 +620,12 @@ button.v2-opt:hover { background: var(--muted); }
 .ver-pop a:hover { background: var(--muted); }
 .ver-pop a[aria-current="page"] { font-weight: 600; }
 .ver-pop a span { color: var(--muted-foreground); font-size: 12px; font-weight: 400; }
+/* The dictation button sits inside the text box, in the bottom-right corner just above the resize handle. */
+.think { position: relative; }
+.think-bar { position: absolute; right: 8px; bottom: 20px; padding: 0; pointer-events: none; }
+.think-bar > * { pointer-events: auto; }
+.think-bar .tip { flex: none; padding: 2px 8px; background: var(--background); border-radius: var(--radius-md); }
+.sf .think .line { padding-right: 56px; }
 </style>
 </head>
 <body>
