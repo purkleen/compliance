@@ -453,6 +453,7 @@ label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animat
 @keyframes magnifier { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(1px, -1px) rotate(-5deg); } 50% { transform: translate(0, -2px) rotate(5deg); } 75% { transform: translate(-1px, -1px) rotate(-5deg); } }
 .start-searchbox:hover .magnifier-group { animation: magnifier 1s ease-in-out; }
 @media (prefers-reduced-motion: reduce) { .start-searchbox:hover .magnifier-group { animation: none; } }
+.qhelp-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; color: var(--muted-foreground); font-size: 14px; line-height: 1.45; }
 .v3-h { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
 .go.end { justify-content: flex-end; }
 .chip.static { cursor: default; display: inline-flex; align-items: center; }
@@ -637,7 +638,8 @@ button.v2-opt:hover { background: var(--muted); }
   var V = [
     { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
     { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
-    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' }
+    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' },
+    { id: 'choose', name: 'Choose your way', file: 'choose.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
   document.getElementById('ver-name').textContent = 'Versions';
@@ -3115,6 +3117,36 @@ button.v2-opt:hover { background: var(--muted); }
     cards.appendChild(recCard);
     return cards;
   }
+  // Risks that fit a free-text description: a synonym or a distinctive word of the risk's name appears in the text.
+  var V3_COMMON = ['compliance', 'non-compliance', 'upcoming', 'requirements', 'regulations', 'governance', 'standards', 'including', 'ongoing', 'changes', 'environment', 'insufficient', 'inadequate', 'obligations', 'directive', 'employee', 'internal'];
+  function v3Suggest(text, opts, picked) {
+    var t = ' ' + text.toLowerCase().replace(/[^a-z0-9ąćęłńóśźż-]+/g, ' ') + ' ', out = [];
+    opts.forEach(function (o) {
+      var score = 0;
+      if (picked.indexOf(o.v) >= 0) return;
+      (SYN[o.v] || []).concat(SYN[o.cat] || []).forEach(function (w) { if (w !== 'other' && (t.indexOf(' ' + w + ' ') >= 0 || t.indexOf(' ' + w + 's ') >= 0)) score += 2; });
+      o.l.toLowerCase().split(/[^a-z-]+/).forEach(function (w) { if (w.length >= 5 && V3_COMMON.indexOf(w) < 0 && t.indexOf(' ' + w.slice(0, Math.max(5, w.length - 2))) >= 0) score += 1; });
+      if (score) out.push({ o: o, score: score });
+    });
+    out.sort(function (x, y) { return y.score - x.score; });
+    return out.slice(0, 5).map(function (x) { return x.o; });
+  }
+  // Questions that help a person describe a risk: specific ones where we have them, general ones otherwise.
+  var V3_PROMPTS = {
+    r_equalpay: ['Are pay bands documented for every role in your area?', 'Where could pay differences be hard to justify?', 'Who needs to act before pay reporting starts?'],
+    r_aiact: ['Which AI tools does your team use, and for what?', 'Has anyone checked them against the AI Act?', 'What data goes into them?'],
+    r_ecgt: ['Which environmental claims does your team make about products or packaging?', 'What evidence backs those claims up?', 'Who approves them before they go out?'],
+    r_labour: ['Which upcoming labour-law changes affect your team most?', 'Are policies and training ready, for example on mobbing?', 'Where have problems already come up?'],
+    r_anticorruption: ['Where do gifts, hospitality or third-party payments occur in your area?', 'Which relationships are hardest to oversee?', 'Which controls exist today, and where are the gaps?'],
+    r_latepay: ['How often are suppliers paid late, and why?', 'Who follows the upcoming late-payment rules?', 'What would have to change in the payment process?'],
+    r_dynamic: ['How does your team find out about new rules?', 'What happens when the person tracking them is away?', 'Which recent change reached you late?']
+  };
+  var V3_PROMPTS_ANY = ['What have you seen or heard that makes this a risk?', 'What could happen if nothing changes, and who would be affected?', 'What is driving it, and what could reduce it?'];
+  function v3Prompts(v) {
+    var list = V3_PROMPTS[v] || V3_PROMPTS_ANY, wrap = h('ul', { class: 'qhelp-list' });
+    list.forEach(function (q) { wrap.appendChild(h('li', { text: q })); });
+    return h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Questions that may help' }), wrap);
+  }
   function v3Name(v) {
     var o;
     if (v.indexOf('own:') === 0) return v.slice(4);
@@ -3329,7 +3361,7 @@ button.v2-opt:hover { background: var(--muted); }
       return wrap;
     }
     function thoughts(placeholder) {
-      box = h('textarea', { class: 'line', id: 'f-thoughts', rows: '6', placeholder: placeholder, 'aria-label': 'Your thoughts',
+      box = h('textarea', { class: 'line', id: 'f-thoughts', rows: '6', 'aria-label': 'Your thoughts',
         oninput: function (e) {
           var fb = document.getElementById('fu-block');
           a.text = e.target.value; clearError();
@@ -3412,15 +3444,17 @@ button.v2-opt:hover { background: var(--muted); }
         return boxEl;
       };
       var group = function (title, body, big) { return h('div', { class: 'pick-group' }, h(big ? 'h2' : 'h3', { class: big ? 'v3-h' : 'intro-h', text: title }), body); };
+      // The person's own area leads the list and is named in its heading. It comes from the link; without one, the prototype uses the first area.
+      var my = la || (areaTags()[0] || {}).id || '';
       var ownPicks = w.picks.filter(function (v) { return v.indexOf('own:') === 0; });
       if (w.step === 'choose') {
         headOf('Choose risks', 'Select the risks that you see in the organisation. ',
           h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }));
-        sec.appendChild(v2Search(la, addPick, true, 'f-'));
-        var listEl = h('div', { class: 'v2-list' }), mine = la ? opts.filter(function (o) { return o.area === la; }) : [];
-        if (mine.length) listEl.appendChild(group('Risks in my area', rows(mine, 'v3-mine-')));
+        sec.appendChild(v2Search(my, addPick, true, 'f-'));
+        var listEl = h('div', { class: 'v2-list' }), mine = my ? opts.filter(function (o) { return o.area === my; }) : [];
+        if (mine.length) listEl.appendChild(group('Your area: ' + tagName(my), rows(mine, 'v3-mine-')));
         if (ownPicks.length || (state.ownRisks || []).length) listEl.appendChild(group('Added by me', rows((state.ownRisks || []).map(function (nm) { return { v: 'own:' + nm, l: nm }; }), 'v3-own-')));
-        var others = areaTags().filter(function (t) { return t.id !== la && opts.some(function (o) { return o.area === t.id; }); });
+        var others = areaTags().filter(function (t) { return t.id !== my && opts.some(function (o) { return o.area === t.id; }); });
         if (others.length && mine.length) listEl.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
         others.forEach(function (t) { listEl.appendChild(group(t.name, rows(opts.filter(function (o) { return o.area === t.id; }), 'v3-' + t.id + '-'))); });
         sec.appendChild(listEl);
@@ -3436,7 +3470,7 @@ button.v2-opt:hover { background: var(--muted); }
         nav(function () { v3Go('choose', 0, 'back'); }, 'Continue', function () { v3Go('selected'); });
       } else if (w.step === 'selected') {
         headOf('Selected risks', 'Risks you have selected so far. Remove any that do not belong, or search to add more.');
-        sec.appendChild(v2Search(la, addPick, true, 'f-'));
+        sec.appendChild(v2Search(my, addPick, true, 'f-'));
         var sel = h('div', { class: 'v2-list' });
         var selRows = function (vals, idp) {
           var boxEl = h('div', { class: 'v2-rows' });
@@ -3445,15 +3479,21 @@ button.v2-opt:hover { background: var(--muted); }
           return boxEl;
         };
         var areaOfPick = function (v) { var o = opts.filter(function (x) { return x.v === v; })[0]; return o ? o.area : ''; };
-        var mineSel = w.picks.filter(function (v) { return la && areaOfPick(v) === la; });
-        if (mineSel.length) sel.appendChild(group('Risks in my area', selRows(mineSel, 'v3-rm-mine-')));
+        var mineSel = w.picks.filter(function (v) { return my && areaOfPick(v) === my; });
+        if (mineSel.length) sel.appendChild(group('Your area: ' + tagName(my), selRows(mineSel, 'v3-rm-mine-')));
         if (ownPicks.length) sel.appendChild(group('Added by me', selRows(ownPicks, 'v3-rm-own-')));
-        var otherAreas = areaTags().filter(function (t) { return t.id !== la && w.picks.some(function (v) { return areaOfPick(v) === t.id; }); });
+        var otherAreas = areaTags().filter(function (t) { return t.id !== my && w.picks.some(function (v) { return areaOfPick(v) === t.id; }); });
         if (otherAreas.length && (mineSel.length || ownPicks.length)) sel.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
         otherAreas.forEach(function (t) { sel.appendChild(group(t.name, selRows(w.picks.filter(function (v) { return areaOfPick(v) === t.id; }), 'v3-rm-' + t.id + '-'))); });
         if (!n) sel.appendChild(h('p', { class: 'risk-empty', text: 'No risks selected. You can go back and choose some, or continue with only your own description and files.' }));
         sec.appendChild(sel);
-        if (w.extra.text.trim()) sec.appendChild(h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Other risks, in your own words' }), h('div', { class: 'v2-opt' }, clipped(w.extra.text.trim()))));
+        // What the person wrote in their own words is matched to risks on the list and offered as suggestions.
+        if (w.extra.text.trim()) {
+          var sugg = v3Suggest(w.extra.text, opts, w.picks);
+          sec.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'v3-h', text: 'Suggested risks' }),
+            h('p', { class: 'help', text: sugg.length ? 'Based on what you described in your own words. Select any that fit.' : 'We could not match what you described to a risk on the list. Your description is still sent as you wrote it, and compliance will sort it.' }),
+            sugg.length ? rows(sugg, 'v3-sugg-') : null));
+        }
         nav(function () { v3Go('extra', 0, 'back'); }, 'Continue', function () { v3Go('media'); });
       } else if (w.step === 'media') {
         headOf('Add documents and media', 'Optional. Add supporting documents and media that may help us identify more risks.');
@@ -3472,6 +3512,7 @@ button.v2-opt:hover { background: var(--muted); }
         var busy1 = draftBusy && draftBusy.kind === 'first', lastOne = w.idx + 1 >= n;
         headOf('Risk details (' + (w.idx + 1) + '/' + n + ')', 'Provide details of the risk you selected. You can leave it empty and move on.');
         sec.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: v3Name(w.picks[w.idx]) })));
+        sec.appendChild(v3Prompts(w.picks[w.idx]));
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
         if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
         var navRow = nav(function () {

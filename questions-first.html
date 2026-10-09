@@ -468,6 +468,7 @@ label.start-card:hover .arrow-group, label.start-card.over .arrow-group { animat
 .qf-q { font-weight: 500; }
 .qf-a { font-weight: 400; white-space: pre-wrap; overflow-wrap: anywhere; }
 .qf-a.none { color: var(--muted-foreground); }
+.qhelp-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; color: var(--muted-foreground); font-size: 14px; line-height: 1.45; }
 .v3-h { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
 .go.end { justify-content: flex-end; }
 .chip.static { cursor: default; display: inline-flex; align-items: center; }
@@ -652,7 +653,8 @@ button.v2-opt:hover { background: var(--muted); }
   var V = [
     { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
     { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
-    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' }
+    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' },
+    { id: 'choose', name: 'Choose your way', file: 'choose.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
   document.getElementById('ver-name').textContent = 'Versions';
@@ -3255,6 +3257,22 @@ button.v2-opt:hover { background: var(--muted); }
     cards.appendChild(recCard);
     return cards;
   }
+  // Questions that help a person describe a risk: specific ones where we have them, general ones otherwise.
+  var V3_PROMPTS = {
+    r_equalpay: ['Are pay bands documented for every role in your area?', 'Where could pay differences be hard to justify?', 'Who needs to act before pay reporting starts?'],
+    r_aiact: ['Which AI tools does your team use, and for what?', 'Has anyone checked them against the AI Act?', 'What data goes into them?'],
+    r_ecgt: ['Which environmental claims does your team make about products or packaging?', 'What evidence backs those claims up?', 'Who approves them before they go out?'],
+    r_labour: ['Which upcoming labour-law changes affect your team most?', 'Are policies and training ready, for example on mobbing?', 'Where have problems already come up?'],
+    r_anticorruption: ['Where do gifts, hospitality or third-party payments occur in your area?', 'Which relationships are hardest to oversee?', 'Which controls exist today, and where are the gaps?'],
+    r_latepay: ['How often are suppliers paid late, and why?', 'Who follows the upcoming late-payment rules?', 'What would have to change in the payment process?'],
+    r_dynamic: ['How does your team find out about new rules?', 'What happens when the person tracking them is away?', 'Which recent change reached you late?']
+  };
+  var V3_PROMPTS_ANY = ['What have you seen or heard that makes this a risk?', 'What could happen if nothing changes, and who would be affected?', 'What is driving it, and what could reduce it?'];
+  function v3Prompts(v) {
+    var list = V3_PROMPTS[v] || V3_PROMPTS_ANY, wrap = h('ul', { class: 'qhelp-list' });
+    list.forEach(function (q) { wrap.appendChild(h('li', { text: q })); });
+    return h('div', { class: 'sf-step' }, h('div', { class: 'sf-label', text: 'Questions that may help' }), wrap);
+  }
   function v3Name(v) {
     var o;
     if (v.indexOf('own:') === 0) return v.slice(4);
@@ -3469,7 +3487,7 @@ button.v2-opt:hover { background: var(--muted); }
       return wrap;
     }
     function thoughts(placeholder) {
-      box = h('textarea', { class: 'line', id: 'f-thoughts', rows: '6', placeholder: placeholder, 'aria-label': 'Your thoughts',
+      box = h('textarea', { class: 'line', id: 'f-thoughts', rows: '6', 'aria-label': 'Your thoughts',
         oninput: function (e) {
           var fb = document.getElementById('fu-block');
           a.text = e.target.value; clearError();
@@ -3551,7 +3569,7 @@ button.v2-opt:hover { background: var(--muted); }
       sec.appendChild(body);
       showNote = q.type === 'multi' || (q.type === 'scale' && A.v != null) || (q.type === 'choice' && (q.when || []).indexOf(A.v) >= 0) || !!(A.note || '').trim();
       if (showNote) {
-        var noteBox = h('textarea', { class: 'line', id: 'qf-note', rows: '3', placeholder: 'A few words are enough', 'aria-label': q.detail,
+        var noteBox = h('textarea', { class: 'line', id: 'qf-note', rows: '3', 'aria-label': q.detail,
           oninput: function (e) { A.note = e.target.value; clearTimeout(qfTimer); } });
         noteBox.value = A.note || '';
         sec.appendChild(h('div', { class: 'field qf-note' }, h('div', { class: 'sf-label' }, q.detail, h('span', { class: 'opt-note', text: 'Optional' })), noteBox));
@@ -3660,6 +3678,7 @@ button.v2-opt:hover { background: var(--muted); }
         headOf('Risk details (' + (w.idx + 1) + '/' + n + ')', 'Provide details of the risk you selected. You can leave it empty and move on.');
         sec.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: v3Name(w.picks[w.idx]) })));
         if ((w.why || {})[w.picks[w.idx]]) sec.appendChild(h('div', { class: 'field ctx' }, h('b', { text: 'Detected from your answer' }), clipped(w.why[w.picks[w.idx]])));
+        sec.appendChild(v3Prompts(w.picks[w.idx]));
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
         if (a.thread && a.thread.turns.length && a.thread.src === (a.text || '').trim()) last.appendChild(draftChat(a));
         var navRow = nav(function () {

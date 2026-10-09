@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Risk Assessment: Choose your way</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+html { color-scheme: light; }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<style>
+/* A start page with three tiles, one per way of going through the risk assessment. Same tokens as the forms. */
+:root {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --border: #e4e4e7;
+  --ring: #a1a1aa;
+  --ring-soft: rgba(161, 161, 170, .35);
+  --destructive: #dc2626;
+  --destructive-border: rgba(220, 38, 38, .45);
+  --destructive-tint: #fef2f2;
+  --success: #15803d;
+  --success-border: rgba(22, 163, 74, .4);
+  --success-tint: #f0fdf4;
+  --c1: #2563eb; --c2: #b45309; --c3: #047857; --c4: #be185d; --c5: #6d28d9; --c6: #0e7490;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
+  --radius: .5rem;
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+:root.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --muted: #1e1e22;
+  --muted-foreground: #a1a1aa;
+  --primary: #fafafa;
+  --primary-foreground: #18181b;
+  --border: #303036;
+  --ring: #71717a;
+  --ring-soft: rgba(113, 113, 122, .4);
+  --destructive: #f87171;
+  --destructive-border: rgba(248, 113, 113, .45);
+  --destructive-tint: #2a1215;
+  --success: #4ade80;
+  --success-border: rgba(74, 222, 128, .35);
+  --success-tint: #0f2417;
+  --c1: #60a5fa; --c2: #fbbf24; --c3: #34d399; --c4: #f472b6; --c5: #a78bfa; --c6: #22d3ee;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  color-scheme: dark;
+}
+html { height: 100%; }
+body { min-height: 100%; margin: 0; background: var(--background); color: var(--foreground); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.top { flex: none; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 24px; }
+.top b { font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+.theme { width: 36px; height: 36px; display: grid; place-items: center; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); cursor: pointer; }
+.theme:hover, .theme[aria-pressed="true"] { background: var(--muted); }
+main { flex: 1 0 auto; display: flex; padding: 16px 24px 48px; }
+.wrap { margin: auto; width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 28px; animation: up .32s cubic-bezier(.2, .7, .2, 1); }
+@keyframes up { from { opacity: 0; transform: translateY(24px); } }
+.head { display: flex; flex-direction: column; gap: 8px; }
+h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; text-wrap: balance; }
+.help { margin: 0; max-width: 60ch; color: var(--muted-foreground); }
+.badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--muted-foreground); }
+.tag { background: var(--muted); color: var(--foreground); border-radius: var(--radius-md); padding: 2px 10px; font-size: 12px; font-weight: 600; }
+.tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; padding: 20px; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); text-decoration: none; transition: background .12s, border-color .12s, transform .12s; }
+.tile:hover { background: var(--muted); border-color: var(--ring); transform: translateY(-2px); }
+.tile .ico { width: 40px; height: 40px; display: grid; place-items: center; background: var(--muted); border-radius: var(--radius); }
+.tile:hover .ico { background: var(--background); }
+.tile h2 { margin: 4px 0 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
+.tile p { margin: 0; color: var(--muted-foreground); font-size: 14px; }
+.tile .best { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--muted); border-radius: var(--radius-md); color: var(--foreground); font-size: 14px; font-weight: 600; line-height: 1.35; }
+.tile .best span { color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.tile:hover .best { background: var(--background); }
+.tile .go { margin-top: auto; padding-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; }
+.tile .go svg { transition: transform .12s; }
+.tile:hover .go svg { transform: translateX(3px); }
+.note { margin: 0; color: var(--muted-foreground); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .wrap { animation: none; } .tile, .tile .go svg { transition: none; } .tile:hover { transform: none; } }
+.top-left { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
+.ver { position: relative; }
+.ver summary { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; list-style: none; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+.ver summary::-webkit-details-marker { display: none; }
+.ver summary:hover { background: var(--muted); }
+.ver[open] summary svg { transform: rotate(180deg); }
+.ver-pop { position: absolute; z-index: 30; top: calc(100% + 6px); left: 0; min-width: 200px; display: flex; flex-direction: column; padding: 4px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0, 0, 0, .12); }
+.ver-pop a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 10px; border-radius: var(--radius-md); color: var(--foreground); font-size: 14px; text-decoration: none; }
+.ver-pop a:hover { background: var(--muted); }
+.ver-pop a[aria-current="page"] { font-weight: 600; }
+.ver-pop a span { color: var(--muted-foreground); font-size: 12px; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-left"><b>Regulatory Risk Assessment</b><details class="ver" id="ver"><summary aria-label="Switch version"><span id="ver-name"></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="ver-pop" id="ver-pop"></div></details>
+<script>
+(function () {
+  // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
+  var CUR = 'choose', inClaude = !!window.claude || /claude/.test(location.hostname);
+  var V = [
+    { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
+    { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
+    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' },
+    { id: 'choose', name: 'Choose your way', file: 'choose.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' }
+  ];
+  var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
+  document.getElementById('ver-name').textContent = 'Versions';
+  V.forEach(function (v) {
+    var a = document.createElement('a'), here = v.id === CUR;
+    a.id = 'ver-' + v.id;
+    a.href = inClaude ? v.url : v.file;
+    a.textContent = v.name;
+    if (inClaude && !here) { a.target = '_blank'; a.rel = 'noopener'; }
+    if (here) {
+      a.setAttribute('aria-current', 'page');
+      a.appendChild(document.createElement('span')).textContent = 'Current';
+      document.getElementById('ver-name').textContent = v.name;
+      a.addEventListener('click', function (e) { e.preventDefault(); box.open = false; });
+    } else a.addEventListener('click', function () { if (!inClaude) a.href = v.file + location.hash; box.open = false; });
+    pop.appendChild(a);
+  });
+  document.addEventListener('click', function (e) { if (box.open && !box.contains(e.target)) box.open = false; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.open = false; });
+})();
+</script></div>
+<button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
+</div>
+<main>
+  <div class="wrap">
+    <div class="head">
+      <div class="badges" id="area-row" hidden><span>Your area</span><span class="tag" id="area-name"></span></div>
+      <h1>How would you like to add risks?</h1>
+      <p class="help">Choose the way that suits you. All three lead to the same result: the risks you see, described in your own words and sent to compliance.</p>
+    </div>
+    <ul class="tiles">
+      <li><a class="tile" id="tile-questions" data-file="questions-first.html" data-url="https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw" href="questions-first.html">
+        <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span>
+        <h2>Ask me questions first</h2>
+        <p class="best"><span>Best if</span>You are not sure where to start.</p>
+        <p>Answer five short questions and we suggest the risks they point to. You confirm them and add detail.</p>
+        <span class="go">Start with questions <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a></li>
+      <li><a class="tile" id="tile-choose" data-file="version-03.html" data-url="https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg" href="version-03.html">
+        <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></span>
+        <h2>Select risks first</h2>
+        <p class="best"><span>Best if</span>You already know which risks apply.</p>
+        <p>Tick the risks you see on a list, with your own area at the top, then describe each one.</p>
+        <span class="go">Start with the list <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a></li>
+      <li><a class="tile" id="tile-free" data-file="index.html" data-url="https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2" href="index.html">
+        <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg></span>
+        <h2>I want to add risks manually</h2>
+        <p class="best"><span>Best if</span>You have a specific risk in mind.</p>
+        <p>Search for a risk or name your own and describe it, one at a time. You can also just upload files or leave a recording.</p>
+        <span class="go">Start adding risks <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a></li>
+    </ul>
+    <p class="note">You can switch to another way at any time from the menu at the top. What you have entered in one does not carry over to another.</p>
+  </div>
+</main>
+<script>
+(function () {
+  var inClaude = !!window.claude || /claude/.test(location.hostname);
+  // Each tile opens one of the three forms. In the repository they are files next to this one and keep the area link; inside Claude each is its own page.
+  [].forEach.call(document.querySelectorAll('.tile'), function (a) {
+    if (inClaude) { a.href = a.getAttribute('data-url'); a.target = '_blank'; a.rel = 'noopener'; }
+    else a.addEventListener('click', function () { a.href = a.getAttribute('data-file') + location.hash; });
+  });
+  // The area comes from the link, as in the forms (for example #cat-main).
+  var AREAS = { 'cat-main': 'Upcoming Legal and Systemic Changes', 'cat-current': 'Current Regulations & Ethical standards', 'cat-integrity': 'Integrity & Cultural Inconsistency Across the Organisation', 'cat-misconduct': 'Undetected Employee Misconduct & Ineffective Reporting Governance', 'cat-supplier': 'Supplier Non-Compliance & Vulnerabilities in Procurement Governance' };
+  function area() { var id = location.hash.replace('#', ''), row = document.getElementById('area-row'); row.hidden = !AREAS[id]; document.getElementById('area-name').textContent = AREAS[id] || ''; }
+  window.addEventListener('hashchange', area); area();
+  var btn = document.getElementById('theme');
+  function apply(dark) { document.documentElement.classList.toggle('dark', dark); btn.setAttribute('aria-pressed', dark ? 'true' : 'false'); btn.setAttribute('aria-label', dark ? 'Light mode' : 'Dark mode'); }
+  btn.addEventListener('click', function () { var dark = !document.documentElement.classList.contains('dark'); apply(dark); try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {} });
+  var saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {}
+  apply(saved === 'dark');
+})();
+</script>
+</body>
+</html>
