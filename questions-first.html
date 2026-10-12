@@ -657,6 +657,9 @@ button.v2-opt:hover { background: var(--muted); }
 /* Search results open over the page instead of pushing it down. */
 .v2-search { position: relative; }
 .v2-search .start-results { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; right: 0; max-height: min(60vh, 420px); overflow-y: auto; background: var(--background); box-shadow: 0 10px 28px rgba(0, 0, 0, .16); }
+/* Risk details: the step and count sit above the risk's name, which is the page heading. */
+.v3-step { font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
 </style>
 </head>
 <body>
@@ -3698,8 +3701,10 @@ button.v2-opt:hover { background: var(--muted); }
         nav(function () { v3Go('extra', 0, 'back'); }, 'Continue', function () { if (n) v3Go('detail', 0); else v3Go('summary'); });
       } else {
         var busy1 = draftBusy && draftBusy.kind === 'first', lastOne = w.idx + 1 >= n;
-        headOf('Risk details (' + (w.idx + 1) + '/' + n + ')', 'Provide details of the risk you selected. You can leave it empty and move on.');
-        sec.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: v3Name(w.picks[w.idx]) })));
+        sec.appendChild(h('div', { class: 'head' },
+          h('div', { class: 'v3-step', id: 'f-step', text: 'Risk details (' + (w.idx + 1) + '/' + n + ')' }),
+          h('h1', { class: 'v3-risk', id: 'f-picked', text: v3Name(w.picks[w.idx]) }),
+          h('p', { class: 'help', text: 'Provide details of the risk you selected. You can leave it empty and move on.' })));
         if ((w.why || {})[w.picks[w.idx]]) sec.appendChild(h('div', { class: 'field ctx' }, h('b', { text: 'Detected from your answer' }), clipped(w.why[w.picks[w.idx]])));
         sec.appendChild(v3Prompts(w.picks[w.idx]));
         step('Your thoughts', '', thoughts('What do you see here? Anything goes: what could go wrong, why, where it comes from, what could be done about it.'));
