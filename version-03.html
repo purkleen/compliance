@@ -631,6 +631,33 @@ button.v2-opt:hover { background: var(--muted); }
 .think-bar > * { pointer-events: auto; }
 .think-bar .tip { flex: none; padding: 2px 8px; background: var(--background); border-radius: var(--radius-md); }
 .sf .think .line { padding-right: 56px; }
+.v3-mine { display: flex; flex-direction: column; gap: 12px; padding: 16px; background: var(--muted); border: 1px solid var(--ring); border-radius: var(--radius-xl); }
+.v3-mine-head { display: flex; flex-direction: column; gap: 2px; }
+.v3-mine-cap { color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.v3-mine-name { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
+.v3-mine .v2-opt[aria-pressed="true"] { background: var(--background); border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.v3-mine .v2-opt[aria-pressed="true"] .dot { box-shadow: inset 0 0 0 3px var(--background); }
+/* Other areas keep their plain headings; a chevron on the right opens and closes each one. */
+.v3-accord { display: flex; flex-direction: column; gap: 24px; }
+.v3-accord .pick-group { gap: 6px; }
+.v3-accord button.pick-head { padding: 0; background: none; border: 0; border-radius: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; }
+.v3-accord button.pick-head:hover { background: none; }
+.v3-accord .pick-head .combo-chev { color: var(--foreground); }
+.v3-accord .pick-head .combo-chev svg { width: 24px; height: 24px; }
+.v3-accord .pick-head .combo-chev .up, .v3-accord .pick-head[aria-expanded="true"] .combo-chev .up { display: none; }
+.v3-accord .pick-head .combo-chev .down, .v3-accord .pick-head[aria-expanded="true"] .combo-chev .down { display: block; }
+.v3-accord .pick-head[aria-expanded="false"] .combo-chev { transform: rotate(-90deg); }
+.restart-flow { position: fixed; z-index: 25; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; background: var(--background); color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 999px; box-shadow: var(--shadow-sm); font-size: 12px; font-weight: 500; cursor: pointer; }
+.restart-flow:hover { color: var(--foreground); background: var(--muted); }
+.restart-flow.ask { color: var(--destructive); border-color: var(--destructive-border); background: var(--destructive-tint); }
+/* "Add as your own risk" at the end of the search results stands out from the matches above it. */
+.sf-opt.own-add { gap: 8px; background: var(--muted); font-weight: 600; }
+.sf-opt.own-add:hover { background: var(--border); }
+.sf-opt.own-add .ico { flex: none; }
+.v2-search .start-results .own-add { position: sticky; bottom: 0; border-top: 1px solid var(--border); }
+/* Search results open over the page instead of pushing it down. */
+.v2-search { position: relative; }
+.v2-search .start-results { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; right: 0; max-height: min(60vh, 420px); overflow-y: auto; background: var(--background); box-shadow: 0 10px 28px rgba(0, 0, 0, .16); }
 </style>
 </head>
 <body>
@@ -642,10 +669,10 @@ button.v2-opt:hover { background: var(--muted); }
   // Switch between the versions of this form. Inside Claude each version is its own page; in the repository they are files next to each other.
   var CUR = 'version-03', inClaude = !!window.claude || /claude/.test(location.hostname);
   var V = [
-    { id: 'version-02', name: 'Free hand', file: 'index.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
+    { id: 'choose', name: 'Choose your way', file: 'index.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' },
+    { id: 'version-02', name: 'Free hand', file: 'free-hand.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' },
     { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
-    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' },
-    { id: 'choose', name: 'Choose your way', file: 'choose.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' }
+    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' }
   ];
   var box = document.getElementById('ver'), pop = document.getElementById('ver-pop');
   document.getElementById('ver-name').textContent = 'Versions';
@@ -675,6 +702,7 @@ button.v2-opt:hover { background: var(--muted); }
 <button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
 </div></div>
 <main id="stage"></main>
+<button type="button" class="act restart-flow" id="restart-flow" title="Clear what you have entered and start this flow again"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span id="restart-flow-text">Restart</span></button>
 <div class="foot">
   <span id="count"></span>
   <div class="nav">
@@ -3043,8 +3071,8 @@ button.v2-opt:hover { background: var(--muted); }
           h('span', { class: 'sf-txt' }, h('span', { text: o.l }), h('span', { class: 'fsub', text: tagName(o.area) + (hit.syn ? ' · also: ' + hit.syn : '') }))));
       });
       if (!hits.length) results.appendChild(h('p', { class: 'tip start-none', text: 'Nothing in the list matches.' }));
-      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt act', id: idp + 'own', onclick: function () { onPick(v2Own(search.value), ''); } },
-        h('span', { class: 'sf-txt', text: '+ Add “' + search.value.trim() + '” as your own risk' })));
+      if (!exact) results.appendChild(h('button', { type: 'button', class: 'sf-opt own-add act', id: idp + 'own', onclick: function () { onPick(v2Own(search.value), ''); } },
+        icon('circlePlus', 18), h('span', { class: 'sf-txt', text: 'Add “' + search.value.trim() + '” as your own risk' })));
     }
     search.addEventListener('input', show);
     search.addEventListener('keydown', function (e) {
@@ -3052,6 +3080,11 @@ button.v2-opt:hover { background: var(--muted); }
       if (e.key === 'Enter') { e.preventDefault(); if (first) first.click(); }
     });
     results.hidden = true;
+    // The results float over the page: they close when the search box loses focus or on Escape, and reopen on focus.
+    results.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    search.addEventListener('blur', function () { results.hidden = true; });
+    search.addEventListener('focus', show);
+    search.addEventListener('keydown', function (e) { if (e.key === 'Escape') { results.hidden = true; } });
     wrap.appendChild(h('div', { class: 'v2-searchrow' }, h('div', { class: 'start-searchbox' }, icon('search', 18), search)));
     wrap.appendChild(results);
     return wrap;
@@ -3432,7 +3465,7 @@ button.v2-opt:hover { background: var(--muted); }
     if (w.step !== 'summary') {
       var opts = v2Opts(), n = w.picks.length;
       var toggle = function (v) { var i = w.picks.indexOf(v); if (i >= 0) w.picks.splice(i, 1); else w.picks.push(v); errMsg = ''; render('stay'); };
-      var addPick = function (v) { if (w.picks.indexOf(v) < 0) w.picks.push(v); errMsg = ''; render('stay'); };
+      var addPick = function (v, areaId) { if (w.picks.indexOf(v) < 0) w.picks.push(v); if (areaId) { w.open = w.open || {}; w.open[areaId] = true; } errMsg = ''; render('stay'); };
       var headOf = function (title, help, extra) { sec.appendChild(h('div', { class: 'head' }, h('h1', { class: 'big', text: title }), h('p', { class: 'help' }, help, extra || null))); };
       var nav = function (back, nextLabel, next, more) {
         var row = h('div', { class: 'go end' }, more || null,
@@ -3458,11 +3491,23 @@ button.v2-opt:hover { background: var(--muted); }
           h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }));
         sec.appendChild(v2Search(my, addPick, true, 'f-'));
         var listEl = h('div', { class: 'v2-list' }), mine = my ? opts.filter(function (o) { return o.area === my; }) : [];
-        if (mine.length) listEl.appendChild(group('Your area: ' + tagName(my), rows(mine, 'v3-mine-')));
+        // The person's own area stands out as a panel; every other area is a section that opens and closes.
+        if (mine.length) listEl.appendChild(h('div', { class: 'v3-mine' },
+          h('div', { class: 'v3-mine-head' }, h('span', { class: 'v3-mine-cap', text: 'Your area' }), h('h2', { class: 'v3-mine-name', text: tagName(my) })),
+          rows(mine, 'v3-mine-')));
         if (ownPicks.length || (state.ownRisks || []).length) listEl.appendChild(group('Added by me', rows((state.ownRisks || []).map(function (nm) { return { v: 'own:' + nm, l: nm }; }), 'v3-own-')));
         var others = areaTags().filter(function (t) { return t.id !== my && opts.some(function (o) { return o.area === t.id; }); });
         if (others.length && mine.length) listEl.appendChild(h('h2', { class: 'v3-h', text: 'Other risks' }));
-        others.forEach(function (t) { listEl.appendChild(group(t.name, rows(opts.filter(function (o) { return o.area === t.id; }), 'v3-' + t.id + '-'))); });
+        w.open = w.open || {};
+        var accord = h('div', { class: 'v3-accord' });
+        others.forEach(function (t) {
+          var list = opts.filter(function (o) { return o.area === t.id; }), isOpen = w.open[t.id] !== false, picked = list.filter(function (o) { return w.picks.indexOf(o.v) >= 0; }).length;
+          accord.appendChild(h('div', { class: 'pick-group' },
+            h('button', { type: 'button', class: 'pick-head combo-btn-like act', id: 'v3-area-' + t.id, 'aria-expanded': isOpen ? 'true' : 'false', onclick: function () { w.open[t.id] = !isOpen; render('stay'); } },
+              h('span', null, t.name, picked ? h('span', { class: 'combo-count', text: picked + ' selected' }) : null), chevrons()),
+            isOpen ? rows(list, 'v3-' + t.id + '-') : null));
+        });
+        if (others.length) listEl.appendChild(accord);
         sec.appendChild(listEl);
         nav(function () { state.started = false; render('back'); }, n ? 'Continue with ' + n + (n === 1 ? ' risk' : ' risks') : 'Continue', function () { v3Go('extra'); });
       } else if (w.step === 'extra') {
@@ -3669,6 +3714,7 @@ button.v2-opt:hover { background: var(--muted); }
     document.getElementById('tab-label').setAttribute('aria-selected', labeling ? 'true' : 'false');
     document.querySelector('.foot').hidden = true;
     document.querySelector('.rail').hidden = true;
+    document.getElementById('restart-flow').hidden = other;
     stage.classList.toggle('rvmode', other);
     if (other) {
       var oldList = stage.querySelector('.rv-list'), keep = oldList ? oldList.scrollTop : 0;
@@ -3812,6 +3858,21 @@ button.v2-opt:hover { background: var(--muted); }
   }
 
   // Theme: light by default; the choice is remembered in this browser.
+  // Restart button in the corner: the first click asks, the second one clears everything and returns to the intro.
+  var restartBtn = document.getElementById('restart-flow'), restartText = document.getElementById('restart-flow-text'), restartTimer = null;
+  function restartIdle() { clearTimeout(restartTimer); restartBtn.classList.remove('ask'); restartText.textContent = 'Restart'; }
+  restartBtn.addEventListener('click', function () {
+    if (!restartBtn.classList.contains('ask')) {
+      restartBtn.classList.add('ask'); restartText.textContent = 'Clear everything? Click again';
+      restartTimer = setTimeout(restartIdle, 4000);
+      return;
+    }
+    restartIdle();
+    stopDictation(); stopRecording();
+    resetForm(); state.started = false; state.req = null; justSubmitted = null; state.mode = 'form';
+    go('welcome', 'back');
+  });
+  restartBtn.addEventListener('blur', restartIdle);
   var themeBtn = document.getElementById('theme');
   function setTheme(dark) {
     document.documentElement.classList.toggle('dark', dark);
