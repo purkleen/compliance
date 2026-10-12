@@ -626,6 +626,15 @@ button.v2-opt:hover { background: var(--muted); }
 .think-bar > * { pointer-events: auto; }
 .think-bar .tip { flex: none; padding: 2px 8px; background: var(--background); border-radius: var(--radius-md); }
 .sf .think .line { padding-right: 56px; }
+/* Free hand start screen: one column, so the ways to add a risk and the list line up. */
+.sf.has-table { max-width: 1280px; }
+.sf.has-table .head, .sf.has-table .risk-editor { max-width: 720px; }
+.v2-sect { display: flex; flex-direction: column; gap: 12px; }
+.v2-sect + .v2-sect { padding-top: 26px; border-top: 1px solid var(--border); }
+.v2-sect > .intro-h { display: flex; align-items: center; gap: 8px; }
+.v2-sect .start { max-width: none; }
+.v2-sect .go.end { justify-content: flex-end; }
+.go.end { justify-content: flex-end; }
 </style>
 </head>
 <body>
@@ -3311,7 +3320,7 @@ button.v2-opt:hover { background: var(--muted); }
       la ? h('div', { class: 'badges' }, h('span', { class: 'tip', text: 'Your area' }), h('span', { class: 'tag', text: tagName(la) }),
         h('button', { type: 'button', class: 'edit act', id: 'area-other', onclick: function () { location.hash = ''; }, text: 'Change' })) : null,
       h('h1', { class: 'big', text: state.draft ? 'Risk description' : 'Add new risk assessment' }),
-      state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, attach documents or media, and change the risk if this is not the right one.' })
+      state.draft ? h('p', { class: 'help', text: 'Say what you see for this risk. Write or dictate, and attach documents or media. If this is not the right risk, search for another one.' })
         : h('p', { class: 'help' }, 'Add the risks you want to raise, one at a time. Options from your own area come first; you can also search, pick from other areas, or add your own. ',
         h('button', { type: 'button', class: 'edit act', id: 'intro-back', text: 'How this works', onclick: function () { state.started = false; render('back'); } }))));
     // The risks added so far, as a table. The Sources and Files columns appear only when some risk has them.
@@ -3372,8 +3381,7 @@ button.v2-opt:hover { background: var(--muted); }
       selName = sel.indexOf('own:') === 0 ? sel.slice(4) : byV[sel] ? byV[sel].l : '';
       editor.appendChild(v2Search(la, setPick, true, 'f-'));
       if (selName) editor.appendChild(h('div', { class: 'v2-opt', id: 'f-picked', 'aria-pressed': 'true' },
-        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: selName }),
-        h('button', { type: 'button', class: 'edit act', id: 'f-change', 'aria-expanded': a.changing ? 'true' : 'false', onclick: function () { a.changing = !a.changing; render('stay'); }, text: a.changing ? 'close' : 'change' })));
+        h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'sf-txt', text: selName })));
       if (!selName || a.changing) editor.appendChild(v2List(la, 'all', sel, setPick, 'f-'));
       a.shown = true;
       // Once the lower sections have appeared they stay, whatever is changed above them.
@@ -3409,10 +3417,14 @@ button.v2-opt:hover { background: var(--muted); }
       err = h('div', { class: 'error', id: 'err', role: 'alert', text: errMsg });
       err.hidden = !errMsg;
       // The ways to add come first; the list so far (or the empty note) and the button to send it sit below them.
+      // Two labelled blocks of the same width: the ways to add a risk, then the list so far with the button to send it.
       var listEl = sec.querySelector('.table-wrap') || sec.querySelector('.risk-empty');
-      sec.insertBefore(startBlock(items.length, la), listEl);
-      sec.appendChild(err);
-      if (items.length) sec.appendChild(h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit risks' })));
+      var listWrap = h('div', { class: 'v2-sect' }, h('h2', { class: 'intro-h' }, 'Your risks', items.length ? h('span', { class: 'combo-count', text: String(items.length) }) : null));
+      sec.insertBefore(h('div', { class: 'v2-sect' }, h('h2', { class: 'intro-h', text: items.length ? 'Add another risk' : 'Add a risk' }), startBlock(items.length, la)), listEl);
+      sec.insertBefore(listWrap, listEl);
+      listWrap.appendChild(listEl);
+      listWrap.appendChild(err);
+      if (items.length) listWrap.appendChild(h('div', { class: 'go end' }, h('button', { type: 'button', class: 'btn act', id: 'ok', onclick: submitSimple, text: 'Submit risks' })));
     }
     open = requests.filter(function (r) { return r.status === 'open'; });
     if (open.length) {
