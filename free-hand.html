@@ -743,6 +743,7 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-steps.one { grid-template-columns: minmax(0, 1fr); gap: 24px; }
 .dash-sendpage .dash-people { max-height: 300px; }
 .dash-top { align-items: flex-start; }
+.dash-filters { display: flex; gap: 8px; flex-wrap: wrap; }
 .dash-top .btn { flex: none; }
 .dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
 .dash-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -756,6 +757,14 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-add .line { flex: 1; min-width: 0; }
 .dash-check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .dash-check input { accent-color: var(--primary); }
+/* View switch: the employee sees only the form; the compliance team gets the side menu with its tools. */
+.role-switch { display: inline-flex; gap: 2px; padding: 3px; background: var(--muted); border-radius: var(--radius); }
+.role-switch button { height: 30px; padding: 0 12px; background: transparent; color: var(--muted-foreground); border: 0; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.role-switch button[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
+:root.role-employee, :root.role-employee.side-collapsed { --side-w: 0px; }
+:root.role-employee .side, :root.role-employee .side-toggle { display: none; }
+:root.role-compliance #tab-form, :root.role-compliance .side .side-cap:first-child { display: none; }
+@media (max-width: 760px) { :root.role-employee .top { padding-left: 24px; } }
 </style>
 </head>
 <body>
@@ -791,7 +800,7 @@ button.dash-stat:hover { background: var(--muted); }
   document.addEventListener('click', function (e) { if (box.open && !box.contains(e.target)) box.open = false; });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.open = false; });
 })();
-</script></div><div class="top-right"><button type="button" class="act save-draft" id="save-draft" title="Keep what you have entered on this device so you can come back to it" hidden><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><span id="save-draft-text">Save draft</span></button><button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
+</script></div><div class="top-right"><div class="role-switch" role="group" aria-label="Switch view"><button type="button" class="act" id="role-employee" aria-pressed="true">Employee</button><button type="button" class="act" id="role-compliance" aria-pressed="false">Compliance team</button></div><button type="button" class="act save-draft" id="save-draft" title="Keep what you have entered on this device so you can come back to it" hidden><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><span id="save-draft-text">Save draft</span></button><button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
 </div></div>
 <button type="button" class="act side-toggle" id="side-toggle" aria-controls="side" aria-expanded="true" aria-label="Collapse menu" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
 <nav class="side" id="side" role="tablist" aria-label="Sections" aria-orientation="vertical">
@@ -1253,7 +1262,7 @@ button.dash-stat:hover { background: var(--muted); }
   var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing']]
     .map(function (p) { return { name: p[0], team: p[1], area: DEPT_AREA[p[1]] || '', email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
   var TRACK = ['sent', 'opened', 'saved', 'submitted'], TRACK_NAME = { sent: 'Sent', opened: 'Opened', saved: 'Draft saved', submitted: 'Submitted' };
-  var dash = { tpl: 'choose', area: 'auto', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
+  var dash = { tpl: 'choose', area: 'auto', dept: 'all', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
   function dashSeed() {
     var now = Date.now();
     function s(i, tpl, status, days, ref) { var p = PEOPLE[i]; return { id: 'x' + i, token: 'demo' + i, name: p.name, email: p.email, team: p.team, tpl: tpl, area: p.area, sentAt: now - days * DAY, status: status, openedAt: status !== 'sent' ? now - (days - 1) * DAY : 0, ref: ref || '', sample: true }; }
@@ -1413,11 +1422,17 @@ button.dash-stat:hover { background: var(--muted); }
       h('div', { class: 'dash-stat' }, h('b', { text: String(counts.opened + counts.saved + counts.submitted) }), h('span', { text: 'Opened' })),
       h('div', { class: 'dash-stat' }, h('b', { text: String(counts.saved) }), h('span', { text: 'Draft saved, not sent' })),
       h('div', { class: 'dash-stat' }, h('b', { text: String(counts.submitted) }), h('span', { text: 'Submitted' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(pending) }), h('span', { text: 'Waiting for review' })),
+      h('button', { type: 'button', class: 'dash-stat act', id: 'dash-open-review', title: 'Open the submissions waiting for review', onclick: function () { rv.fStatus = 'pending'; rv.fDate = 'all'; rv.sel = null; setMode('review'); } }, h('b', { text: String(pending) }), h('span', { text: 'Waiting for review' })),
       h('button', { type: 'button', class: 'dash-stat act', id: 'dash-open-watch', onclick: function () { setMode('watch'); } }, h('b', { text: String(dashUnread()) }), h('span', { text: 'New legislation alerts' }))));
     wrap.appendChild(note);
     // 2. Track forms
-    var rows = d.sent.filter(function (x) { return dash.filter === 'all' || x.status === dash.filter; }), body = h('tbody');
+    // A row's department: stored when it was sent, or looked up from the directory for older rows.
+    var deptOf = function (x) { var p; if (x.team) return x.team; p = PEOPLE.filter(function (q) { return q.email === x.email; })[0]; return p ? p.team : ''; };
+    var depts = [], noDept = 0;
+    d.sent.forEach(function (x) { var t = deptOf(x); if (!t) noDept++; else if (depts.indexOf(t) < 0) depts.push(t); });
+    depts.sort();
+    if (dash.dept !== 'all' && dash.dept !== 'none' && depts.indexOf(dash.dept) < 0) dash.dept = 'all';
+    var rows = d.sent.filter(function (x) { return (dash.filter === 'all' || x.status === dash.filter) && (dash.dept === 'all' || (dash.dept === 'none' ? !deptOf(x) : deptOf(x) === dash.dept)); }), body = h('tbody');
     rows.forEach(function (x, i) {
       var step = TRACK.indexOf(x.status), bar = h('div', { class: 'dash-track' }), tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0], when = x[x.status + 'At'] || x.sentAt;
       TRACK.forEach(function (s, k) { bar.appendChild(h('i', { class: k <= step ? (x.status === 'submitted' ? 'done' : 'on') : '' })); });
@@ -1439,9 +1454,11 @@ button.dash-stat:hover { background: var(--muted); }
     });
     wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
       h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
-        select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; })),
+        h('div', { class: 'dash-filters' },
+          select('dash-dept', 'Filter by department', dash.dept, [['all', 'All departments']].concat(depts.map(function (t) { return [t, t + ' (' + d.sent.filter(function (x) { return deptOf(x) === t; }).length + ')']; })).concat(noDept ? [['none', 'No department (' + noDept + ')']] : []), function (v) { dash.dept = v; }),
+          select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All stages (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; }))),
       rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Person' }), h('th', { scope: 'col', text: 'Template and area' }), h('th', { scope: 'col', text: 'Sent' }), h('th', { scope: 'col', text: 'Progress' }), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
-        : h('p', { class: 'tip', text: d.sent.length ? 'No forms at this stage.' : 'No forms have been sent yet.' }),
+        : h('p', { class: 'tip', text: d.sent.length ? 'No forms match these filters.' : 'No forms have been sent yet.' }),
       h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
     return wrap;
   }
@@ -3967,6 +3984,7 @@ button.dash-stat:hover { background: var(--muted); }
   function render(dir) {
     var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', watchM = state.mode === 'watch', other = review || tagging || labeling || dashM || watchM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
     document.getElementById('tab-dash').setAttribute('aria-selected', dashM ? 'true' : 'false');
+    if (other && role !== 'compliance') { role = 'compliance'; roleApply(); }
     document.getElementById('tab-watch').setAttribute('aria-selected', watchM ? 'true' : 'false');
     document.getElementById('tab-watch-n').hidden = !unreadN; document.getElementById('tab-watch-n').textContent = String(unreadN);
     document.getElementById('tab-form').setAttribute('aria-selected', other ? 'false' : 'true');
@@ -4180,6 +4198,25 @@ button.dash-stat:hover { background: var(--muted); }
     setTheme(saved === 'dark');
   })();
   document.getElementById('prev').addEventListener('click', prev);
+  // Two views of the same app: the employee who fills in the form, and the compliance team with its dashboard and tools.
+  var role = 'employee';
+  try { if (localStorage.getItem('viewRole') === 'compliance' && !/[?&]t=/.test(location.search)) role = 'compliance'; } catch (e) {}
+  function roleApply() {
+    document.documentElement.classList.toggle('role-employee', role === 'employee');
+    document.documentElement.classList.toggle('role-compliance', role === 'compliance');
+    document.getElementById('role-employee').setAttribute('aria-pressed', role === 'employee' ? 'true' : 'false');
+    document.getElementById('role-compliance').setAttribute('aria-pressed', role === 'compliance' ? 'true' : 'false');
+  }
+  function roleSet(r) {
+    role = r;
+    try { localStorage.setItem('viewRole', r); } catch (e) {}
+    roleApply();
+    if (r === 'employee') { if (state.mode !== 'form') setMode('form'); }
+    else if (state.mode === 'form') setMode('dash');
+  }
+  document.getElementById('role-employee').addEventListener('click', function () { roleSet('employee'); });
+  document.getElementById('role-compliance').addEventListener('click', function () { roleSet('compliance'); });
+  roleApply();
   document.getElementById('tab-watch').addEventListener('click', function () { setMode('watch'); });
   document.getElementById('tab-dash').addEventListener('click', function () { dash.view = null; if (state.mode === 'dash') render('stay'); else setMode('dash'); });
   // Side menu: collapses to icons; the choice is remembered. On small screens it starts closed and closes after a choice.
@@ -4227,6 +4264,7 @@ button.dash-stat:hover { background: var(--muted); }
     if (data && (data.mode === 'review' || data.mode === 'tags' || data.mode === 'label')) state.mode = data.mode;
     if (data && data.req && data.req.risks) state.req = data.req;
     if (data && data.at) state.at = data.at;
+    if (role === 'compliance' && state.mode === 'form' && !state.req) state.mode = 'dash';
     render('fwd');
   }
   var hot = window.claude && window.claude.hot;
