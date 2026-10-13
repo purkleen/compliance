@@ -3696,10 +3696,6 @@ button.dash-stat:hover { background: var(--muted); }
     }
     if (own.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Added by you' }),
       v2Rows(own.map(function (n) { return { v: 'own:' + n, l: n, area: '' }; }), sel, onPick, idp + 'own-')));
-    var name = h('input', { type: 'text', class: 'line', id: idp + 'another', maxlength: '120', autocomplete: 'off', placeholder: 'Add another risk…', 'aria-label': 'Add another risk' });
-    var add = h('button', { type: 'button', class: 'btn act', id: idp + 'another-go', text: 'Add risk', onclick: function () { if (!name.value.trim()) { name.focus(); return; } onPick(v2Own(name.value), ''); } });
-    name.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
-    wrap.appendChild(h('div', { class: 'v2-addrow' }, name, add));
     if (mode === 'all' || !la) {
       others = areaTags().filter(function (t) { return t.id !== my && all.some(function (o) { return o.area === t.id; }); });
       if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: my ? 'Other areas' : 'All areas' }));
