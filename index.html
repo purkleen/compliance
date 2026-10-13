@@ -89,6 +89,11 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
 .tile:hover .go svg { transform: translateX(3px); }
 .note { margin: 0; color: var(--muted-foreground); font-size: 13px; }
 @media (prefers-reduced-motion: reduce) { .wrap { animation: none; } .tile, .tile .go svg { transition: none; } .tile:hover { transform: none; } }
+.top-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.role-switch { display: inline-flex; gap: 2px; padding: 3px; background: var(--muted); border-radius: var(--radius); }
+.role-switch button, .role-switch a { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; background: transparent; color: var(--muted-foreground); border: 0; border-radius: var(--radius-md); font: inherit; font-size: 13px; font-weight: 500; white-space: nowrap; text-decoration: none; cursor: pointer; }
+.role-switch a:hover { color: var(--foreground); }
+.role-switch button[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
 .top-left { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
 .ver { position: relative; }
 .ver summary { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; list-style: none; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
@@ -131,11 +136,18 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
     } else a.addEventListener('click', function () { if (!inClaude) { try { localStorage.setItem('viewRole', 'employee'); } catch (e) {} a.href = v.file + location.hash; } box.open = false; });
     pop.appendChild(a);
   });
+  // The Compliance team side lives in the flow pages; open one of them in that view.
+  document.addEventListener('DOMContentLoaded', function () {
+    var rc = document.getElementById('role-compliance');
+    if (inClaude) { rc.href = rc.getAttribute('data-url'); rc.target = '_blank'; rc.rel = 'noopener'; }
+    else rc.addEventListener('click', function () { try { localStorage.setItem('viewRole', 'compliance'); } catch (e) {} });
+  });
   document.addEventListener('click', function (e) { if (box.open && !box.contains(e.target)) box.open = false; });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.open = false; });
 })();
 </script></div>
-<button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
+<div class="top-right"><div class="role-switch" role="group" aria-label="Switch view"><button type="button" id="role-employee" aria-pressed="true">Employee</button><a id="role-compliance" href="free-hand.html" data-url="https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2">Compliance team</a></div>
+<button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button></div>
 </div>
 <main>
   <div class="wrap">
