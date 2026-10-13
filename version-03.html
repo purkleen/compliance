@@ -691,6 +691,78 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
 #syn-note { position: sticky; top: 8px; z-index: 5; padding: 8px 12px; background: var(--muted); border-radius: var(--radius-md); color: var(--foreground); }
 .rv-detail .syn-row .line { max-width: none; min-height: 0; height: 36px; font-size: 14px; }
 @media (max-width: 760px) { .syn-row { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+/* Side menu: sections of the app, collapsible to an icon rail. On small screens it opens over the page. */
+:root { --side-w: 224px; }
+:root.side-collapsed { --side-w: 60px; }
+body { padding-left: var(--side-w); }
+.side { position: fixed; z-index: 24; top: 0; left: 0; bottom: 0; width: var(--side-w); box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; padding: 62px 10px 16px; background: var(--background); border-right: 1px solid var(--border); overflow: hidden auto; }
+.side-toggle { position: fixed; z-index: 26; top: 13px; left: 12px; width: 36px; height: 36px; display: grid; place-items: center; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); cursor: pointer; }
+.side-toggle:hover { background: var(--muted); }
+.side-cap { padding: 12px 10px 4px; color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.side button { display: flex; align-items: center; gap: 10px; width: 100%; height: 36px; padding: 0 10px; background: transparent; color: var(--muted-foreground); border: 0; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; text-align: left; white-space: nowrap; cursor: pointer; }
+.side button svg { flex: none; }
+.side button .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.side button:hover { background: var(--muted); color: var(--foreground); }
+.side button[aria-selected="true"] { background: var(--muted); color: var(--foreground); }
+.side-n { flex: none; min-width: 18px; padding: 0 5px; background: var(--primary); color: var(--primary-foreground); border-radius: 9px; font-size: 11px; font-weight: 600; line-height: 18px; text-align: center; }
+:root.side-collapsed .side { padding-inline: 12px; }
+:root.side-collapsed .side-cap { height: 1px; margin: 10px 4px 6px; padding: 0; background: var(--border); overflow: hidden; color: transparent; }
+:root.side-collapsed .side button { justify-content: center; padding: 0; position: relative; }
+:root.side-collapsed .side button .t { display: none; }
+:root.side-collapsed .side-n { position: absolute; top: 2px; right: 0; min-width: 8px; width: 8px; height: 8px; padding: 0; font-size: 0; }
+.corner-tools { left: calc(var(--side-w) + 16px); }
+@media (max-width: 760px) {
+  :root, :root.side-collapsed { --side-w: 0px; }
+  .side { width: 224px; box-shadow: 0 10px 28px rgba(0, 0, 0, .2); }
+  :root.side-collapsed .side { display: none; }
+  .top { padding-left: 60px; }
+}
+/* Compliance dashboard */
+.dash { width: 100%; max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 32px; }
+.dash h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+.dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.dash-stat { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.dash-stat b { font-size: 26px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.dash-stat span { color: var(--muted-foreground); font-size: 13px; }
+.dash-card { display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-xl); }
+.dash-card > h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.dash-card h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.dash-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.dash-step { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dash-step .n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px; background: var(--muted); border-radius: 50%; font-family: var(--mono); font-size: 11px; }
+.dash .line { max-width: none; }
+.dash .rv-sel { flex: none; width: 100%; height: 38px; font-size: 14px; }
+.dash-bar .rv-sel { width: auto; min-width: 190px; height: 32px; font-size: 13px; }
+.dash textarea.line { min-height: 72px; font-size: 14px; }
+.dash input.line { height: 38px; font-size: 14px; }
+.dash-people { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); max-height: 190px; overflow-y: auto; }
+.dash-people label { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 14px; cursor: pointer; }
+.dash-people label:last-child { border-bottom: 0; }
+.dash-people input { accent-color: var(--primary); }
+.dash-people .fsub { margin-left: auto; }
+.dash-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.dash-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dash-table th { padding: 8px 10px; text-align: left; white-space: nowrap; background: var(--muted); color: var(--muted-foreground); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; }
+.dash-table td { padding: 10px; vertical-align: top; border-bottom: 1px solid var(--border); }
+.dash-table tr:last-child td { border-bottom: 0; }
+.dash-table .edit { margin-right: 10px; text-decoration: underline; white-space: nowrap; }
+.dash-track { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.dash-track i { width: 22px; height: 6px; border-radius: 3px; background: var(--border); }
+.dash-track i.on { background: var(--primary); }
+.dash-track i.done { background: var(--success); }
+.dash-track span { margin-left: 6px; font-size: 13px; font-weight: 500; }
+.dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.dash-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.dash-list li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.dash-list li:last-child { border-bottom: 0; }
+.dash-list .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.dash-list .edit { text-decoration: underline; white-space: nowrap; }
+.dash-dot { flex: none; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: var(--c1); }
+.dash-dot.read { background: var(--border); }
+.dash-add { display: flex; gap: 8px; }
+.dash-add .line { flex: 1; min-width: 0; }
+.dash-check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.dash-check input { accent-color: var(--primary); }
 </style>
 </head>
 <body>
@@ -726,14 +798,18 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
   document.addEventListener('click', function (e) { if (box.open && !box.contains(e.target)) box.open = false; });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.open = false; });
 })();
-</script></div><div class="top-right"><button type="button" class="act save-draft" id="save-draft" title="Keep what you have entered on this device so you can come back to it" hidden><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><span id="save-draft-text">Save draft</span></button><div class="tabs" role="tablist" aria-label="Switch view">
-  <button type="button" role="tab" class="act" id="tab-form" aria-selected="true">Form</button>
-  <button type="button" role="tab" class="act" id="tab-review" aria-selected="false">Review submissions</button>
-  <button type="button" role="tab" class="act" id="tab-tags" aria-selected="false">Tagging</button>
-  <button type="button" role="tab" class="act" id="tab-label" aria-selected="false">Labeling</button>
-</div>
-<button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
+</script></div><div class="top-right"><button type="button" class="act save-draft" id="save-draft" title="Keep what you have entered on this device so you can come back to it" hidden><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><span id="save-draft-text">Save draft</span></button><button type="button" class="act theme" id="theme" aria-pressed="false" aria-label="Dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 3l0 18"></path><path d="M12 9l4.65 -4.65"></path><path d="M12 14.3l7.37 -7.37"></path><path d="M12 19.6l8.85 -8.85"></path></svg></button>
 </div></div>
+<button type="button" class="act side-toggle" id="side-toggle" aria-controls="side" aria-expanded="true" aria-label="Collapse menu" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
+<nav class="side" id="side" role="tablist" aria-label="Sections" aria-orientation="vertical">
+  <div class="side-cap">Employee</div>
+  <button type="button" role="tab" class="act" id="tab-form" aria-selected="true" title="Form"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg><span class="t">Form</span></button>
+  <div class="side-cap">Compliance team</div>
+  <button type="button" role="tab" class="act" id="tab-dash" aria-selected="false" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span class="t">Dashboard</span><span class="side-n" id="tab-dash-n" hidden></span></button>
+  <button type="button" role="tab" class="act" id="tab-review" aria-selected="false" title="Review submissions"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="t">Review submissions</span></button>
+  <button type="button" role="tab" class="act" id="tab-tags" aria-selected="false" title="Tagging"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/></svg><span class="t">Tagging</span></button>
+  <button type="button" role="tab" class="act" id="tab-label" aria-selected="false" title="Labeling"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="t">Labeling</span></button>
+</nav>
 <main id="stage"></main>
 <div class="corner-tools"><button type="button" class="act restart-flow" id="restart-flow" title="Clear what you have entered and start this flow again"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span id="restart-flow-text">Restart</span></button></div>
 <div class="foot">
@@ -1170,6 +1246,183 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
   }
   // Reviewer screen: every submitted form on the left, a text summary of the selected one on the right.
   var rv = { sel: null, detail: false, note: '', regen: null, srcClosed: false, links: false, fStatus: 'all', fDate: 'all', panel: null, version: null, syn: false }, rvEditing = false;
+  // ---- Compliance dashboard: send a form, track it, and watch sources for new legislation ----
+  var DASH_KEY = 'riskDash', DAY = 86400000;
+  var TEMPLATES = [
+    { id: 'choose', name: 'Choose your way (the person picks how to answer)', file: 'index.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' },
+    { id: 'questions-first', name: 'Questions first', file: 'questions-first.html', url: 'https://claude.ai/artifact/EWYfRnGgxYadkoPmpzCKrw' },
+    { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
+    { id: 'version-02', name: 'Free hand', file: 'free-hand.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' }
+  ];
+  var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing']]
+    .map(function (p) { return { name: p[0], team: p[1], email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
+  var TRACK = ['sent', 'opened', 'saved', 'submitted'], TRACK_NAME = { sent: 'Sent', opened: 'Opened', saved: 'Draft saved', submitted: 'Submitted' };
+  var dash = { tpl: 'choose', area: '', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
+  function dashSeed() {
+    var now = Date.now();
+    function s(i, tpl, status, days, ref) { var p = PEOPLE[i]; return { id: 'x' + i, token: 'demo' + i, name: p.name, email: p.email, tpl: tpl, area: 'cat-main', sentAt: now - days * DAY, status: status, openedAt: status !== 'sent' ? now - (days - 1) * DAY : 0, ref: ref || '', sample: true }; }
+    return { sent: [s(0, 'questions-first', 'submitted', 9, 'RSK-2026-1177'), s(1, 'questions-first', 'saved', 9), s(2, 'version-03', 'opened', 6), s(3, 'version-03', 'sent', 6), s(4, 'choose', 'submitted', 3, 'RSK-2026-1725'), s(8, 'choose', 'sent', 1)],
+      sources: [{ id: 's1', url: 'https://eur-lex.europa.eu', checkedAt: now - 3600000 }, { id: 's2', url: 'https://dziennikustaw.gov.pl', checkedAt: now - 3600000 }, { id: 's3', url: 'https://www.ema.europa.eu/en/news', checkedAt: now - 7200000 }],
+      alerts: [{ id: 'a1', at: now - 5 * 3600000, src: 'https://eur-lex.europa.eu', title: 'Sample alert: updated guidance on substantiating environmental claims', read: false, sample: true },
+        { id: 'a2', at: now - 2 * DAY, src: 'https://dziennikustaw.gov.pl', title: 'Sample alert: draft act on pay transparency published for consultation', read: false, sample: true },
+        { id: 'a3', at: now - 6 * DAY, src: 'https://www.ema.europa.eu/en/news', title: 'Sample alert: revised good manufacturing practice annex announced', read: true, sample: true }],
+      notify: { inApp: true, email: false, address: '' } };
+  }
+  function dashGet() {
+    if (dashData) return dashData;
+    try { dashData = JSON.parse(localStorage.getItem(DASH_KEY) || 'null'); } catch (e) {}
+    if (!dashData || !dashData.sent) dashData = dashSeed();
+    return dashData;
+  }
+  function dashPut() { try { localStorage.setItem(DASH_KEY, JSON.stringify(dashData)); } catch (e) {} }
+  function dashUnread() { return dashGet().alerts.filter(function (a) { return !a.read; }).length; }
+  // The form itself reports progress for the link it was opened from: opened, draft saved, submitted.
+  function dashTrack(status, ref) {
+    var t = (location.search.match(/[?&]t=([^&#]+)/) || [])[1], d, it;
+    if (!t) return;
+    dashData = null; d = dashGet();
+    it = d.sent.filter(function (x) { return x.token === t; })[0];
+    if (!it) return;
+    if (TRACK.indexOf(status) > TRACK.indexOf(it.status)) it.status = status;
+    it[status + 'At'] = Date.now();
+    if (ref) it.ref = ref;
+    dashPut();
+  }
+  function dashLink(it) {
+    var tpl = TEMPLATES.filter(function (t) { return t.id === it.tpl; })[0] || TEMPLATES[0];
+    if (window.claude) return tpl.url + (it.area ? '#' + it.area : '');
+    return location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '') + tpl.file + '?t=' + it.token + (it.area ? '#' + it.area : '');
+  }
+  function dashScreen() {
+    var d = dashGet(), wrap = h('section', { class: 'dash' }), counts = { sent: 0, opened: 0, saved: 0, submitted: 0 }, pending = records.concat(EXAMPLES).filter(function (r) { return recStatus(r) === 'pending'; }).length;
+    d.sent.forEach(function (x) { counts[x.status]++; });
+    function redraw(msg) { dash.note = msg || ''; dashPut(); render('stay'); }
+    function select(id, label, value, options, set) {
+      var sel = h('select', { class: 'rv-sel act', id: id, 'aria-label': label, onchange: function (e) { set(e.target.value); render('stay'); } });
+      options.forEach(function (o) { var op = h('option', { value: o[0], text: o[1] }); if (o[0] === value) op.selected = true; sel.appendChild(op); });
+      return sel;
+    }
+    wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Compliance dashboard' }),
+      h('p', { class: 'help', text: 'Send the risk assessment to people, follow how far each of them got, and keep an eye on new legislation.' })));
+    wrap.appendChild(h('div', { class: 'dash-stats' },
+      h('div', { class: 'dash-stat' }, h('b', { text: String(d.sent.length) }), h('span', { text: 'Forms sent' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.opened + counts.saved + counts.submitted) }), h('span', { text: 'Opened' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.saved) }), h('span', { text: 'Draft saved, not sent' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.submitted) }), h('span', { text: 'Submitted' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(pending) }), h('span', { text: 'Waiting for review' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(dashUnread()) }), h('span', { text: 'New legislation alerts' }))));
+    var note = h('p', { class: 'tip', id: 'dash-msg', role: 'status', text: dash.note });
+    note.hidden = !dash.note;
+    // 1. Send a form
+    var people = h('div', { class: 'dash-people', id: 'dash-people' });
+    PEOPLE.forEach(function (p, i) {
+      var box = h('input', { type: 'checkbox', id: 'dash-p-' + i, onchange: function (e) { dash.picked[p.email] = e.target.checked; } });
+      box.checked = !!dash.picked[p.email];
+      people.appendChild(h('label', null, box, h('span', { text: p.name }), h('span', { class: 'fsub', text: p.team })));
+    });
+    var emails = h('textarea', { class: 'line', id: 'dash-emails', rows: '2', 'aria-label': 'Other email addresses', oninput: function (e) { dash.emails = e.target.value; } });
+    emails.value = dash.emails;
+    var msg = h('textarea', { class: 'line', id: 'dash-text', rows: '3', 'aria-label': 'Message', oninput: function (e) { dash.msg = e.target.value; } });
+    msg.value = dash.msg;
+    function send() {
+      var list = PEOPLE.filter(function (p) { return dash.picked[p.email]; }).map(function (p) { return { name: p.name, email: p.email }; }), bad = [], now = Date.now();
+      dash.emails.split(/[\s,;]+/).filter(Boolean).forEach(function (e) {
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { bad.push(e); return; }
+        if (!list.some(function (x) { return x.email.toLowerCase() === e.toLowerCase(); })) list.push({ name: '', email: e });
+      });
+      if (bad.length) { redraw('Check ' + (bad.length === 1 ? 'this address' : 'these addresses') + ': ' + bad.join(', ') + '.'); return; }
+      if (!list.length) { redraw('Choose at least one person or add an email address.'); return; }
+      list.forEach(function (p) { d.sent.unshift({ id: newId('m'), token: newId('k'), name: p.name, email: p.email, tpl: dash.tpl, area: dash.area, msg: dash.msg.trim(), sentAt: now, status: 'sent' }); });
+      dash.picked = {}; dash.emails = ''; dash.msg = '';
+      redraw('Form recorded as sent to ' + list.length + (list.length === 1 ? ' person' : ' people') + '. This prototype does not send email itself: use “Email” or “Copy link” in the list below to pass each link on.');
+    }
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-send' }, h('h2', { text: 'Send a form' }),
+      h('div', { class: 'dash-steps' },
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '1' }), 'Select a template'),
+          select('dash-tpl', 'Template', dash.tpl, TEMPLATES.map(function (t) { return [t.id, t.name]; }), function (v) { dash.tpl = v; }),
+          h('span', { class: 'tip', text: 'Area the form is about' }),
+          select('dash-area', 'Area', dash.area, [['', 'No particular area']].concat(areaTags().map(function (t) { return [t.id, t.name]; })), function (v) { dash.area = v; })),
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '2' }), 'Select people'), people,
+          h('span', { class: 'tip', text: 'Or add email addresses, separated by commas or new lines' }), emails),
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '3' }), 'Add a message and send'), msg,
+          h('span', { class: 'tip', text: 'Optional. Each person gets their own link, so their progress can be followed.' }),
+          h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn sm act', id: 'dash-send-go', onclick: send, text: 'Send form' })))),
+      note));
+    // 2. Track forms
+    var rows = d.sent.filter(function (x) { return dash.filter === 'all' || x.status === dash.filter; }), body = h('tbody');
+    rows.forEach(function (x, i) {
+      var step = TRACK.indexOf(x.status), bar = h('div', { class: 'dash-track' }), tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0], when = x[x.status + 'At'] || x.sentAt;
+      TRACK.forEach(function (s, k) { bar.appendChild(h('i', { class: k <= step ? (x.status === 'submitted' ? 'done' : 'on') : '' })); });
+      bar.appendChild(h('span', { text: TRACK_NAME[x.status] }));
+      var mail = 'mailto:' + encodeURIComponent(x.email) + '?subject=' + encodeURIComponent('Risk assessment: your input is needed') + '&body=' + encodeURIComponent('Hello' + (x.name ? ' ' + x.name.split(' ')[0] : '') + ',\n\n' + (x.msg || 'Compliance is collecting the risks people see in their daily work. Please add yours using the link below.') + '\n\n' + dashLink(x) + '\n\nThank you,\nCompliance');
+      body.appendChild(h('tr', null,
+        h('td', null, h('div', { text: x.name || x.email }), x.name ? h('span', { class: 'fsub', text: x.email }) : null),
+        h('td', null, h('div', { text: tpl.name.replace(/ \(.*/, '') }), h('span', { class: 'fsub', text: x.area ? tagName(x.area) : 'No particular area' })),
+        h('td', null, h('span', { class: 'fsub', text: stamp(x.sentAt) })),
+        h('td', null, bar, h('span', { class: 'fsub', text: (x.status === 'sent' ? 'Not opened yet' : stamp(when)) + (x.ref ? ' · ' + x.ref : '') + (x.remindedAt ? ' · reminded ' + stamp(x.remindedAt) : '') })),
+        h('td', null,
+          h('a', { class: 'edit act', id: 'dash-mail-' + i, href: mail, target: '_blank', rel: 'noopener', text: 'Email' }),
+          h('button', { type: 'button', class: 'edit act', id: 'dash-copy-' + i, text: 'Copy link', onclick: function (e) {
+            var b = e.currentTarget, link = dashLink(x);
+            (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { b.textContent = 'Copied'; }, function () { window.prompt('Copy this link', link); });
+          } }),
+          x.status !== 'submitted' ? h('button', { type: 'button', class: 'edit act', id: 'dash-remind-' + i, text: 'Remind', onclick: function () { x.remindedAt = Date.now(); redraw('Reminder recorded for ' + (x.name || x.email) + '.'); } }) : null,
+          h('button', { type: 'button', class: 'edit act', id: 'dash-del-' + i, text: 'Remove', onclick: function () { d.sent = d.sent.filter(function (y) { return y !== x; }); redraw(''); } }))));
+    });
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
+      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
+        select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; })),
+      rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Person' }), h('th', { scope: 'col', text: 'Template and area' }), h('th', { scope: 'col', text: 'Sent' }), h('th', { scope: 'col', text: 'Progress' }), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
+        : h('p', { class: 'tip', text: d.sent.length ? 'No forms at this stage.' : 'No forms have been sent yet.' }),
+      h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
+    // 3. Legislation watch
+    var srcList = h('ul', { class: 'dash-list', id: 'dash-sources' });
+    d.sources.forEach(function (s, i) {
+      srcList.appendChild(h('li', null, h('span', { class: 'grow' }, h('div', { text: s.url }), h('span', { class: 'fsub', text: s.checkedAt ? 'Last checked ' + stamp(s.checkedAt) : 'Not checked yet' })),
+        h('button', { type: 'button', class: 'edit act', id: 'dash-src-del-' + i, 'aria-label': 'Remove ' + s.url, text: 'Remove', onclick: function () { d.sources = d.sources.filter(function (y) { return y !== s; }); redraw(''); } })));
+    });
+    var srcIn = h('input', { type: 'url', class: 'line', id: 'dash-src', placeholder: 'https://', 'aria-label': 'Address to watch', autocomplete: 'off', oninput: function (e) { dash.src = e.target.value; } });
+    srcIn.value = dash.src;
+    function addSrc() {
+      var u = dash.src.trim();
+      if (!/^https?:\/\/[^\s.]+\.[^\s]+$/.test(u)) { redraw('Enter a full web address, starting with https://.'); return; }
+      if (d.sources.some(function (s) { return s.url.replace(/\/$/, '') === u.replace(/\/$/, ''); })) { redraw('That address is already on the list.'); return; }
+      d.sources.push({ id: newId('s'), url: u, checkedAt: 0 }); dash.src = '';
+      redraw('Address added to the watch list.');
+    }
+    srcIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addSrc(); } });
+    var alertList = h('ul', { class: 'dash-list', id: 'dash-alerts' });
+    d.alerts.slice().sort(function (a, b) { return b.at - a.at; }).forEach(function (a, i) {
+      alertList.appendChild(h('li', null, h('span', { class: 'dash-dot' + (a.read ? ' read' : ''), 'aria-hidden': 'true' }),
+        h('span', { class: 'grow' }, h('div', { text: a.title }), h('span', { class: 'fsub', text: stamp(a.at) + ' · ' + a.src })),
+        a.read ? h('button', { type: 'button', class: 'edit act', id: 'dash-al-del-' + i, text: 'Dismiss', onclick: function () { d.alerts = d.alerts.filter(function (y) { return y !== a; }); redraw(''); } })
+          : h('button', { type: 'button', class: 'edit act', id: 'dash-al-read-' + i, text: 'Mark as read', onclick: function () { a.read = true; redraw(''); } })));
+    });
+    var inApp = h('input', { type: 'checkbox', id: 'dash-n-app', onchange: function (e) { d.notify.inApp = e.target.checked; redraw(''); } }); inApp.checked = !!d.notify.inApp;
+    var byMail = h('input', { type: 'checkbox', id: 'dash-n-mail', onchange: function (e) { d.notify.email = e.target.checked; redraw(''); } }); byMail.checked = !!d.notify.email;
+    var addr = h('input', { type: 'email', class: 'line', id: 'dash-n-addr', placeholder: 'compliance@company.com', 'aria-label': 'Email address for alerts', onchange: function (e) { d.notify.address = e.target.value.trim(); dashPut(); } });
+    addr.value = d.notify.address || ''; addr.hidden = !d.notify.email;
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-watch' }, h('h2', { text: 'Legislation watch' }),
+      h('div', { class: 'dash-two' },
+        h('div', { class: 'dash-step' }, h('h3', { text: 'Addresses to watch' }),
+          h('span', { class: 'tip', text: 'Pages that are checked for new information and legislation.' }), srcList,
+          h('div', { class: 'dash-add' }, srcIn, h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-src-add', text: 'Add address', onclick: addSrc })),
+          h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-check', text: 'Check now', onclick: function () {
+            var now = Date.now(), src;
+            if (!d.sources.length) { redraw('Add an address to watch first.'); return; }
+            d.sources.forEach(function (s) { s.checkedAt = now; });
+            src = d.sources[Math.floor(Math.random() * d.sources.length)];
+            d.alerts.push({ id: newId('a'), at: now, src: src.url, title: 'Sample alert: a new document was published on this page', read: false, sample: true });
+            redraw('Checked ' + d.sources.length + (d.sources.length === 1 ? ' address' : ' addresses') + '. This prototype does not read the pages; it adds a sample alert to show how a notification arrives.');
+          } }))),
+        h('div', { class: 'dash-step' }, h('div', { class: 'dash-bar' }, h('h3', null, 'Notifications', dashUnread() ? h('span', { class: 'combo-count', text: dashUnread() + ' new' }) : null),
+            dashUnread() ? h('button', { type: 'button', class: 'edit act', id: 'dash-al-all', text: 'Mark all as read', onclick: function () { d.alerts.forEach(function (a) { a.read = true; }); redraw(''); } }) : null),
+          d.alerts.length ? alertList : h('p', { class: 'tip', text: 'No notifications.' }),
+          h('h3', { text: 'How to be notified' }),
+          h('label', { class: 'dash-check' }, inApp, 'Show a count on the Dashboard menu item'),
+          h('label', { class: 'dash-check' }, byMail, 'Also send an email'), addr))));
+    return wrap;
+  }
   // ---- Reviewer tools: status, filters, extra questions, earlier versions, synonyms ----
   var STATUS = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' };
   function recStatus(r) { return r.status && STATUS[r.status] ? r.status : 'pending'; }
@@ -2941,6 +3194,7 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
   }
   function storeSubmission(rec) {
     draftClear();
+    dashTrack('submitted', rec.ref);
     records.unshift(rec);
     justSubmitted = rec.id;
     dashNote = '';
@@ -3927,7 +4181,9 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
     return sec;
   }
   function render(dir) {
-    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', other = review || tagging || labeling;
+    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', other = review || tagging || labeling || dashM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
+    document.getElementById('tab-dash').setAttribute('aria-selected', dashM ? 'true' : 'false');
+    document.getElementById('tab-dash-n').hidden = !unreadN; document.getElementById('tab-dash-n').textContent = String(unreadN);
     document.getElementById('tab-form').setAttribute('aria-selected', other ? 'false' : 'true');
     document.getElementById('tab-review').setAttribute('aria-selected', review ? 'true' : 'false');
     document.getElementById('tab-tags').setAttribute('aria-selected', tagging ? 'true' : 'false');
@@ -3942,7 +4198,7 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stopDictation();
       stopRecording();
-      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : tagScreen());
+      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
@@ -4091,6 +4347,7 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
       }));
       if ((state.files.thoughts || []).length) hadFiles = true;
       draftFlash(hadFiles ? 'Saved, without attached files' : 'Draft saved');
+      dashTrack('saved');
     } catch (e) { draftFlash('Could not save here'); }
   }
   function draftClear() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
@@ -4138,6 +4395,13 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
     setTheme(saved === 'dark');
   })();
   document.getElementById('prev').addEventListener('click', prev);
+  document.getElementById('tab-dash').addEventListener('click', function () { setMode('dash'); });
+  // Side menu: collapses to icons; the choice is remembered. On small screens it starts closed and closes after a choice.
+  var sideBtn = document.getElementById('side-toggle'), sideNav = document.getElementById('side');
+  function sideSet(c) { document.documentElement.classList.toggle('side-collapsed', c); sideBtn.setAttribute('aria-expanded', c ? 'false' : 'true'); sideBtn.setAttribute('aria-label', c ? 'Open menu' : 'Collapse menu'); }
+  (function () { var saved = null; try { saved = localStorage.getItem('sideCollapsed'); } catch (e) {} sideSet(window.innerWidth <= 900 ? true : saved === '1'); })();
+  sideBtn.addEventListener('click', function () { var c = !document.documentElement.classList.contains('side-collapsed'); sideSet(c); try { localStorage.setItem('sideCollapsed', c ? '1' : '0'); } catch (e) {} });
+  sideNav.addEventListener('click', function (e) { if (window.innerWidth <= 760 && e.target.closest('button')) sideSet(true); });
   document.getElementById('tab-form').addEventListener('click', function () { setMode('form'); });
   document.getElementById('tab-review').addEventListener('click', function () { setMode('review'); });
   document.getElementById('tab-tags').addEventListener('click', function () { setMode('tags'); });
@@ -4169,6 +4433,7 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
 
   function start(data) {
     draftLoad();
+    dashTrack('opened');
     if (data && data.answers) state.answers = data.answers;
     if (data && data.fu) state.fu = data.fu;
     if (data && data.edited) state.edited = data.edited;
