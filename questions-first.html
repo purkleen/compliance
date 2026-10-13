@@ -717,10 +717,12 @@ body { padding-left: var(--side-w); }
   .top { padding-left: 60px; }
 }
 /* Compliance dashboard */
-.dash { width: 100%; max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 32px; }
+.dash { width: 100%; max-width: none; margin: 0; display: flex; flex-direction: column; gap: 20px; padding-bottom: 32px; }
 .dash h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
 .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .dash-stat { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+button.dash-stat { background: var(--background); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+button.dash-stat:hover { background: var(--muted); }
 .dash-stat b { font-size: 26px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .dash-stat span { color: var(--muted-foreground); font-size: 13px; }
 .dash-card { display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-xl); }
@@ -738,7 +740,7 @@ body { padding-left: var(--side-w); }
 .dash-people label { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 14px; cursor: pointer; }
 .dash-people label:last-child { border-bottom: 0; }
 .dash-people input { accent-color: var(--primary); }
-.dash-people .fsub { margin-left: auto; }
+.dash-people .fsub { margin-left: auto; text-align: right; }
 .dash-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .dash-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .dash-table th { padding: 8px 10px; text-align: left; white-space: nowrap; background: var(--muted); color: var(--muted-foreground); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; }
@@ -750,6 +752,12 @@ body { padding-left: var(--side-w); }
 .dash-track i.on { background: var(--primary); }
 .dash-track i.done { background: var(--success); }
 .dash-track span { margin-left: 6px; font-size: 13px; font-weight: 500; }
+.dash.dash-sendpage { max-width: 760px; }
+.dash > .edit { align-self: flex-start; }
+.dash-steps.one { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.dash-sendpage .dash-people { max-height: 300px; }
+.dash-top { align-items: flex-start; }
+.dash-top .btn { flex: none; }
 .dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
 .dash-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .dash-list li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -804,7 +812,8 @@ body { padding-left: var(--side-w); }
   <div class="side-cap">Employee</div>
   <button type="button" role="tab" class="act" id="tab-form" aria-selected="true" title="Form"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg><span class="t">Form</span></button>
   <div class="side-cap">Compliance team</div>
-  <button type="button" role="tab" class="act" id="tab-dash" aria-selected="false" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span class="t">Dashboard</span><span class="side-n" id="tab-dash-n" hidden></span></button>
+  <button type="button" role="tab" class="act" id="tab-dash" aria-selected="false" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span class="t">Dashboard</span></button>
+  <button type="button" role="tab" class="act" id="tab-watch" aria-selected="false" title="Legislation watch"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg><span class="t">Legislation watch</span><span class="side-n" id="tab-watch-n" hidden></span></button>
   <button type="button" role="tab" class="act" id="tab-review" aria-selected="false" title="Review submissions"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="t">Review submissions</span></button>
   <button type="button" role="tab" class="act" id="tab-tags" aria-selected="false" title="Tagging"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/></svg><span class="t">Tagging</span></button>
   <button type="button" role="tab" class="act" id="tab-label" aria-selected="false" title="Labeling"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="t">Labeling</span></button>
@@ -1253,13 +1262,15 @@ body { padding-left: var(--side-w); }
     { id: 'version-03', name: 'Choose risks first', file: 'version-03.html', url: 'https://claude.ai/artifact/T3W1gae9gYZSJWxiUVcCcg' },
     { id: 'version-02', name: 'Free hand', file: 'free-hand.html', url: 'https://claude.ai/artifact/HBv97LAqRLJykrQuPThEu2' }
   ];
+  // Each department has a template prepared for it: the area of the risk matrix its form is about.
+  var DEPT_AREA = { 'Legal': 'cat-main', 'Finance': 'cat-current', 'HR': 'cat-integrity', 'Procurement': 'cat-supplier', 'Quality': 'cat-current', 'Industrial Operations': 'cat-misconduct', 'IT': 'cat-current', 'Marketing': 'cat-current' };
   var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing']]
-    .map(function (p) { return { name: p[0], team: p[1], email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
+    .map(function (p) { return { name: p[0], team: p[1], area: DEPT_AREA[p[1]] || '', email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
   var TRACK = ['sent', 'opened', 'saved', 'submitted'], TRACK_NAME = { sent: 'Sent', opened: 'Opened', saved: 'Draft saved', submitted: 'Submitted' };
-  var dash = { tpl: 'choose', area: '', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
+  var dash = { tpl: 'choose', area: 'auto', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
   function dashSeed() {
     var now = Date.now();
-    function s(i, tpl, status, days, ref) { var p = PEOPLE[i]; return { id: 'x' + i, token: 'demo' + i, name: p.name, email: p.email, tpl: tpl, area: 'cat-main', sentAt: now - days * DAY, status: status, openedAt: status !== 'sent' ? now - (days - 1) * DAY : 0, ref: ref || '', sample: true }; }
+    function s(i, tpl, status, days, ref) { var p = PEOPLE[i]; return { id: 'x' + i, token: 'demo' + i, name: p.name, email: p.email, team: p.team, tpl: tpl, area: p.area, sentAt: now - days * DAY, status: status, openedAt: status !== 'sent' ? now - (days - 1) * DAY : 0, ref: ref || '', sample: true }; }
     return { sent: [s(0, 'questions-first', 'submitted', 9, 'RSK-2026-1177'), s(1, 'questions-first', 'saved', 9), s(2, 'version-03', 'opened', 6), s(3, 'version-03', 'sent', 6), s(4, 'choose', 'submitted', 3, 'RSK-2026-1725'), s(8, 'choose', 'sent', 1)],
       sources: [{ id: 's1', url: 'https://eur-lex.europa.eu', checkedAt: now - 3600000 }, { id: 's2', url: 'https://dziennikustaw.gov.pl', checkedAt: now - 3600000 }, { id: 's3', url: 'https://www.ema.europa.eu/en/news', checkedAt: now - 7200000 }],
       alerts: [{ id: 'a1', at: now - 5 * 3600000, src: 'https://eur-lex.europa.eu', title: 'Sample alert: updated guidance on substantiating environmental claims', read: false, sample: true },
@@ -1292,88 +1303,15 @@ body { padding-left: var(--side-w); }
     if (window.claude) return tpl.url + (it.area ? '#' + it.area : '');
     return location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '') + tpl.file + '?t=' + it.token + (it.area ? '#' + it.area : '');
   }
-  function dashScreen() {
-    var d = dashGet(), wrap = h('section', { class: 'dash' }), counts = { sent: 0, opened: 0, saved: 0, submitted: 0 }, pending = records.concat(EXAMPLES).filter(function (r) { return recStatus(r) === 'pending'; }).length;
-    d.sent.forEach(function (x) { counts[x.status]++; });
+  // Legislation watch has its own item in the side menu: the addresses to watch and the notifications they produce.
+  function watchScreen() {
+    var d = dashGet(), wrap = h('section', { class: 'dash' });
     function redraw(msg) { dash.note = msg || ''; dashPut(); render('stay'); }
-    function select(id, label, value, options, set) {
-      var sel = h('select', { class: 'rv-sel act', id: id, 'aria-label': label, onchange: function (e) { set(e.target.value); render('stay'); } });
-      options.forEach(function (o) { var op = h('option', { value: o[0], text: o[1] }); if (o[0] === value) op.selected = true; sel.appendChild(op); });
-      return sel;
-    }
-    wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Compliance dashboard' }),
-      h('p', { class: 'help', text: 'Send the risk assessment to people, follow how far each of them got, and keep an eye on new legislation.' })));
-    wrap.appendChild(h('div', { class: 'dash-stats' },
-      h('div', { class: 'dash-stat' }, h('b', { text: String(d.sent.length) }), h('span', { text: 'Forms sent' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.opened + counts.saved + counts.submitted) }), h('span', { text: 'Opened' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.saved) }), h('span', { text: 'Draft saved, not sent' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.submitted) }), h('span', { text: 'Submitted' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(pending) }), h('span', { text: 'Waiting for review' })),
-      h('div', { class: 'dash-stat' }, h('b', { text: String(dashUnread()) }), h('span', { text: 'New legislation alerts' }))));
     var note = h('p', { class: 'tip', id: 'dash-msg', role: 'status', text: dash.note });
     note.hidden = !dash.note;
-    // 1. Send a form
-    var people = h('div', { class: 'dash-people', id: 'dash-people' });
-    PEOPLE.forEach(function (p, i) {
-      var box = h('input', { type: 'checkbox', id: 'dash-p-' + i, onchange: function (e) { dash.picked[p.email] = e.target.checked; } });
-      box.checked = !!dash.picked[p.email];
-      people.appendChild(h('label', null, box, h('span', { text: p.name }), h('span', { class: 'fsub', text: p.team })));
-    });
-    var emails = h('textarea', { class: 'line', id: 'dash-emails', rows: '2', 'aria-label': 'Other email addresses', oninput: function (e) { dash.emails = e.target.value; } });
-    emails.value = dash.emails;
-    var msg = h('textarea', { class: 'line', id: 'dash-text', rows: '3', 'aria-label': 'Message', oninput: function (e) { dash.msg = e.target.value; } });
-    msg.value = dash.msg;
-    function send() {
-      var list = PEOPLE.filter(function (p) { return dash.picked[p.email]; }).map(function (p) { return { name: p.name, email: p.email }; }), bad = [], now = Date.now();
-      dash.emails.split(/[\s,;]+/).filter(Boolean).forEach(function (e) {
-        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { bad.push(e); return; }
-        if (!list.some(function (x) { return x.email.toLowerCase() === e.toLowerCase(); })) list.push({ name: '', email: e });
-      });
-      if (bad.length) { redraw('Check ' + (bad.length === 1 ? 'this address' : 'these addresses') + ': ' + bad.join(', ') + '.'); return; }
-      if (!list.length) { redraw('Choose at least one person or add an email address.'); return; }
-      list.forEach(function (p) { d.sent.unshift({ id: newId('m'), token: newId('k'), name: p.name, email: p.email, tpl: dash.tpl, area: dash.area, msg: dash.msg.trim(), sentAt: now, status: 'sent' }); });
-      dash.picked = {}; dash.emails = ''; dash.msg = '';
-      redraw('Form recorded as sent to ' + list.length + (list.length === 1 ? ' person' : ' people') + '. This prototype does not send email itself: use “Email” or “Copy link” in the list below to pass each link on.');
-    }
-    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-send' }, h('h2', { text: 'Send a form' }),
-      h('div', { class: 'dash-steps' },
-        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '1' }), 'Select a template'),
-          select('dash-tpl', 'Template', dash.tpl, TEMPLATES.map(function (t) { return [t.id, t.name]; }), function (v) { dash.tpl = v; }),
-          h('span', { class: 'tip', text: 'Area the form is about' }),
-          select('dash-area', 'Area', dash.area, [['', 'No particular area']].concat(areaTags().map(function (t) { return [t.id, t.name]; })), function (v) { dash.area = v; })),
-        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '2' }), 'Select people'), people,
-          h('span', { class: 'tip', text: 'Or add email addresses, separated by commas or new lines' }), emails),
-        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '3' }), 'Add a message and send'), msg,
-          h('span', { class: 'tip', text: 'Optional. Each person gets their own link, so their progress can be followed.' }),
-          h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn sm act', id: 'dash-send-go', onclick: send, text: 'Send form' })))),
-      note));
-    // 2. Track forms
-    var rows = d.sent.filter(function (x) { return dash.filter === 'all' || x.status === dash.filter; }), body = h('tbody');
-    rows.forEach(function (x, i) {
-      var step = TRACK.indexOf(x.status), bar = h('div', { class: 'dash-track' }), tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0], when = x[x.status + 'At'] || x.sentAt;
-      TRACK.forEach(function (s, k) { bar.appendChild(h('i', { class: k <= step ? (x.status === 'submitted' ? 'done' : 'on') : '' })); });
-      bar.appendChild(h('span', { text: TRACK_NAME[x.status] }));
-      var mail = 'mailto:' + encodeURIComponent(x.email) + '?subject=' + encodeURIComponent('Risk assessment: your input is needed') + '&body=' + encodeURIComponent('Hello' + (x.name ? ' ' + x.name.split(' ')[0] : '') + ',\n\n' + (x.msg || 'Compliance is collecting the risks people see in their daily work. Please add yours using the link below.') + '\n\n' + dashLink(x) + '\n\nThank you,\nCompliance');
-      body.appendChild(h('tr', null,
-        h('td', null, h('div', { text: x.name || x.email }), x.name ? h('span', { class: 'fsub', text: x.email }) : null),
-        h('td', null, h('div', { text: tpl.name.replace(/ \(.*/, '') }), h('span', { class: 'fsub', text: x.area ? tagName(x.area) : 'No particular area' })),
-        h('td', null, h('span', { class: 'fsub', text: stamp(x.sentAt) })),
-        h('td', null, bar, h('span', { class: 'fsub', text: (x.status === 'sent' ? 'Not opened yet' : stamp(when)) + (x.ref ? ' · ' + x.ref : '') + (x.remindedAt ? ' · reminded ' + stamp(x.remindedAt) : '') })),
-        h('td', null,
-          h('a', { class: 'edit act', id: 'dash-mail-' + i, href: mail, target: '_blank', rel: 'noopener', text: 'Email' }),
-          h('button', { type: 'button', class: 'edit act', id: 'dash-copy-' + i, text: 'Copy link', onclick: function (e) {
-            var b = e.currentTarget, link = dashLink(x);
-            (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { b.textContent = 'Copied'; }, function () { window.prompt('Copy this link', link); });
-          } }),
-          x.status !== 'submitted' ? h('button', { type: 'button', class: 'edit act', id: 'dash-remind-' + i, text: 'Remind', onclick: function () { x.remindedAt = Date.now(); redraw('Reminder recorded for ' + (x.name || x.email) + '.'); } }) : null,
-          h('button', { type: 'button', class: 'edit act', id: 'dash-del-' + i, text: 'Remove', onclick: function () { d.sent = d.sent.filter(function (y) { return y !== x; }); redraw(''); } }))));
-    });
-    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
-      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
-        select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; })),
-      rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Person' }), h('th', { scope: 'col', text: 'Template and area' }), h('th', { scope: 'col', text: 'Sent' }), h('th', { scope: 'col', text: 'Progress' }), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
-        : h('p', { class: 'tip', text: d.sent.length ? 'No forms at this stage.' : 'No forms have been sent yet.' }),
-      h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
+    wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Legislation watch' }),
+      h('p', { class: 'help', text: 'Keep a list of pages to watch and see what is new on them.' })));
+    wrap.appendChild(note);
     // 3. Legislation watch
     var srcList = h('ul', { class: 'dash-list', id: 'dash-sources' });
     d.sources.forEach(function (s, i) {
@@ -1401,7 +1339,7 @@ body { padding-left: var(--side-w); }
     var byMail = h('input', { type: 'checkbox', id: 'dash-n-mail', onchange: function (e) { d.notify.email = e.target.checked; redraw(''); } }); byMail.checked = !!d.notify.email;
     var addr = h('input', { type: 'email', class: 'line', id: 'dash-n-addr', placeholder: 'compliance@company.com', 'aria-label': 'Email address for alerts', onchange: function (e) { d.notify.address = e.target.value.trim(); dashPut(); } });
     addr.value = d.notify.address || ''; addr.hidden = !d.notify.email;
-    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-watch' }, h('h2', { text: 'Legislation watch' }),
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-watch' },
       h('div', { class: 'dash-two' },
         h('div', { class: 'dash-step' }, h('h3', { text: 'Addresses to watch' }),
           h('span', { class: 'tip', text: 'Pages that are checked for new information and legislation.' }), srcList,
@@ -1418,8 +1356,107 @@ body { padding-left: var(--side-w); }
             dashUnread() ? h('button', { type: 'button', class: 'edit act', id: 'dash-al-all', text: 'Mark all as read', onclick: function () { d.alerts.forEach(function (a) { a.read = true; }); redraw(''); } }) : null),
           d.alerts.length ? alertList : h('p', { class: 'tip', text: 'No notifications.' }),
           h('h3', { text: 'How to be notified' }),
-          h('label', { class: 'dash-check' }, inApp, 'Show a count on the Dashboard menu item'),
+          h('label', { class: 'dash-check' }, inApp, 'Show a count on the Legislation watch menu item'),
           h('label', { class: 'dash-check' }, byMail, 'Also send an email'), addr))));
+    return wrap;
+  }
+  function dashScreen() {
+    var d = dashGet(), wrap = h('section', { class: 'dash' }), counts = { sent: 0, opened: 0, saved: 0, submitted: 0 }, pending = records.concat(EXAMPLES).filter(function (r) { return recStatus(r) === 'pending'; }).length;
+    d.sent.forEach(function (x) { counts[x.status]++; });
+    function redraw(msg) { dash.note = msg || ''; dashPut(); render('stay'); }
+    function select(id, label, value, options, set) {
+      var sel = h('select', { class: 'rv-sel act', id: id, 'aria-label': label, onchange: function (e) { set(e.target.value); render('stay'); } });
+      options.forEach(function (o) { var op = h('option', { value: o[0], text: o[1] }); if (o[0] === value) op.selected = true; sel.appendChild(op); });
+      return sel;
+    }
+    var note = h('p', { class: 'tip', id: 'dash-msg', role: 'status', text: dash.note });
+    note.hidden = !dash.note;
+    // "Send a form" is its own page, opened from the button at the top of the dashboard.
+    if (dash.view === 'send') {
+      wrap.classList.add('dash-sendpage');
+      wrap.appendChild(h('button', { type: 'button', class: 'edit act', id: 'dash-back', onclick: function () { dash.view = null; dash.note = ''; render('back'); window.scrollTo(0, 0); }, text: '\u2190 Dashboard' }));
+      wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Send a form' }),
+        h('p', { class: 'help', text: 'Choose who gets the form and what the message says. Templates are prepared per department, so each person gets the right one, with their own link.' })));
+    // 1. Send a form
+    var people = h('div', { class: 'dash-people', id: 'dash-people' });
+    PEOPLE.forEach(function (p, i) {
+      var box = h('input', { type: 'checkbox', id: 'dash-p-' + i, onchange: function (e) { dash.picked[p.email] = e.target.checked; } });
+      box.checked = !!dash.picked[p.email];
+      people.appendChild(h('label', null, box, h('span', { text: p.name }), h('span', { class: 'fsub', text: p.team + (dash.area === 'auto' && p.area ? ' \u2192 ' + tagName(p.area) : '') })));
+    });
+    var emails = h('textarea', { class: 'line', id: 'dash-emails', rows: '2', 'aria-label': 'Other email addresses', oninput: function (e) { dash.emails = e.target.value; } });
+    emails.value = dash.emails;
+    var msg = h('textarea', { class: 'line', id: 'dash-text', rows: '3', 'aria-label': 'Message', oninput: function (e) { dash.msg = e.target.value; } });
+    msg.value = dash.msg;
+    function send() {
+      var list = PEOPLE.filter(function (p) { return dash.picked[p.email]; }).map(function (p) { return { name: p.name, email: p.email, team: p.team, area: p.area }; }), bad = [], now = Date.now(), typed = 0;
+      dash.emails.split(/[\s,;]+/).filter(Boolean).forEach(function (e) {
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { bad.push(e); return; }
+        if (!list.some(function (x) { return x.email.toLowerCase() === e.toLowerCase(); })) { list.push({ name: '', email: e, team: '', area: '' }); typed++; }
+      });
+      if (bad.length) { redraw('Check ' + (bad.length === 1 ? 'this address' : 'these addresses') + ': ' + bad.join(', ') + '.'); return; }
+      if (!list.length) { redraw('Choose at least one person or add an email address.'); return; }
+      var auto = dash.area === 'auto';
+      list.forEach(function (p) { d.sent.unshift({ id: newId('m'), token: newId('k'), name: p.name, email: p.email, team: p.team, tpl: dash.tpl, area: auto ? p.area : dash.area, msg: dash.msg.trim(), sentAt: now, status: 'sent' }); });
+      dash.picked = {}; dash.emails = ''; dash.msg = ''; dash.view = null;
+      redraw('Form recorded as sent to ' + list.length + (list.length === 1 ? ' person' : ' people') + (auto ? ', each with the template for their department' + (typed ? ' (' + typed + ' added by email got the general template, as their department is not known)' : '') : '') + '. This prototype does not send email itself: use “Email” or “Copy link” in the list below to pass each link on.');
+    }
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-send' },
+      h('div', { class: 'dash-steps one' },
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '1' }), 'Template'),
+          h('span', { class: 'tip', text: 'Area the form is about' }),
+          select('dash-area', 'Area the form is about', dash.area, [['auto', 'Corresponding template (by each person\u2019s department)'], ['', 'General template (no particular area)']].concat(areaTags().map(function (t) { return [t.id, t.name]; })), function (v) { dash.area = v; }),
+          h('span', { class: 'tip', id: 'dash-area-tip', text: dash.area === 'auto' ? 'Each person gets the template prepared for their department, so nothing needs to be chosen here. People added by email get the general template.' : 'Everyone you select gets this same template, whatever their department.' }),
+          h('span', { class: 'tip', text: 'Form version' }),
+          select('dash-tpl', 'Form version', dash.tpl, TEMPLATES.map(function (t) { return [t.id, t.name]; }), function (v) { dash.tpl = v; })),
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '2' }), 'Select people'), people,
+          h('span', { class: 'tip', text: 'Or add email addresses, separated by commas or new lines' }), emails),
+        h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '3' }), 'Add a message'), msg,
+          h('span', { class: 'tip', text: 'Optional. Each person gets their own link, so their progress can be followed.' }))),
+      note,
+      h('div', { class: 'go' },
+        h('button', { type: 'button', class: 'btn act', id: 'dash-send-go', onclick: send, text: 'Send form' }),
+        h('button', { type: 'button', class: 'btn ghost act', id: 'dash-send-cancel', onclick: function () { dash.view = null; dash.note = ''; render('back'); window.scrollTo(0, 0); }, text: 'Cancel' }))));
+      return wrap;
+    }
+    wrap.appendChild(h('div', { class: 'dash-bar dash-top' }, h('div', { class: 'head' }, h('h1', { text: 'Compliance dashboard' }),
+      h('p', { class: 'help', text: 'Send the risk assessment to people, follow how far each of them got, and keep an eye on new legislation.' })),
+      h('button', { type: 'button', class: 'btn act', id: 'dash-send-open', onclick: function () { dash.view = 'send'; dash.note = ''; render('fwd'); window.scrollTo(0, 0); }, text: 'Send a form' })));
+    wrap.appendChild(h('div', { class: 'dash-stats' },
+      h('div', { class: 'dash-stat' }, h('b', { text: String(d.sent.length) }), h('span', { text: 'Forms sent' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.opened + counts.saved + counts.submitted) }), h('span', { text: 'Opened' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.saved) }), h('span', { text: 'Draft saved, not sent' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(counts.submitted) }), h('span', { text: 'Submitted' })),
+      h('div', { class: 'dash-stat' }, h('b', { text: String(pending) }), h('span', { text: 'Waiting for review' })),
+      h('button', { type: 'button', class: 'dash-stat act', id: 'dash-open-watch', onclick: function () { setMode('watch'); } }, h('b', { text: String(dashUnread()) }), h('span', { text: 'New legislation alerts' }))));
+    wrap.appendChild(note);
+    // 2. Track forms
+    var rows = d.sent.filter(function (x) { return dash.filter === 'all' || x.status === dash.filter; }), body = h('tbody');
+    rows.forEach(function (x, i) {
+      var step = TRACK.indexOf(x.status), bar = h('div', { class: 'dash-track' }), tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0], when = x[x.status + 'At'] || x.sentAt;
+      TRACK.forEach(function (s, k) { bar.appendChild(h('i', { class: k <= step ? (x.status === 'submitted' ? 'done' : 'on') : '' })); });
+      bar.appendChild(h('span', { text: TRACK_NAME[x.status] }));
+      var mail = 'mailto:' + encodeURIComponent(x.email) + '?subject=' + encodeURIComponent('Risk assessment: your input is needed') + '&body=' + encodeURIComponent('Hello' + (x.name ? ' ' + x.name.split(' ')[0] : '') + ',\n\n' + (x.msg || 'Compliance is collecting the risks people see in their daily work. Please add yours using the link below.') + '\n\n' + dashLink(x) + '\n\nThank you,\nCompliance');
+      body.appendChild(h('tr', null,
+        h('td', null, h('div', { text: x.name || x.email }), x.name ? h('span', { class: 'fsub', text: x.email + (x.team ? ' \u00B7 ' + x.team : '') }) : null),
+        h('td', null, h('div', { text: tpl.name.replace(/ \(.*/, '') }), h('span', { class: 'fsub', text: x.area ? tagName(x.area) : 'General template' })),
+        h('td', null, h('span', { class: 'fsub', text: stamp(x.sentAt) })),
+        h('td', null, bar, h('span', { class: 'fsub', text: (x.status === 'sent' ? 'Not opened yet' : stamp(when)) + (x.ref ? ' · ' + x.ref : '') + (x.remindedAt ? ' · reminded ' + stamp(x.remindedAt) : '') })),
+        h('td', null,
+          h('a', { class: 'edit act', id: 'dash-mail-' + i, href: mail, target: '_blank', rel: 'noopener', text: 'Email' }),
+          h('button', { type: 'button', class: 'edit act', id: 'dash-copy-' + i, text: 'Copy link', onclick: function (e) {
+            var b = e.currentTarget, link = dashLink(x);
+            (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { b.textContent = 'Copied'; }, function () { window.prompt('Copy this link', link); });
+          } }),
+          x.status !== 'submitted' ? h('button', { type: 'button', class: 'edit act', id: 'dash-remind-' + i, text: 'Remind', onclick: function () { x.remindedAt = Date.now(); redraw('Reminder recorded for ' + (x.name || x.email) + '.'); } }) : null,
+          h('button', { type: 'button', class: 'edit act', id: 'dash-del-' + i, text: 'Remove', onclick: function () { d.sent = d.sent.filter(function (y) { return y !== x; }); redraw(''); } }))));
+    });
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
+      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
+        select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; })),
+      rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Person' }), h('th', { scope: 'col', text: 'Template and area' }), h('th', { scope: 'col', text: 'Sent' }), h('th', { scope: 'col', text: 'Progress' }), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
+        : h('p', { class: 'tip', text: d.sent.length ? 'No forms at this stage.' : 'No forms have been sent yet.' }),
+      h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
     return wrap;
   }
   // ---- Reviewer tools: status, filters, extra questions, earlier versions, synonyms ----
@@ -2644,6 +2681,7 @@ body { padding-left: var(--side-w); }
     if (chatBusy) { chatBusy.dead = true; if (chatBusy.ctl) chatBusy.ctl.abort(); chatBusy = null; }
     stopDraftBusy();
     state.mode = mode;
+    dash.note = ''; dash.view = null;
     rvEditing = false; rv.detail = false; rv.note = ''; rv.regen = null; rv.links = false;
     tg.detail = false; tg.note = ''; tg.confirm = null;
     lb.detail = false; lb.note = ''; lb.pending = null; lb.region = null;
@@ -4330,9 +4368,10 @@ body { padding-left: var(--side-w); }
     return sec;
   }
   function render(dir) {
-    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', other = review || tagging || labeling || dashM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
+    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', watchM = state.mode === 'watch', other = review || tagging || labeling || dashM || watchM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
     document.getElementById('tab-dash').setAttribute('aria-selected', dashM ? 'true' : 'false');
-    document.getElementById('tab-dash-n').hidden = !unreadN; document.getElementById('tab-dash-n').textContent = String(unreadN);
+    document.getElementById('tab-watch').setAttribute('aria-selected', watchM ? 'true' : 'false');
+    document.getElementById('tab-watch-n').hidden = !unreadN; document.getElementById('tab-watch-n').textContent = String(unreadN);
     document.getElementById('tab-form').setAttribute('aria-selected', other ? 'false' : 'true');
     document.getElementById('tab-review').setAttribute('aria-selected', review ? 'true' : 'false');
     document.getElementById('tab-tags').setAttribute('aria-selected', tagging ? 'true' : 'false');
@@ -4347,7 +4386,7 @@ body { padding-left: var(--side-w); }
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stopDictation();
       stopRecording();
-      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : tagScreen());
+      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : watchM ? watchScreen() : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
@@ -4544,7 +4583,8 @@ body { padding-left: var(--side-w); }
     setTheme(saved === 'dark');
   })();
   document.getElementById('prev').addEventListener('click', prev);
-  document.getElementById('tab-dash').addEventListener('click', function () { setMode('dash'); });
+  document.getElementById('tab-watch').addEventListener('click', function () { setMode('watch'); });
+  document.getElementById('tab-dash').addEventListener('click', function () { dash.view = null; if (state.mode === 'dash') render('stay'); else setMode('dash'); });
   // Side menu: collapses to icons; the choice is remembered. On small screens it starts closed and closes after a choice.
   var sideBtn = document.getElementById('side-toggle'), sideNav = document.getElementById('side');
   function sideSet(c) { document.documentElement.classList.toggle('side-collapsed', c); sideBtn.setAttribute('aria-expanded', c ? 'false' : 'true'); sideBtn.setAttribute('aria-label', c ? 'Open menu' : 'Collapse menu'); }
