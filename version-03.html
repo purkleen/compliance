@@ -728,6 +728,8 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-stat span { color: var(--muted-foreground); font-size: 13px; }
 .dash-card { display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-xl); }
 .dash-card > h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.dash-card .dash-bar > h2 { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+#dash-watch .dash-add, #dash-notifications #dash-n-addr { max-width: 560px; }
 .dash-card h3 { margin: 0; font-size: 14px; font-weight: 600; }
 .dash-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
 .dash-step { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -780,6 +782,8 @@ button.dash-stat:hover { background: var(--muted); }
 :root.role-employee .side, :root.role-employee .side-toggle { display: none; }
 :root.role-compliance #tab-form, :root.role-compliance .side .side-cap:first-child { display: none; }
 @media (max-width: 760px) { :root.role-employee .top { padding-left: 24px; } }
+/* The compliance screens use the full width next to the side menu. */
+.rv, .tg { max-width: none; margin: 0; }
 </style>
 </head>
 <body>
@@ -1319,8 +1323,16 @@ button.dash-stat:hover { background: var(--muted); }
     function redraw(msg) { dash.note = msg || ''; dashPut(); render('stay'); }
     var note = h('p', { class: 'tip', id: 'dash-msg', role: 'status', text: dash.note });
     note.hidden = !dash.note;
-    wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Legislation watch' }),
-      h('p', { class: 'help', text: 'Keep a list of pages to watch and see what is new on them.' })));
+    wrap.appendChild(h('div', { class: 'dash-bar dash-top' }, h('div', { class: 'head' }, h('h1', { text: 'Legislation watch' }),
+      h('p', { class: 'help', text: 'Keep a list of pages to watch and see what is new on them.' })),
+      h('button', { type: 'button', class: 'btn act', id: 'dash-check', text: 'Check now', onclick: function () {
+            var now = Date.now(), src;
+            if (!d.sources.length) { redraw('Add an address to watch first.'); return; }
+            d.sources.forEach(function (s) { s.checkedAt = now; });
+            src = d.sources[Math.floor(Math.random() * d.sources.length)];
+            d.alerts.push({ id: newId('a'), at: now, src: src.url, title: 'Sample alert: a new document was published on this page', read: false, sample: true });
+            redraw('Checked ' + d.sources.length + (d.sources.length === 1 ? ' address' : ' addresses') + '. This prototype does not read the pages; it adds a sample alert to show how a notification arrives.');
+          } })));
     wrap.appendChild(note);
     // 3. Legislation watch
     var srcList = h('ul', { class: 'dash-list', id: 'dash-sources' });
@@ -1349,25 +1361,17 @@ button.dash-stat:hover { background: var(--muted); }
     var byMail = h('input', { type: 'checkbox', id: 'dash-n-mail', onchange: function (e) { d.notify.email = e.target.checked; redraw(''); } }); byMail.checked = !!d.notify.email;
     var addr = h('input', { type: 'email', class: 'line', id: 'dash-n-addr', placeholder: 'compliance@company.com', 'aria-label': 'Email address for alerts', onchange: function (e) { d.notify.address = e.target.value.trim(); dashPut(); } });
     addr.value = d.notify.address || ''; addr.hidden = !d.notify.email;
-    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-watch' },
-      h('div', { class: 'dash-two' },
-        h('div', { class: 'dash-step' }, h('h3', { text: 'Addresses to watch' }),
-          h('span', { class: 'tip', text: 'Pages that are checked for new information and legislation.' }), srcList,
-          h('div', { class: 'dash-add' }, srcIn, h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-src-add', text: 'Add address', onclick: addSrc })),
-          h('div', { class: 'go' }, h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-check', text: 'Check now', onclick: function () {
-            var now = Date.now(), src;
-            if (!d.sources.length) { redraw('Add an address to watch first.'); return; }
-            d.sources.forEach(function (s) { s.checkedAt = now; });
-            src = d.sources[Math.floor(Math.random() * d.sources.length)];
-            d.alerts.push({ id: newId('a'), at: now, src: src.url, title: 'Sample alert: a new document was published on this page', read: false, sample: true });
-            redraw('Checked ' + d.sources.length + (d.sources.length === 1 ? ' address' : ' addresses') + '. This prototype does not read the pages; it adds a sample alert to show how a notification arrives.');
-          } }))),
-        h('div', { class: 'dash-step' }, h('div', { class: 'dash-bar' }, h('h3', null, 'Notifications', dashUnread() ? h('span', { class: 'combo-count', text: dashUnread() + ' new' }) : null),
-            dashUnread() ? h('button', { type: 'button', class: 'edit act', id: 'dash-al-all', text: 'Mark all as read', onclick: function () { d.alerts.forEach(function (a) { a.read = true; }); redraw(''); } }) : null),
-          d.alerts.length ? alertList : h('p', { class: 'tip', text: 'No notifications.' }),
-          h('h3', { text: 'How to be notified' }),
-          h('label', { class: 'dash-check' }, inApp, 'Show a count on the Legislation watch menu item'),
-          h('label', { class: 'dash-check' }, byMail, 'Also send an email'), addr))));
+    // Two separate cards: what is new first, then the list of pages being watched.
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-notifications' },
+      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp' }, 'Notifications', dashUnread() ? h('span', { class: 'combo-count', text: dashUnread() + ' new' }) : null),
+        dashUnread() ? h('button', { type: 'button', class: 'edit act', id: 'dash-al-all', text: 'Mark all as read', onclick: function () { d.alerts.forEach(function (a) { a.read = true; }); redraw(''); } }) : null),
+      d.alerts.length ? alertList : h('p', { class: 'tip', text: 'No notifications.' }),
+      h('h3', { text: 'How to be notified' }),
+      h('label', { class: 'dash-check' }, inApp, 'Show a count on the Legislation watch menu item'),
+      h('label', { class: 'dash-check' }, byMail, 'Also send an email'), addr));
+    wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-watch' }, h('h2', { text: 'Addresses to watch' }),
+      h('span', { class: 'tip', text: 'Pages that are checked for new information and legislation.' }), srcList,
+      h('div', { class: 'dash-add' }, srcIn, h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-src-add', text: 'Add address', onclick: addSrc }))));
     return wrap;
   }
   function dashScreen() {
