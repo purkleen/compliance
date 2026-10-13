@@ -3651,7 +3651,7 @@ button.dash-stat:hover { background: var(--muted); }
     wrap.appendChild(v2Search(la, openWith, false, 'start-'));
     if (!st.list) {
       wrap.appendChild(h('div', { class: 'go' },
-        h('button', { type: 'button', class: 'btn ghost act', id: 'start-add', onclick: function () { st.list = la ? 'mine' : 'all'; errMsg = ''; render('stay'); } }, icon('circlePlus', 16), 'Add new risk'),
+        h('button', { type: 'button', class: 'btn act', id: 'start-add', onclick: function () { st.list = la ? 'mine' : 'all'; errMsg = ''; render('stay'); } }, icon('circlePlus', 16), 'Add new risk'),
         h('button', { type: 'button', class: 'btn ghost act', id: 'add-risk', onclick: function () { st.list = 'all'; errMsg = ''; render('stay'); }, text: 'Browse all risk options' })));
     } else {
       wrap.appendChild(v2List(la, st.list, '', openWith, 'start-'));

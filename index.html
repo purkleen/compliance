@@ -128,7 +128,7 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
       a.appendChild(document.createElement('span')).textContent = 'Current';
       document.getElementById('ver-name').textContent = v.name;
       a.addEventListener('click', function (e) { e.preventDefault(); box.open = false; });
-    } else a.addEventListener('click', function () { if (!inClaude) a.href = v.file + location.hash; box.open = false; });
+    } else a.addEventListener('click', function () { if (!inClaude) { try { localStorage.setItem('viewRole', 'employee'); } catch (e) {} a.href = v.file + location.hash; } box.open = false; });
     pop.appendChild(a);
   });
   document.addEventListener('click', function (e) { if (box.open && !box.contains(e.target)) box.open = false; });
@@ -175,7 +175,11 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
   // Each tile opens one of the three forms. In the repository they are files next to this one and keep the area link; inside Claude each is its own page.
   [].forEach.call(document.querySelectorAll('.tile'), function (a) {
     if (inClaude) { a.href = a.getAttribute('data-url'); a.target = '_blank'; a.rel = 'noopener'; }
-    else a.addEventListener('click', function () { a.href = a.getAttribute('data-file') + location.search + location.hash; });
+    else a.addEventListener('click', function () {
+      // A tile always opens the form itself, even if the Compliance team view was used last.
+      try { localStorage.setItem('viewRole', 'employee'); } catch (e) {}
+      a.href = a.getAttribute('data-file') + location.search + location.hash;
+    });
   });
   // The area comes from the link, as in the forms (for example #cat-main).
   var AREAS = { 'cat-main': 'Upcoming Legal and Systemic Changes', 'cat-current': 'Current Regulations & Ethical standards', 'cat-integrity': 'Integrity & Cultural Inconsistency Across the Organisation', 'cat-misconduct': 'Undetected Employee Misconduct & Ineffective Reporting Governance', 'cat-supplier': 'Supplier Non-Compliance & Vulnerabilities in Procurement Governance' };
