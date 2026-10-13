@@ -472,6 +472,10 @@ button.v2-opt:hover { background: var(--muted); }
 .v2-or { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
 .v2-or::before, .v2-or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 .btn .ico { display: inline-flex; margin-right: 6px; }
+.v3-mine { display: flex; flex-direction: column; gap: 12px; padding: 16px; background: var(--muted); border: 1px solid var(--ring); border-radius: var(--radius-xl); }
+.v3-mine-head { display: flex; flex-direction: column; gap: 2px; }
+.v3-mine-cap { color: var(--muted-foreground); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.v3-mine-name { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
 #start-add { display: inline-flex; align-items: center; justify-content: center; }
 .risk-editor { display: flex; flex-direction: column; gap: 14px; }
 .intro-h { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
@@ -3661,9 +3665,13 @@ button.dash-stat:hover { background: var(--muted); }
   // The risks to choose from: the person's own area first, then their own additions, an "add another" row, and, when asked for, every other area.
   function v2List(la, mode, sel, onPick, idp) {
     var st = v2(), wrap = h('div', { class: 'v2-list' }), all = v2Opts(), own = state.ownRisks || [], mine, others;
-    if (la) {
-      mine = all.filter(function (o) { return o.area === la; });
-      if (mine.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Risks in ' + tagName(la) }), v2Rows(mine, sel, onPick, idp + 'mine-')));
+    // The person's own area leads the list as a panel. It comes from the link, which is set per department; without one, the prototype uses the first area.
+    var my = la || (areaTags()[0] || {}).id || '';
+    if (my) {
+      mine = all.filter(function (o) { return o.area === my; });
+      if (mine.length) wrap.appendChild(h('div', { class: 'v3-mine', id: idp + 'my-area' },
+        h('div', { class: 'v3-mine-head' }, h('span', { class: 'v3-mine-cap', text: 'Your area' }), h('h2', { class: 'v3-mine-name', text: tagName(my) })),
+        v2Rows(mine, sel, onPick, idp + 'mine-')));
     }
     if (own.length) wrap.appendChild(h('div', { class: 'pick-group' }, h('h2', { class: 'intro-h', text: 'Added by you' }),
       v2Rows(own.map(function (n) { return { v: 'own:' + n, l: n, area: '' }; }), sel, onPick, idp + 'own-')));
@@ -3672,8 +3680,8 @@ button.dash-stat:hover { background: var(--muted); }
     name.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
     wrap.appendChild(h('div', { class: 'v2-addrow' }, name, add));
     if (mode === 'all' || !la) {
-      others = areaTags().filter(function (t) { return t.id !== la && all.some(function (o) { return o.area === t.id; }); });
-      if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: la ? 'Other areas' : 'All areas' }));
+      others = areaTags().filter(function (t) { return t.id !== my && all.some(function (o) { return o.area === t.id; }); });
+      if (others.length) wrap.appendChild(h('div', { class: 'pick-label', text: my ? 'Other areas' : 'All areas' }));
       others.forEach(function (t) {
         var isOpen = !!st.open[t.id], opts = all.filter(function (o) { return o.area === t.id; });
         var head = h('button', { type: 'button', class: 'pick-head combo-btn-like act', id: idp + 'area-' + t.id, 'aria-expanded': isOpen ? 'true' : 'false', onclick: function () { st.open[t.id] = !st.open[t.id]; render('stay'); } },
