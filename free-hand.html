@@ -271,6 +271,11 @@ main.rvmode { padding-block: 4px 20px; }
 .tg > .rv { flex: 1; }
 .tg-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .rv.single { grid-template-columns: minmax(0, 1fr); }
+.rv-over > p { margin: 0; }
+.rv-over > p + p, .rv-over-list + p { margin-top: 8px; }
+.rv-over-list { margin: 6px 0 0; padding-left: 20px; }
+.rv-over-list li { margin: 2px 0; line-height: 1.5; }
+.rv-over-more { margin-top: 4px; font-size: 14px; text-decoration: underline; }
 .rv-over b { display: block; font-size: 13px; margin-bottom: 2px; }
 .rv-over .tip { display: block; margin-top: 4px; }
 .rv-row h3 .opt-note, .grp .opt-note { margin-left: 8px; color: var(--muted-foreground); font-weight: 400; font-size: 12px; }
@@ -673,8 +678,13 @@ button.v2-opt:hover { background: var(--muted); }
 .rv-detail .rv-panel .line { max-width: none; min-height: 90px; font-size: 14px; }
 .rv-detail .rv-panel input.line { min-height: 0; height: 40px; }
 .rv-version { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 14px; background: var(--muted); border: 1px dashed var(--ring); border-radius: var(--radius); font-size: 14px; }
+.rv-headrow { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.rv-headrow > .head { flex: 1; min-width: 240px; }
+.rv-head-acts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .rv-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .hist .edit { margin-top: 6px; text-decoration: underline; }
+.rv-detail.tool-page { padding: 0; }
+.rv-detail.tool-page h1 { font-size: 28px; }
 .syn-list { display: flex; flex-direction: column; gap: 8px; }
 .syn-row { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: center; font-size: 14px; }
 .syn-more { white-space: nowrap; }
@@ -682,7 +692,7 @@ button.v2-opt:hover { background: var(--muted); }
 .rv-detail .syn-row .line { max-width: none; min-height: 0; height: 36px; font-size: 14px; }
 @media (max-width: 760px) { .syn-row { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 /* Side menu: sections of the app, collapsible to an icon rail. On small screens it opens over the page. */
-:root { --side-w: 224px; }
+:root { --side-w: 240px; }
 :root.side-collapsed { --side-w: 60px; }
 body { padding-left: var(--side-w); }
 .side { position: fixed; z-index: 24; top: 0; left: 0; bottom: 0; width: var(--side-w); box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; padding: 62px 10px 16px; background: var(--background); border-right: 1px solid var(--border); overflow: hidden auto; }
@@ -703,7 +713,7 @@ body { padding-left: var(--side-w); }
 .corner-tools { left: calc(var(--side-w) + 16px); }
 @media (max-width: 760px) {
   :root, :root.side-collapsed { --side-w: 0px; }
-  .side { width: 224px; box-shadow: 0 10px 28px rgba(0, 0, 0, .2); }
+  .side { width: 240px; box-shadow: 0 10px 28px rgba(0, 0, 0, .2); }
   :root.side-collapsed .side { display: none; }
   .top { padding-left: 60px; }
 }
@@ -856,9 +866,11 @@ button.dash-stat:hover { background: var(--muted); }
   <div class="side-cap">Compliance team</div>
   <button type="button" role="tab" class="act" id="tab-dash" aria-selected="false" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span class="t">Dashboard</span></button>
   <button type="button" role="tab" class="act" id="tab-watch" aria-selected="false" title="Legislation watch"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg><span class="t">Legislation watch</span><span class="side-n" id="tab-watch-n" hidden></span></button>
-  <button type="button" role="tab" class="act" id="tab-review" aria-selected="false" title="Review submissions"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="t">Review submissions</span></button>
+  <button type="button" role="tab" class="act" id="tab-review" aria-selected="false" title="Review submissions"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="t">Review submissions</span><span class="side-n" id="tab-review-n" title="Waiting for review" hidden></span></button>
   <button type="button" role="tab" class="act" id="tab-tags" aria-selected="false" title="Tagging"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/></svg><span class="t">Tagging</span></button>
   <button type="button" role="tab" class="act" id="tab-label" aria-selected="false" title="Labeling"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="t">Labeling</span></button>
+  <button type="button" role="tab" class="act" id="tab-links" aria-selected="false" title="Links for each area"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="t">Links for each area</span></button>
+  <button type="button" role="tab" class="act" id="tab-syn" aria-selected="false" title="Synonyms"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m8 13 4-7 4 7"/><path d="M9.1 11h5.7"/></svg><span class="t">Synonyms</span></button>
 </nav>
 <main id="stage"></main>
 <div class="corner-tools"><button type="button" class="act restart-flow" id="restart-flow" title="Clear what you have entered and start this flow again"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span id="restart-flow-text">Restart</span></button></div>
@@ -990,7 +1002,8 @@ button.dash-stat:hover { background: var(--muted); }
       r_anticorruption: { desc: 'Third-party due diligence does not yet cover the new offences in the draft directive.', drivers: 'Questionnaire last updated in 2022.', opps: 'One refreshed questionnaire can serve sanctions and ESG checks too.', source: 'EU Anti-Corruption Directive', files: ['dd-questionnaire-v3.docx', 'gap-analysis.xlsx', 'supplier-onboarding-call.m4a'],
         clips: [{ file: 'supplier-onboarding-call.m4a', at: 725, dur: 2410, quote: 'The questionnaire does not ask about trading in influence at all.' }] },
       r_dynamic: { desc: 'We track new rules in a spreadsheet that depends on one person.', drivers: 'No regulatory watch tool or backup owner.', source: 'Internal process' },
-      r_unknown: { desc: 'Possible national gold-plating when directives are transposed.', source: 'National legislators' }
+      r_unknown: { desc: 'Possible national gold-plating when directives are transposed.', source: 'National legislators' },
+      r_equalpay: { desc: 'Pay bands for legal roles are not published, which the directive will require.', source: 'EU Pay Transparency Directive' }
     }),
     example(5, 'Elena Petrova', 'elena.petrova@example.com', Date.UTC(2026, 8, 18, 8, 55), {
       r_equalpay: { desc: 'Payroll data cannot yet be split by job grade and gender in one report.', drivers: 'Two payroll systems after the merger.', opps: 'A merged dataset improves budgeting accuracy.', source: 'EU Pay Transparency Directive' },
@@ -1237,7 +1250,7 @@ button.dash-stat:hover { background: var(--muted); }
     newPage();
     para(rec.title, 42, '700', INK, 6);
     para('Submitted ' + stamp(rec.submittedAt) + '  \u00B7  Reference ' + rec.ref, 21, '400', MUTED, 6);
-    para(rec.simple ? (rec.count > 1 ? rec.count + ' risks' : [tagName(rec.matrixArea), tagName(rec.matrixCat)].filter(Boolean).join(' \u203A ') || 'General thoughts') : rec.total ? 'Input on ' + rec.risks + ' of ' + rec.total + ' risks' : rec.flags ? rec.flags + ' answers routed to Compliance for follow-up' : 'No answers needed follow-up from Compliance', 21, '400', MUTED, 6);
+    para(rec.simple ? (rec.count > 1 ? rec.count + ' risks' : [tagName(rec.matrixArea), tagName(rec.matrixCat)].filter(Boolean).join(' \u203A ') || 'General thoughts') : rec.total ? 'Input on ' + rec.risks + (rec.risks === 1 ? ' risk' : ' risks') : rec.flags ? rec.flags + ' answers routed to Compliance for follow-up' : 'No answers needed follow-up from Compliance', 21, '400', MUTED, 6);
     if (rec.example) para('Example record with sample data.', 21, '400', MUTED, 6);
     y += 22;
     var group = null;
@@ -1746,7 +1759,6 @@ button.dash-stat:hover { background: var(--muted); }
     var synRows = [];
     var opts = v2Opts(), list = h('div', { class: 'syn-list' }), note = h('p', { class: 'tip', id: 'syn-note', role: 'status' });
     note.hidden = true;
-    pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'rv-back', onclick: function () { rv.detail = false; rv.syn = false; render('stay'); }, text: '← All forms' }));
     pane.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Synonyms' }),
       h('p', { class: 'help', text: 'Words people might type instead of a risk’s name. The search in the form finds the risk by these words too. Separate them with commas.' })));
     areaTags().forEach(function (a) {
@@ -1781,8 +1793,7 @@ button.dash-stat:hover { background: var(--muted); }
         try { localStorage.setItem('riskSynonyms', JSON.stringify(all)); note.textContent = 'Synonyms saved in this browser. The search in the form uses them from now on.'; }
         catch (e) { note.textContent = 'Synonyms are in use for this session, but could not be stored here.'; }
         note.hidden = false;
-      } }),
-      h('button', { type: 'button', class: 'btn ghost sm act', id: 'syn-close', text: 'Close', onclick: function () { rv.syn = false; render('stay'); } })));
+      } })));
 
     return pane;
   }
@@ -1797,7 +1808,7 @@ button.dash-stat:hover { background: var(--muted); }
     body.forEach(function (x) { asked += (x.thread || (x.fq ? [1] : [])).length; files += (x.files || []).length; });
     if (!r.total) text = 'An earlier form with ' + body.length + (body.length === 1 ? ' answer.' : ' answers.');
     else if (!filled.length) text = (rowValue(r, 'Full name') || 'This person') + ' did not add input on any of the ' + r.total + ' risks.';
-    else text = (rowValue(r, 'Full name') || 'This person') + ' gave input on ' + filled.length + ' of ' + r.total + ' risks: '
+    else text = (rowValue(r, 'Full name') || 'This person') + ' gave input on ' + filled.length + (filled.length === 1 ? ' risk: ' : ' risks: ')
       + filled.map(function (x) { return x.label; }).join(', ') + '.';
     if (asked) text += ' ' + asked + (asked === 1 ? ' follow-up question was' : ' follow-up questions were') + ' asked.';
     if (files) text += ' ' + files + (files === 1 ? ' file is' : ' files are') + ' attached.';
@@ -1806,7 +1817,7 @@ button.dash-stat:hover { background: var(--muted); }
   // Summary with sources: every claim in the summary cites the answer, follow-up or file it came from,
   // shown as numbered chips in the text and a list of source cards underneath.
   function summaryWithSources(rec, pane) {
-    var sources = [], p = h('p', { class: 'rv-over' }), name = rowValue(rec, 'Full name') || 'This person';
+    var sources = [], p = h('div', { class: 'rv-over' }), cur = p.appendChild(h('p')), name = rowValue(rec, 'Full name') || 'This person';
     var body = [], filled = [], asked = [], files = [], clips = [], list, toggle, stack, box;
     rec.rows.forEach(function (r, i) { if (r.group !== 'About you') body.push({ r: r, i: i }); });
     function add(kind, title, snip, type, row, badge) {
@@ -1824,7 +1835,7 @@ button.dash-stat:hover { background: var(--muted); }
     function cite(src) {
       return h('button', { type: 'button', class: 'cite act', id: 'cite-' + src.n, 'aria-label': 'Source ' + src.n + ': ' + src.title, title: src.title, onclick: function () { jump(src); }, text: String(src.n) });
     }
-    function say(text) { p.appendChild(document.createTextNode(text)); }
+    function say(text) { if (!cur.childNodes.length) text = text.replace(/^\s+/, ''); cur.appendChild(document.createTextNode(text)); }
     body.forEach(function (x) {
       if (x.r.value && x.r.value !== 'No input') filled.push(add('answer', x.r.label, x.r.value.replace(/\s+/g, ' '), 'Form answer', x.i, 'A'));
     });
@@ -1844,29 +1855,45 @@ button.dash-stat:hover { background: var(--muted); }
         clips.push(src);
       });
     });
-    if (rec.simple && filled.length) say(rec.count > 1 ? name + ' raised ' + filled.length + ' risks: ' : name + ' shared general thoughts on ');
+    // The risks are a plain list, one per line, each with its source number.
+    if (rec.simple && filled.length) say(rec.count > 1 ? name + ' raised ' + filled.length + ' risks:' : name + ' shared general thoughts on:');
     else if (!rec.total) say('An earlier form with ' + body.length + (body.length === 1 ? ' answer' : ' answers'));
-    else if (!filled.length) say(name + ' did not add input on any of the ' + rec.total + ' risks');
-    else say(name + ' gave input on ' + filled.length + ' of ' + rec.total + ' risks: ');
-    if (rec.total) filled.forEach(function (src, k) { say((k ? ', ' : '') + src.title); p.appendChild(cite(src)); });
-    else filled.forEach(function (src) { p.appendChild(cite(src)); });
-    say('.');
+    else if (!filled.length) say(name + ' did not add input on any of the ' + rec.total + ' risks.');
+    else say(name + ' gave input on ' + filled.length + (filled.length === 1 ? ' risk:' : ' risks:'));
+    if (rec.total || rec.simple) {
+      if (filled.length) {
+        var ul = p.appendChild(h('ul', { class: 'rv-over-list' }));
+        filled.forEach(function (src, k) { var li = ul.appendChild(h('li', null, src.title, cite(src))); if (k >= 5) li.hidden = true; });
+        // Longer lists show the first five; "See all" opens the rest.
+        if (filled.length > 5) {
+          var more = h('button', { type: 'button', class: 'edit act rv-over-more', id: 'rv-over-more', 'aria-expanded': 'false', text: 'See all ' + filled.length, onclick: function () {
+            var open = more.getAttribute('aria-expanded') !== 'true';
+            Array.prototype.forEach.call(ul.children, function (li, k) { if (k >= 5) li.hidden = !open; });
+            more.setAttribute('aria-expanded', open ? 'true' : 'false');
+            more.textContent = open ? 'Show less' : 'See all ' + filled.length;
+          } });
+          p.appendChild(more);
+        }
+      }
+    } else { filled.forEach(function (src) { cur.appendChild(cite(src)); }); say('.'); }
+    cur = h('p');
     if (asked.length) {
       var total = asked.reduce(function (n, x) { return n + x.n; }, 0);
       say(' ' + total + (total === 1 ? ' follow-up question was' : ' follow-up questions were') + ' asked');
-      asked.forEach(function (x) { p.appendChild(cite(x.src)); });
+      asked.forEach(function (x) { cur.appendChild(cite(x.src)); });
       say('.');
     }
     if (files.length) {
       say(' ' + files.length + (files.length === 1 ? ' file is' : ' files are') + ' attached');
-      files.forEach(function (src) { p.appendChild(cite(src)); });
+      files.forEach(function (src) { cur.appendChild(cite(src)); });
       say('.');
     }
     if (clips.length) {
       say(' Recordings are cited at ' + clips.length + (clips.length === 1 ? ' point' : ' points'));
-      clips.forEach(function (src) { p.appendChild(cite(src)); });
+      clips.forEach(function (src) { cur.appendChild(cite(src)); });
       say('.');
     }
+    if (cur.childNodes.length) p.appendChild(cur);
     pane.appendChild(p);
     return sources;
   }
@@ -2118,7 +2145,6 @@ button.dash-stat:hover { background: var(--muted); }
   function linksPane(pane) {
     var note = h('p', { class: 'tip', id: 'links-note', role: 'status' });
     note.hidden = true;
-    pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'rv-back', onclick: function () { rv.detail = false; rv.links = false; render('stay'); }, text: '← All forms' }));
     pane.appendChild(h('div', { class: 'head' },
       h('h1', { text: 'Links for each area' }),
       h('p', { class: 'help', text: 'Send a link to the people who look after an area. The form they open is already set to that area, so they only pick risk categories and risk names and write their thoughts.' })));
@@ -2146,6 +2172,13 @@ button.dash-stat:hover { background: var(--muted); }
     });
     return pane;
   }
+  // "Links for each area" and "Synonyms" are their own pages in the side menu.
+  function toolScreen(fill) {
+    var wrap = h('section', { class: 'dash' }), pane = h('div', { class: 'rv-detail tool-page' });
+    fill(pane);
+    wrap.appendChild(pane);
+    return wrap;
+  }
   function detailPane(rec) {
     var pane = h('div', { class: 'rv-detail' }), group = null, actions;
     if (rv.links) return linksPane(pane);
@@ -2159,9 +2192,10 @@ button.dash-stat:hover { background: var(--muted); }
       return regenPane(rec, pane);
     }
     pane.appendChild(h('button', { type: 'button', class: 'edit act rv-back', id: 'rv-back', onclick: function () { rv.detail = false; rvEditing = false; rv.note = ''; render('stay'); }, text: '← All forms' }));
-    pane.appendChild(h('div', { class: 'head' },
+    var headActs = h('div', { class: 'rv-head-acts', id: 'rv-head-acts' });
+    pane.appendChild(h('div', { class: 'rv-headrow' }, h('div', { class: 'head' },
       h('h1', { class: 'rv-title' }, rowValue(rec, 'Full name') || 'Anonymous', statusBadge(live)),
-      h('p', { class: 'help', text: [rowValue(rec, 'Work email'), rec.matrixArea && !rec.matrixCat ? 'Area: ' + tagName(rec.matrixArea) : '', rec.count > 1 ? rec.count + ' risks' : rec.matrixCat ? tagName(rec.matrixArea) + ' › ' + tagName(rec.matrixCat) : '', 'Submitted ' + stamp(rec.submittedAt), rec.ref].filter(Boolean).join(' · ') })));
+      h('p', { class: 'help', text: [rowValue(rec, 'Work email'), rec.matrixArea && !rec.matrixCat ? 'Area: ' + tagName(rec.matrixArea) : '', rec.count > 1 ? rec.count + ' risks' : rec.matrixCat ? tagName(rec.matrixArea) + ' › ' + tagName(rec.matrixCat) : '', 'Submitted ' + stamp(rec.submittedAt), rec.ref].filter(Boolean).join(' · ') })), headActs));
     if (viewing) pane.appendChild(h('div', { class: 'rv-version', id: 'rv-version' },
       h('span', { text: 'You are viewing this submission as it was before the change on ' + stamp(rv.version) + '.' }),
       h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-version-back', onclick: function () { rv.version = null; render('stay'); }, text: 'Back to the current version' })));
@@ -2174,29 +2208,33 @@ button.dash-stat:hover { background: var(--muted); }
       pane.appendChild(h('p', { class: 'rv-sub', text: 'Sent to ' + r.area + ' on ' + stamp(r.createdAt) + ' · '
         + (r.status === 'answered' ? 'Answered (' + r.answeredRef + ')' : 'Waiting for a response') }));
     });
-    actions = h('div', { class: 'go' });
+    // Approve and Edit answers sit next to the name; everything else is in the three-dot menu.
+    actions = headActs;
     if (rvEditing) {
       actions.appendChild(h('button', { type: 'button', class: 'btn sm act', id: 'rv-save', onclick: function () { saveReview(rec); }, text: 'Save changes' }));
       actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-cancel', onclick: function () { rvEditing = false; rv.note = ''; render('stay'); }, text: 'Cancel' }));
     } else if (!viewing) {
       var st = recStatus(live);
       if (st !== 'approved') actions.appendChild(h('button', { type: 'button', class: 'btn sm act', id: 'rv-approve', onclick: function () { setStatus(live, 'approved'); }, text: 'Approve' }));
-      if (st !== 'rejected') actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-reject', 'aria-expanded': rv.panel === 'reject' ? 'true' : 'false', onclick: function () { rv.panel = rv.panel === 'reject' ? null : 'reject'; rv.note = ''; render('stay'); }, text: 'Reject' }));
-      if (st !== 'pending') actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-reopen', onclick: function () { setStatus(live, 'pending'); }, text: 'Set back to pending' }));
       actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-edit', onclick: function () { rvEditing = true; rv.note = ''; rv.panel = null; render('stay'); }, text: 'Edit answers' }));
-      actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-ask', 'aria-expanded': rv.panel === 'ask' ? 'true' : 'false', onclick: function () { rv.panel = rv.panel === 'ask' ? null : 'ask'; rv.note = ''; render('stay'); }, text: 'Email extra questions' }));
-      actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-tags', onclick: function () {
-        var firstRow = live.rows.filter(function (x) { return x.group !== 'About you' && x.value && x.value !== 'No input'; })[0];
-        tg.view = 'answers'; if (firstRow) tg.sel = live.id + '|' + firstRow.label; tg.detail = true; state.mode = 'tags'; render('fwd');
-      }, text: 'Add tags' }));
-      actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-resend', onclick: function () { startRegen(rec, 'person'); }, text: 'Resend to a person' }));
-      actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-pdf', onclick: function (e) { downloadPdf(rec, e.currentTarget); }, text: 'Download PDF' }));
+      actions.appendChild(h('button', { type: 'button', class: 'dash-more act', id: 'rv-more', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-label': 'More actions', onclick: function (e) {
+        menuOpen(e.currentTarget, [
+          st !== 'rejected' ? { id: 'rv-reject', text: 'Reject', run: function () { rv.panel = 'reject'; rv.note = ''; render('stay'); } } : null,
+          st !== 'pending' ? { id: 'rv-reopen', text: 'Set back to pending', run: function () { setStatus(live, 'pending'); } } : null,
+          { id: 'rv-ask', text: 'Email extra questions', run: function () { rv.panel = 'ask'; rv.note = ''; render('stay'); } },
+          { id: 'rv-tags', text: 'Add tags', run: function () {
+            var firstRow = live.rows.filter(function (x) { return x.group !== 'About you' && x.value && x.value !== 'No input'; })[0];
+            tg.view = 'answers'; if (firstRow) tg.sel = live.id + '|' + firstRow.label; tg.detail = true; state.mode = 'tags'; render('fwd');
+          } },
+          { id: 'rv-resend', text: 'Resend to a person', run: function () { startRegen(rec, 'person'); } },
+          { id: 'rv-pdf', text: 'Download PDF', run: function () { downloadPdf(rec, { textContent: '', disabled: false }); } },
+          { id: 'rv-hist', text: 'History \u00B7 ' + historyOf(rec).length, run: function () {
+            var el = document.getElementById('rv-history');
+            if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          } }
+        ]);
+      } }, dots()));
     }
-    if (!rvEditing && !viewing) actions.appendChild(h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-hist', onclick: function () {
-      var el = document.getElementById('rv-history');
-      if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    }, text: 'History \u00B7 ' + historyOf(rec).length }));
-    pane.appendChild(actions);
     if (rv.panel === 'reject' && !viewing && !rvEditing) {
       var why = h('textarea', { class: 'line', id: 'rv-reason-in', rows: '3', 'aria-label': 'Reason for rejecting' });
       pane.appendChild(h('div', { class: 'rv-panel', id: 'rv-panel-reject' }, h('h2', { text: 'Reject this submission' }),
@@ -2313,9 +2351,6 @@ button.dash-stat:hover { background: var(--muted); }
     list.appendChild(h('div', { class: 'rv-filters' },
       pick('rv-f-status', 'Filter by status', rv.fStatus, [['all', 'All statuses'], ['pending', 'Pending'], ['approved', 'Approved'], ['rejected', 'Rejected'], ['new', 'With new risk names']], function (v) { rv.fStatus = v; }),
       pick('rv-f-date', 'Filter by date', rv.fDate, [['all', 'Any date'], ['d7', 'Last 7 days'], ['d30', 'Last 30 days'], ['d90', 'Last 90 days']], function (v) { rv.fDate = v; })));
-    list.appendChild(h('div', { class: 'rv-pad two' },
-      h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-links', 'aria-pressed': rv.links ? 'true' : 'false', onclick: function () { rv.links = true; rv.syn = false; rv.detail = true; rv.regen = null; rvEditing = false; render('fwd'); }, text: 'Links for each area' }),
-      h('button', { type: 'button', class: 'btn ghost sm act', id: 'rv-syn', 'aria-pressed': rv.syn ? 'true' : 'false', onclick: function () { rv.syn = true; rv.links = false; rv.detail = true; rv.regen = null; rvEditing = false; render('fwd'); }, text: 'Synonyms' })));
     if (loaded && !all.length) list.appendChild(h('p', { class: 'tip rv-pad', text: 'No forms match these filters.' }));
     if (!loaded) list.appendChild(h('p', { class: 'tip rv-pad', text: 'Loading submitted forms…' }));
     else if (store && !store.admin) list.appendChild(h('p', { class: 'tip rv-pad', text: 'You can see your own forms here. Editors and the owner of this page see everyone’s.' }));
@@ -2323,8 +2358,8 @@ button.dash-stat:hover { background: var(--muted); }
       var item = h('button', { type: 'button', class: 'rv-item act', id: 'rv-' + r.id, 'aria-current': cur && r.id === cur.id ? 'true' : null,
         onclick: function () { rv.sel = r.id; rv.detail = true; rv.note = ''; rv.regen = null; rv.links = false; rv.syn = false; rv.panel = null; rv.version = null; render('fwd'); } },
         h('span', { class: 'rv-name' }, rowValue(r, 'Full name') || 'Anonymous'),
-        h('span', { class: 'fsub', text: stamp(r.submittedAt) + ' · ' + r.ref }),
-        h('span', { class: 'fsub', text: (r.responseTo ? r.area + ' input for ' + r.responseTo + ' \u00B7 ' : '') + (r.simple ? simpleLabel(r) : (r.matrixCat ? tagName(r.matrixCat) + ' \u00B7 ' : '') + (r.total ? r.risks + ' of ' + r.total + ' risks' : 'Earlier form')) }),
+        h('span', { class: 'fsub', text: stamp(r.submittedAt) }),
+        h('span', { class: 'fsub', text: (r.responseTo ? r.area + ' input for ' + r.responseTo + ' \u00B7 ' : '') + (r.simple ? simpleLabel(r) : (r.matrixCat ? tagName(r.matrixCat) + ' \u00B7 ' : '') + (r.total ? r.risks + (r.risks === 1 ? ' risk' : ' risks') : 'Earlier form')) }),
         h('span', { class: 'rv-badges' }, statusBadge(r), pendingNames(r).length ? h('span', { class: 'st-badge st-new', text: 'New risk name' }) : null));
       item.disabled = rvEditing && !(cur && r.id === cur.id);
       list.appendChild(item);
@@ -2925,7 +2960,7 @@ button.dash-stat:hover { background: var(--muted); }
         h('div', { class: 'ftext' },
           h('div', { class: 'ftitle' }, r.title),
           h('div', { class: 'fsub', text: 'Submitted ' + stamp(r.submittedAt) + ' \u00B7 ' + r.ref })),
-        h('span', { class: 'tag ai', text: r.simple ? simpleLabel(r) : r.total ? r.risks + ' of ' + r.total + ' risks' : r.flags ? r.flags + ' for follow-up' : 'No follow-up' }),
+        h('span', { class: 'tag ai', text: r.simple ? simpleLabel(r) : r.total ? r.risks + (r.risks === 1 ? ' risk' : ' risks') : r.flags ? r.flags + ' for follow-up' : 'No follow-up' }),
         h('button', { type: 'button', class: 'btn ghost sm act', id: 'regen-' + r.id, onclick: function () { state.mode = 'review'; rv.sel = r.id; startRegen(r); }, text: 'Send to another area' }),
         h('button', { type: 'button', class: 'btn ghost sm act', id: 'pdf-' + r.id, 'aria-label': 'Download ' + r.title + ' as PDF', onclick: function (e) { downloadPdf(r, e.currentTarget); }, text: 'Download PDF' })));
     });
@@ -4190,15 +4225,20 @@ button.dash-stat:hover { background: var(--muted); }
     return sec;
   }
   function render(dir) {
-    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', watchM = state.mode === 'watch', other = review || tagging || labeling || dashM || watchM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
+    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', watchM = state.mode === 'watch', linksM = state.mode === 'links', synM = state.mode === 'syn', other = review || tagging || labeling || dashM || watchM || linksM || synM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
     document.getElementById('tab-dash').setAttribute('aria-selected', dashM ? 'true' : 'false');
     if (other && role !== 'compliance') { role = 'compliance'; roleApply(); }
     document.getElementById('tab-watch').setAttribute('aria-selected', watchM ? 'true' : 'false');
     document.getElementById('tab-watch-n').hidden = !unreadN; document.getElementById('tab-watch-n').textContent = String(unreadN);
+    // Submissions still waiting for review, counted on the Review submissions menu item.
+    var waitN = records.concat(EXAMPLES).filter(function (r) { return recStatus(r) === 'pending'; }).length;
+    document.getElementById('tab-review-n').hidden = !waitN; document.getElementById('tab-review-n').textContent = String(waitN);
     document.getElementById('tab-form').setAttribute('aria-selected', other ? 'false' : 'true');
     document.getElementById('tab-review').setAttribute('aria-selected', review ? 'true' : 'false');
     document.getElementById('tab-tags').setAttribute('aria-selected', tagging ? 'true' : 'false');
     document.getElementById('tab-label').setAttribute('aria-selected', labeling ? 'true' : 'false');
+    document.getElementById('tab-links').setAttribute('aria-selected', linksM ? 'true' : 'false');
+    document.getElementById('tab-syn').setAttribute('aria-selected', synM ? 'true' : 'false');
     document.querySelector('.foot').hidden = true;
     document.querySelector('.rail').hidden = true;
     document.getElementById('restart-flow').hidden = other;
@@ -4209,7 +4249,7 @@ button.dash-stat:hover { background: var(--muted); }
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stopDictation();
       stopRecording();
-      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : watchM ? watchScreen() : tagScreen());
+      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : watchM ? watchScreen() : linksM ? toolScreen(linksPane) : synM ? toolScreen(synPane) : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
@@ -4437,6 +4477,8 @@ button.dash-stat:hover { background: var(--muted); }
   document.getElementById('tab-review').addEventListener('click', function () { setMode('review'); });
   document.getElementById('tab-tags').addEventListener('click', function () { setMode('tags'); });
   document.getElementById('tab-label').addEventListener('click', function () { setMode('label'); });
+  document.getElementById('tab-links').addEventListener('click', function () { setMode('links'); });
+  document.getElementById('tab-syn').addEventListener('click', function () { setMode('syn'); });
   document.getElementById('next').addEventListener('click', next);
 
   document.addEventListener('keydown', function (e) {
