@@ -726,6 +726,9 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-step .n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px; background: var(--muted); border-radius: 50%; font-family: var(--mono); font-size: 11px; }
 .dash .line { max-width: none; }
 .dash .rv-sel { flex: none; width: 100%; height: 38px; font-size: 14px; }
+/* Dropdowns draw their own chevron, so it sits a fixed distance from the edge in every browser. */
+.rv-sel { -webkit-appearance: none; appearance: none; padding-right: 34px; background-repeat: no-repeat; background-position: right 10px center; background-size: 16px 16px; text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
 .dash-bar .rv-sel { width: auto; min-width: 190px; height: 32px; font-size: 13px; }
 .dash textarea.line { min-height: 72px; font-size: 14px; }
 .dash input.line { height: 38px; font-size: 14px; }
@@ -748,6 +751,14 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-table td { padding: 10px; vertical-align: top; border-bottom: 1px solid var(--border); }
 .dash-table tr:last-child td { border-bottom: 0; }
 .dash-table .edit { margin-right: 10px; text-decoration: underline; white-space: nowrap; }
+.dash-table .st-badge { padding: 2px 10px; font-size: 12px; }
+.dash-table td:nth-child(3), .dash-table td:nth-child(4) { vertical-align: middle; }
+.dash-table td.dash-acts { width: 1%; text-align: right; vertical-align: middle; }
+.dash-more { display: inline-grid; place-items: center; width: 32px; height: 32px; padding: 0; background: transparent; color: var(--foreground); border: 0; border-radius: var(--radius-md); cursor: pointer; }
+.dash-more:hover, .dash-more[aria-expanded="true"] { background: var(--muted); }
+.row-menu { position: fixed; z-index: 60; min-width: 160px; display: flex; flex-direction: column; padding: 4px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0, 0, 0, .12); }
+.row-menu a, .row-menu button { display: block; width: 100%; padding: 8px 10px; background: transparent; color: var(--foreground); border: 0; border-radius: var(--radius-md); font: inherit; font-size: 14px; text-align: left; text-decoration: none; cursor: pointer; }
+.row-menu a:hover, .row-menu button:hover, .row-menu a:focus-visible, .row-menu button:focus-visible { background: var(--muted); }
 .dash-track { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
 .dash-track i { width: 22px; height: 6px; border-radius: 3px; background: var(--border); }
 .dash-track i.on { background: var(--primary); }
@@ -759,6 +770,25 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-sendpage .dash-people { max-height: 300px; }
 .dash-top { align-items: flex-start; }
 .dash-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+#dash-tracking { padding: 0; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+.dash-sort { display: inline-flex; align-items: center; gap: 4px; margin: -4px -6px; padding: 4px 6px; background: transparent; color: inherit; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; }
+.dash-sort:hover, .dash-sort.on { color: var(--foreground); }
+.dash-sort:hover { background: var(--border); }
+.dash-sort-ic { display: inline-flex; opacity: .55; }
+.dash-sort.on .dash-sort-ic { opacity: 1; }
+.mail-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); cursor: text; }
+.mail-tags:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px var(--ring-soft); }
+.mail-tags input { flex: 1; min-width: 160px; height: 28px; padding: 0 4px; background: transparent; color: var(--foreground); border: 0; font: inherit; font-size: 14px; }
+.mail-tags input:focus { outline: none; }
+.mail-tag { display: inline-flex; align-items: center; gap: 2px; max-width: 100%; padding: 2px 4px 2px 10px; background: var(--muted); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; }
+.mail-tag > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mail-tag button { display: inline-grid; place-items: center; width: 22px; height: 22px; padding: 0; background: transparent; color: var(--muted-foreground); border: 0; border-radius: 50%; cursor: pointer; }
+.mail-tag button:hover { background: var(--border); color: var(--foreground); }
+.mail-tag.bad { background: var(--destructive-tint); border-color: var(--destructive-border); color: var(--destructive); }
+.dash-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.dash-pages { display: flex; flex-wrap: wrap; gap: 4px; margin-left: auto; }
+.dash-pn { min-width: 32px; padding: 0 8px; }
+.dash-pn[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
 .dash-top .btn { flex: none; }
 .dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
 .dash-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -1276,14 +1306,21 @@ button.dash-stat:hover { background: var(--muted); }
   ];
   // Each department has a template prepared for it: the area of the risk matrix its form is about.
   var DEPT_AREA = { 'Legal': 'cat-main', 'Finance': 'cat-current', 'HR': 'cat-integrity', 'Procurement': 'cat-supplier', 'Quality': 'cat-current', 'Industrial Operations': 'cat-misconduct', 'IT': 'cat-current', 'Marketing': 'cat-current' };
-  var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing']]
+  var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing'], ['Piotr Lewandowski', 'Finance'], ['Marta Dabrowska', 'HR'], ['Henrik Olsen', 'Procurement'], ['Agnieszka Kaminska', 'Quality'], ['Daniel Costa', 'IT'], ['Julia Szymanska', 'Marketing'], ['Oliver Schmidt', 'Industrial Operations'], ['Ewa Kozlowska', 'Legal'], ['Mateusz Jankowski', 'Finance'], ['Ingrid Larsen', 'Quality'], ['Pawel Mazur', 'Industrial Operations'], ['Chiara Romano', 'HR'], ['Krzysztof Wojciechowski', 'Procurement'], ['Natalia Krawczyk', 'IT'], ['Samuel Adeyemi', 'Marketing']]
     .map(function (p) { return { name: p[0], team: p[1], area: DEPT_AREA[p[1]] || '', email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
   var TRACK = ['sent', 'opened', 'saved', 'submitted'], TRACK_NAME = { sent: 'Sent', opened: 'Opened', saved: 'Draft saved', submitted: 'Submitted' };
-  var dash = { tpl: 'choose', area: 'auto', dept: 'all', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
+  var dash = { page: 0, tpl: 'choose', area: 'auto', dept: 'all', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
   function dashSeed() {
     var now = Date.now();
     function s(i, tpl, status, days, ref) { var p = PEOPLE[i]; return { id: 'x' + i, token: 'demo' + i, name: p.name, email: p.email, team: p.team, tpl: tpl, area: p.area, sentAt: now - days * DAY, status: status, openedAt: status !== 'sent' ? now - (days - 1) * DAY : 0, ref: ref || '', sample: true }; }
-    return { sent: [s(0, 'questions-first', 'submitted', 9, 'RSK-2026-1177'), s(1, 'questions-first', 'saved', 9), s(2, 'version-03', 'opened', 6), s(3, 'version-03', 'sent', 6), s(4, 'choose', 'submitted', 3, 'RSK-2026-1725'), s(8, 'choose', 'sent', 1)],
+    // Enough sample rows to fill more than two pages of "Track forms".
+    var tpls = ['questions-first', 'version-03', 'choose', 'version-02'], stages = ['submitted', 'saved', 'opened', 'sent'];
+    var sent = [s(0, 'questions-first', 'submitted', 9, 'RSK-2026-1177'), s(1, 'questions-first', 'saved', 9), s(2, 'version-03', 'opened', 6), s(3, 'version-03', 'sent', 6), s(4, 'choose', 'submitted', 3, 'RSK-2026-1725'), s(8, 'choose', 'sent', 1)];
+    [5, 6, 7].concat(PEOPLE.map(function (p, i) { return i; }).slice(9)).forEach(function (i, k) {
+      var st = stages[(k * 3 + 1) % 4];
+      sent.push(s(i, tpls[k % 4], st, 12 - (k % 11), st === 'submitted' ? 'RSK-2026-' + (2000 + k * 37) : ''));
+    });
+    return { v: 2, sent: sent,
       sources: [{ id: 's1', url: 'https://eur-lex.europa.eu', checkedAt: now - 3600000 }, { id: 's2', url: 'https://dziennikustaw.gov.pl', checkedAt: now - 3600000 }, { id: 's3', url: 'https://www.ema.europa.eu/en/news', checkedAt: now - 7200000 }],
       alerts: [{ id: 'a1', at: now - 5 * 3600000, src: 'https://eur-lex.europa.eu', title: 'Sample alert: updated guidance on substantiating environmental claims', read: false, sample: true },
         { id: 'a2', at: now - 2 * DAY, src: 'https://dziennikustaw.gov.pl', title: 'Sample alert: draft act on pay transparency published for consultation', read: false, sample: true },
@@ -1293,7 +1330,7 @@ button.dash-stat:hover { background: var(--muted); }
   function dashGet() {
     if (dashData) return dashData;
     try { dashData = JSON.parse(localStorage.getItem(DASH_KEY) || 'null'); } catch (e) {}
-    if (!dashData || !dashData.sent) dashData = dashSeed();
+    if (!dashData || !dashData.sent || !dashData.v) dashData = dashSeed();
     return dashData;
   }
   function dashPut() { try { localStorage.setItem(DASH_KEY, JSON.stringify(dashData)); } catch (e) {} }
@@ -1433,8 +1470,43 @@ button.dash-stat:hover { background: var(--muted); }
     });
     fill();
     var people = h('div', { class: 'dash-pwrap' }, h('div', { class: 'dash-ptools' }, pSearch, pDept), pList);
-    var emails = h('textarea', { class: 'line', id: 'dash-emails', rows: '2', 'aria-label': 'Other email addresses', oninput: function (e) { dash.emails = e.target.value; } });
-    emails.value = dash.emails;
+    // Other addresses become tags as they are typed; each tag has an X to take it out again.
+    dash.chips = dash.chips || []; dash.draft = dash.draft || '';
+    var mailOk = function (e) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); };
+    var emailIn = h('input', { type: 'text', id: 'dash-emails', inputmode: 'email', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Other email addresses' });
+    var emails = h('div', { class: 'mail-tags', id: 'dash-mail-tags', onclick: function (e) { if (e.target === emails) emailIn.focus(); } });
+    function mailSync() { dash.emails = dash.chips.concat(dash.draft.trim() ? [dash.draft.trim()] : []).join(', '); }
+    function mailDraw() {
+      Array.prototype.slice.call(emails.querySelectorAll('.mail-tag')).forEach(function (el) { el.remove(); });
+      dash.chips.forEach(function (addr, k) {
+        var x = h('button', { type: 'button', class: 'act', id: 'dash-mail-x-' + k, 'aria-label': 'Remove ' + addr, onclick: function () { dash.chips.splice(k, 1); mailSync(); mailDraw(); emailIn.focus(); } });
+        x.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+        emails.insertBefore(h('span', { class: 'mail-tag' + (mailOk(addr) ? '' : ' bad'), title: mailOk(addr) ? null : 'This does not look like an email address' }, h('span', { text: addr }), x), emailIn);
+      });
+    }
+    function mailCommit(text) {
+      text.split(/[\s,;]+/).filter(Boolean).forEach(function (a) {
+        if (!dash.chips.some(function (c) { return c.toLowerCase() === a.toLowerCase(); })) dash.chips.push(a);
+      });
+      dash.draft = ''; emailIn.value = '';
+      mailSync(); mailDraw();
+    }
+    emailIn.value = dash.draft;
+    emailIn.addEventListener('input', function () {
+      if (/[\s,;]/.test(emailIn.value)) {
+        var parts = emailIn.value.split(/[\s,;]+/), rest = /[\s,;]$/.test(emailIn.value) ? '' : parts.pop();
+        mailCommit(parts.join(' '));
+        emailIn.value = rest || '';
+      }
+      dash.draft = emailIn.value; mailSync();
+    });
+    emailIn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); if (emailIn.value.trim()) mailCommit(emailIn.value); }
+      else if (e.key === 'Backspace' && !emailIn.value && dash.chips.length) { dash.chips.pop(); mailSync(); mailDraw(); }
+    });
+    emailIn.addEventListener('blur', function () { if (emailIn.value.trim()) mailCommit(emailIn.value); });
+    emails.appendChild(emailIn);
+    mailSync(); mailDraw();
     var msg = h('textarea', { class: 'line', id: 'dash-text', rows: '3', 'aria-label': 'Message', oninput: function (e) { dash.msg = e.target.value; } });
     msg.value = dash.msg;
     function send() {
@@ -1447,7 +1519,7 @@ button.dash-stat:hover { background: var(--muted); }
       if (!list.length) { redraw('Choose at least one person or add an email address.'); return; }
       var auto = dash.area === 'auto';
       list.forEach(function (p) { d.sent.unshift({ id: newId('m'), token: newId('k'), name: p.name, email: p.email, team: p.team, tpl: dash.tpl, area: auto ? p.area : dash.area, msg: dash.msg.trim(), sentAt: now, status: 'sent' }); });
-      dash.picked = {}; dash.emails = ''; dash.msg = ''; dash.view = null;
+      dash.picked = {}; dash.emails = ''; dash.chips = []; dash.draft = ''; dash.msg = ''; dash.view = null;
       redraw('Form recorded as sent to ' + list.length + (list.length === 1 ? ' person' : ' people') + (auto ? ', each with the template for their department' + (typed ? ' (' + typed + ' added by email got the general template, as their department is not known)' : '') : '') + '. This prototype does not send email itself: use “Email” or “Copy link” in the list below to pass each link on.');
     }
     wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-send' },
@@ -1455,11 +1527,9 @@ button.dash-stat:hover { background: var(--muted); }
         h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '1' }), 'Template'),
           h('span', { class: 'tip', text: 'Area the form is about' }),
           select('dash-area', 'Area the form is about', dash.area, [['auto', 'Corresponding template (by each person\u2019s department)'], ['', 'General template (no particular area)']].concat(areaTags().map(function (t) { return [t.id, t.name]; })), function (v) { dash.area = v; }),
-          h('span', { class: 'tip', id: 'dash-area-tip', text: dash.area === 'auto' ? 'Each person gets the template prepared for their department, so nothing needs to be chosen here. People added by email get the general template.' : 'Everyone you select gets this same template, whatever their department.' }),
-          h('span', { class: 'tip', text: 'Form version' }),
-          select('dash-tpl', 'Form version', dash.tpl, TEMPLATES.map(function (t) { return [t.id, t.name]; }), function (v) { dash.tpl = v; })),
+          h('span', { class: 'tip', id: 'dash-area-tip', text: dash.area === 'auto' ? 'Each person gets the template prepared for their department, so nothing needs to be chosen here. People added by email get the general template.' : 'Everyone you select gets this same template, whatever their department.' })),
         h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '2' }), 'Select people'), people,
-          h('span', { class: 'tip', text: 'Or add email addresses, separated by commas or new lines' }), emails),
+          h('span', { class: 'tip', text: 'Or add email addresses. Press Enter, space or comma after each one.' }), emails),
         h('div', { class: 'dash-step' }, h('h3', null, h('span', { class: 'n', text: '3' }), 'Add a message'), msg,
           h('span', { class: 'tip', text: 'Optional. Each person gets their own link, so their progress can be followed.' }))),
       note,
@@ -1487,35 +1557,119 @@ button.dash-stat:hover { background: var(--muted); }
     depts.sort();
     if (dash.dept !== 'all' && dash.dept !== 'none' && depts.indexOf(dash.dept) < 0) dash.dept = 'all';
     var rows = d.sent.filter(function (x) { return (dash.filter === 'all' || x.status === dash.filter) && (dash.dept === 'all' || (dash.dept === 'none' ? !deptOf(x) : deptOf(x) === dash.dept)); }), body = h('tbody');
+    // Click a column heading to sort by it; click again to reverse.
+    var tplName = function (x) { return ((TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0]).name || '').replace(/ \(.*/, ''); };
+    var SORTS = {
+      person: function (x) { return (x.name || x.email || '').toLowerCase(); },
+      tpl: function (x) { return (tplName(x) + ' ' + (x.area ? tagName(x.area) : '')).toLowerCase(); },
+      sent: function (x) { return x.sentAt || 0; },
+      status: function (x) { return TRACK.indexOf(x.status); }
+    };
+    if (dash.sort && SORTS[dash.sort]) {
+      var keyOf = SORTS[dash.sort], sign = dash.sortDir === 'desc' ? -1 : 1;
+      rows = rows.map(function (x, k) { return { x: x, k: k, v: keyOf(x) }; }).sort(function (a, b) { return (a.v < b.v ? -1 : a.v > b.v ? 1 : 0) * sign || a.k - b.k; }).map(function (o) { return o.x; });
+    }
+    function sortTh(key, label) {
+      var on = dash.sort === key, dir = on ? dash.sortDir : '';
+      var arrow = h('span', { class: 'dash-sort-ic', 'aria-hidden': 'true' });
+      arrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (dir === 'asc' ? '<path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>' : dir === 'desc' ? '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>' : '<path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>') + '</svg>';
+      return h('th', { scope: 'col', 'aria-sort': dir === 'asc' ? 'ascending' : dir === 'desc' ? 'descending' : 'none' },
+        h('button', { type: 'button', class: 'dash-sort act' + (on ? ' on' : ''), id: 'dash-sort-' + key, onclick: function () {
+          if (dash.sort !== key) { dash.sort = key; dash.sortDir = 'asc'; }
+          else if (dash.sortDir === 'asc') dash.sortDir = 'desc';
+          else { dash.sort = ''; dash.sortDir = ''; }
+          dash.page = 0; render('stay');
+        } }, label, arrow));
+    }
+    // Ten rows to a page.
+    var PER = 10, pages = Math.max(1, Math.ceil(rows.length / PER)), total = rows.length;
+    dash.page = Math.min(Math.max(0, dash.page || 0), pages - 1);
+    var from = dash.page * PER;
+    function goPage(p) { dash.page = p; render('stay'); var el = document.getElementById('dash-tracking'); if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView(); }
+    var pager = h('nav', { class: 'dash-pager', id: 'dash-pager', 'aria-label': 'Pages of forms' },
+      h('span', { class: 'fsub', id: 'dash-page-info', text: total ? (from + 1) + '\u2013' + Math.min(from + PER, total) + ' of ' + total : '' }));
+    if (pages > 1) {
+      var nums = h('div', { class: 'dash-pages' });
+      var prev = h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-prev', text: 'Previous', onclick: function () { goPage(dash.page - 1); } });
+      var next = h('button', { type: 'button', class: 'btn ghost sm act', id: 'dash-next', text: 'Next', onclick: function () { goPage(dash.page + 1); } });
+      prev.disabled = dash.page === 0; next.disabled = dash.page === pages - 1;
+      nums.appendChild(prev);
+      for (var pn = 0; pn < pages; pn++) (function (p) {
+        var b = h('button', { type: 'button', class: 'btn ghost sm act dash-pn', id: 'dash-page-' + (p + 1), 'aria-label': 'Page ' + (p + 1), text: String(p + 1), onclick: function () { goPage(p); } });
+        if (p === dash.page) b.setAttribute('aria-current', 'page');
+        nums.appendChild(b);
+      })(pn);
+      nums.appendChild(next);
+      pager.appendChild(nums);
+    }
+    rows = rows.slice(from, from + PER);
     rows.forEach(function (x, i) {
-      var step = TRACK.indexOf(x.status), bar = h('div', { class: 'dash-track' }), tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0], when = x[x.status + 'At'] || x.sentAt;
-      TRACK.forEach(function (s, k) { bar.appendChild(h('i', { class: k <= step ? (x.status === 'submitted' ? 'done' : 'on') : '' })); });
-      bar.appendChild(h('span', { text: TRACK_NAME[x.status] }));
+      var tpl = TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0];
+      var pill = h('span', { class: 'st-badge ' + (x.status === 'submitted' ? 'st-approved' : x.status === 'sent' ? 'st-new' : 'st-pending'), text: TRACK_NAME[x.status] });
       var mail = 'mailto:' + encodeURIComponent(x.email) + '?subject=' + encodeURIComponent('Risk assessment: your input is needed') + '&body=' + encodeURIComponent('Hello' + (x.name ? ' ' + x.name.split(' ')[0] : '') + ',\n\n' + (x.msg || 'Compliance is collecting the risks people see in their daily work. Please add yours using the link below.') + '\n\n' + dashLink(x) + '\n\nThank you,\nCompliance');
       body.appendChild(h('tr', null,
         h('td', null, h('div', { text: x.name || x.email }), x.name ? h('span', { class: 'fsub', text: x.email + (x.team ? ' \u00B7 ' + x.team : '') }) : null),
         h('td', null, h('div', { text: tpl.name.replace(/ \(.*/, '') }), h('span', { class: 'fsub', text: x.area ? tagName(x.area) : 'General template' })),
         h('td', null, h('span', { class: 'fsub', text: stamp(x.sentAt) })),
-        h('td', null, bar, h('span', { class: 'fsub', text: (x.status === 'sent' ? 'Not opened yet' : stamp(when)) + (x.ref ? ' · ' + x.ref : '') + (x.remindedAt ? ' · reminded ' + stamp(x.remindedAt) : '') })),
-        h('td', null,
-          h('a', { class: 'edit act', id: 'dash-mail-' + i, href: mail, target: '_blank', rel: 'noopener', text: 'Email' }),
-          h('button', { type: 'button', class: 'edit act', id: 'dash-copy-' + i, text: 'Copy link', onclick: function (e) {
-            var b = e.currentTarget, link = dashLink(x);
-            (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { b.textContent = 'Copied'; }, function () { window.prompt('Copy this link', link); });
-          } }),
-          x.status !== 'submitted' ? h('button', { type: 'button', class: 'edit act', id: 'dash-remind-' + i, text: 'Remind', onclick: function () { x.remindedAt = Date.now(); redraw('Reminder recorded for ' + (x.name || x.email) + '.'); } }) : null,
-          h('button', { type: 'button', class: 'edit act', id: 'dash-del-' + i, text: 'Remove', onclick: function () { d.sent = d.sent.filter(function (y) { return y !== x; }); redraw(''); } }))));
+        h('td', null, pill),
+        h('td', { class: 'dash-acts' }, h('button', { type: 'button', class: 'dash-more act', id: 'dash-more-' + i, 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-label': 'Actions for ' + (x.name || x.email), onclick: function (e) {
+          var who = x.name || x.email;
+          menuOpen(e.currentTarget, [
+            { id: 'dash-mail-' + i, text: 'Email', href: mail },
+            { id: 'dash-copy-' + i, text: 'Copy link', run: function () {
+              var link = dashLink(x);
+              (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { redraw('Link copied for ' + who + '.'); }, function () { window.prompt('Copy this link', link); });
+            } },
+            x.status !== 'submitted' ? { id: 'dash-remind-' + i, text: 'Remind', run: function () { x.remindedAt = Date.now(); redraw('Reminder recorded for ' + who + '.'); } } : null,
+            { id: 'dash-del-' + i, text: 'Remove', run: function () { d.sent = d.sent.filter(function (y) { return y !== x; }); redraw(''); } }
+          ]);
+        } }, dots()))));
     });
     wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
       h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
         h('div', { class: 'dash-filters' },
-          select('dash-dept', 'Filter by department', dash.dept, [['all', 'All departments']].concat(depts.map(function (t) { return [t, t + ' (' + d.sent.filter(function (x) { return deptOf(x) === t; }).length + ')']; })).concat(noDept ? [['none', 'No department (' + noDept + ')']] : []), function (v) { dash.dept = v; }),
-          select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All stages (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; }))),
-      rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Person' }), h('th', { scope: 'col', text: 'Template and area' }), h('th', { scope: 'col', text: 'Sent' }), h('th', { scope: 'col', text: 'Progress' }), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
+          select('dash-dept', 'Filter by department', dash.dept, [['all', 'All departments']].concat(depts.map(function (t) { return [t, t + ' (' + d.sent.filter(function (x) { return deptOf(x) === t; }).length + ')']; })).concat(noDept ? [['none', 'No department (' + noDept + ')']] : []), function (v) { dash.dept = v; dash.page = 0; }),
+          select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All stages (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; dash.page = 0; }))),
+      rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, sortTh('person', 'Person'), sortTh('tpl', 'Template and area'), sortTh('sent', 'Sent'), sortTh('status', 'Status'), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
         : h('p', { class: 'tip', text: d.sent.length ? 'No forms match these filters.' : 'No forms have been sent yet.' }),
+      rows.length ? pager : null,
       h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
     return wrap;
   }
+  // A small menu behind a three-dot button. It is placed on the page itself, so a scrolling table cannot cut it off.
+  var menuEl = null, menuBtn = null;
+  function menuClose() {
+    if (menuEl) menuEl.remove();
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    menuEl = menuBtn = null;
+  }
+  function dots() {
+    var el = h('span', { 'aria-hidden': 'true', style: 'display: inline-flex' });
+    el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>';
+    return el;
+  }
+  function menuOpen(btn, items) {
+    var same = menuBtn === btn;
+    menuClose();
+    if (same) return;
+    var pop = h('div', { class: 'row-menu', role: 'menu' });
+    items.filter(Boolean).forEach(function (it) {
+      pop.appendChild(it.href
+        ? h('a', { class: 'act', id: it.id, role: 'menuitem', href: it.href, target: '_blank', rel: 'noopener', text: it.text, onclick: function () { menuClose(); } })
+        : h('button', { type: 'button', class: 'act', id: it.id, role: 'menuitem', text: it.text, onclick: function () { menuClose(); it.run(); } }));
+    });
+    document.body.appendChild(pop);
+    var r = btn.getBoundingClientRect(), ph = pop.offsetHeight, pw = pop.offsetWidth;
+    pop.style.top = (r.bottom + 4 + ph > window.innerHeight && r.top - 4 - ph > 0 ? r.top - 4 - ph : r.bottom + 4) + 'px';
+    pop.style.left = Math.max(8, Math.min(r.right - pw, window.innerWidth - pw - 8)) + 'px';
+    menuEl = pop; menuBtn = btn;
+    btn.setAttribute('aria-expanded', 'true');
+    pop.firstChild.focus();
+  }
+  document.addEventListener('click', function (e) { if (menuEl && !menuEl.contains(e.target) && !(menuBtn && menuBtn.contains(e.target))) menuClose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menuEl) { var b = menuBtn; menuClose(); if (b) b.focus(); } });
+  window.addEventListener('scroll', function () { menuClose(); }, true);
+  window.addEventListener('resize', menuClose);
   // ---- Reviewer tools: status, filters, extra questions, earlier versions, synonyms ----
   var STATUS = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' };
   function recStatus(r) { return r.status && STATUS[r.status] ? r.status : 'pending'; }
