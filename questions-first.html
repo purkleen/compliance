@@ -703,6 +703,9 @@ h1.v3-risk { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-hei
 .syn-row { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: center; font-size: 14px; }
 .syn-more { white-space: nowrap; }
 #syn-note { position: sticky; top: 8px; z-index: 5; padding: 8px 12px; background: var(--muted); border-radius: var(--radius-md); color: var(--foreground); }
+.syn-tags input { min-width: 100px; }
+.syn-row { align-items: start; }
+.syn-row .syn-name, .syn-row .syn-more { margin-top: 9px; }
 .rv-detail .syn-row .line { max-width: none; min-height: 0; height: 36px; font-size: 14px; }
 @media (max-width: 760px) { .syn-row { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 /* Side menu: sections of the app, collapsible to an icon rail. On small screens it opens over the page. */
@@ -718,6 +721,10 @@ body { padding-left: var(--side-w); }
 .side button .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .side button:hover { background: var(--muted); color: var(--foreground); }
 .side button[aria-selected="true"] { background: var(--muted); color: var(--foreground); }
+.side button.soon { cursor: default; }
+.side button.soon:hover { background: transparent; color: var(--muted-foreground); }
+.side-soon { flex: none; padding: 1px 8px; background: var(--muted); color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 16px; white-space: nowrap; }
+:root.side-collapsed .side-soon { display: none; }
 .side-n { flex: none; min-width: 18px; padding: 0 5px; background: var(--primary); color: var(--primary-foreground); border-radius: 9px; font-size: 11px; font-weight: 600; line-height: 18px; text-align: center; }
 :root.side-collapsed .side { padding-inline: 12px; }
 :root.side-collapsed .side-cap { height: 1px; margin: 10px 4px 6px; padding: 0; background: var(--border); overflow: hidden; color: transparent; }
@@ -815,6 +822,11 @@ button.dash-stat:hover { background: var(--muted); }
 .dash-pn[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
 .dash-top .btn { flex: none; }
 .dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.dash-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; align-items: start; }
+.dash-seeall { font-size: 14px; text-decoration: underline; }
+.dash-sum { margin: 0; font-size: 14px; line-height: 1.5; }
+.dash-news-t { font-weight: 500; }
+.dash-news-s { margin: 2px 0 4px; color: var(--foreground); font-size: 13px; line-height: 1.45; }
 .dash-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .dash-list li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
 .dash-list li:last-child { border-bottom: 0; }
@@ -832,6 +844,8 @@ button.dash-stat:hover { background: var(--muted); }
 .role-switch button[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
 :root.role-employee, :root.role-employee.side-collapsed { --side-w: 0px; }
 :root.role-employee .side, :root.role-employee .side-toggle { display: none; }
+/* The menu of form versions only matters to someone filling in the form. */
+:root.role-compliance #ver, :root.role-compliance .top-left > b { display: none; }
 :root.role-compliance #tab-form, :root.role-compliance .side .side-cap:first-child { display: none; }
 @media (max-width: 760px) { :root.role-employee .top { padding-left: 24px; } }
 /* The compliance screens use the full width next to the side menu. */
@@ -879,10 +893,11 @@ button.dash-stat:hover { background: var(--muted); }
   <button type="button" role="tab" class="act" id="tab-form" aria-selected="true" title="Form"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg><span class="t">Form</span></button>
   <div class="side-cap">Compliance team</div>
   <button type="button" role="tab" class="act" id="tab-dash" aria-selected="false" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span class="t">Dashboard</span></button>
+  <button type="button" role="tab" class="act" id="tab-track" aria-selected="false" title="Track forms"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span class="t">Track forms</span></button>
   <button type="button" role="tab" class="act" id="tab-watch" aria-selected="false" title="Legislation watch"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg><span class="t">Legislation watch</span><span class="side-n" id="tab-watch-n" hidden></span></button>
   <button type="button" role="tab" class="act" id="tab-review" aria-selected="false" title="Review submissions"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="t">Review submissions</span><span class="side-n" id="tab-review-n" title="Waiting for review" hidden></span></button>
-  <button type="button" role="tab" class="act" id="tab-tags" aria-selected="false" title="Tagging"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/></svg><span class="t">Tagging</span></button>
-  <button type="button" role="tab" class="act" id="tab-label" aria-selected="false" title="Labeling"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="t">Labeling</span></button>
+  <button type="button" role="tab" class="act soon" id="tab-tags" aria-selected="false" aria-disabled="true" title="Tagging (coming soon)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/></svg><span class="t">Tagging</span><span class="side-soon">Coming soon</span></button>
+  <button type="button" role="tab" class="act soon" id="tab-label" aria-selected="false" aria-disabled="true" title="Labeling (coming soon)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span class="t">Labeling</span><span class="side-soon">Coming soon</span></button>
   <button type="button" role="tab" class="act" id="tab-links" aria-selected="false" title="Links for each area"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="t">Links for each area</span></button>
   <button type="button" role="tab" class="act" id="tab-syn" aria-selected="false" title="Synonyms"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m8 13 4-7 4 7"/><path d="M9.1 11h5.7"/></svg><span class="t">Synonyms</span></button>
 </nav>
@@ -1335,6 +1350,14 @@ button.dash-stat:hover { background: var(--muted); }
   var DEPT_AREA = { 'Legal': 'cat-main', 'Finance': 'cat-current', 'HR': 'cat-integrity', 'Procurement': 'cat-supplier', 'Quality': 'cat-current', 'Industrial Operations': 'cat-misconduct', 'IT': 'cat-current', 'Marketing': 'cat-current' };
   var PEOPLE = [['Anna Kowalska', 'Legal'], ['Marek Nowak', 'Finance'], ['Sofia Lindgren', 'HR'], ['Tomasz Zielinski', 'Procurement'], ['Elena Petrova', 'Quality'], ['James Okafor', 'Legal'], ['Katarzyna Wojcik', 'Industrial Operations'], ['Lukas Becker', 'IT'], ['Priya Nair', 'Marketing'], ['Piotr Lewandowski', 'Finance'], ['Marta Dabrowska', 'HR'], ['Henrik Olsen', 'Procurement'], ['Agnieszka Kaminska', 'Quality'], ['Daniel Costa', 'IT'], ['Julia Szymanska', 'Marketing'], ['Oliver Schmidt', 'Industrial Operations'], ['Ewa Kozlowska', 'Legal'], ['Mateusz Jankowski', 'Finance'], ['Ingrid Larsen', 'Quality'], ['Pawel Mazur', 'Industrial Operations'], ['Chiara Romano', 'HR'], ['Krzysztof Wojciechowski', 'Procurement'], ['Natalia Krawczyk', 'IT'], ['Samuel Adeyemi', 'Marketing']]
     .map(function (p) { return { name: p[0], team: p[1], area: DEPT_AREA[p[1]] || '', email: p[0].toLowerCase().replace(' ', '.') + '@example.com' }; });
+  // Articles found on pharma industry pages and news sites, with a short summary of each (sample data).
+  var NEWS = [
+    { title: 'EU pharmaceutical package: provisional agreement reached', src: 'ec.europa.eu', days: 2, summary: 'Shorter baseline regulatory data protection, with extra time for unmet medical need, and new duties to prevent and report medicine shortages.' },
+    { title: 'EMA reflection paper on AI in the medicinal product lifecycle', src: 'ema.europa.eu', days: 5, summary: 'Sets expectations for validating and documenting AI used in development, manufacturing and pharmacovigilance.' },
+    { title: 'Consultation on rules for advertising medicines to healthcare professionals', src: 'urpl.gov.pl', days: 8, summary: 'Proposes tighter limits on gifts and hospitality at events and clearer labelling of sponsored content.' },
+    { title: 'Revised GMP Annex 1 inspections: common findings published', src: 'ema.europa.eu', days: 12, summary: 'Contamination control strategies and environmental monitoring were the findings raised most often.' }
+  ];
+  var NEWS_SUMMARY = '4 articles found in the last 14 days. Main themes: the EU pharmaceutical package (data protection and shortages), AI in the medicine lifecycle, advertising to healthcare professionals and GMP inspections. The advertising consultation touches the Anti-Corruption and Bribery risk; the others relate to Pharmaceutical Law and industry standards.';
   var TRACK = ['sent', 'opened', 'saved', 'submitted'], TRACK_NAME = { sent: 'Sent', opened: 'Opened', saved: 'Draft saved', submitted: 'Submitted' };
   var dash = { page: 0, tpl: 'choose', area: 'auto', dept: 'all', picked: {}, emails: '', msg: '', note: '', filter: 'all', src: '' }, dashData = null;
   function dashSeed() {
@@ -1437,6 +1460,8 @@ button.dash-stat:hover { background: var(--muted); }
     return wrap;
   }
   function dashScreen() {
+    // The Track forms page shows every tracked form; the dashboard shows the five latest and links to it.
+    var full = state.mode === 'track';
     var d = dashGet(), wrap = h('section', { class: 'dash' }), counts = { sent: 0, opened: 0, saved: 0, submitted: 0 }, pending = records.concat(EXAMPLES).filter(function (r) { return recStatus(r) === 'pending'; }).length;
     d.sent.forEach(function (x) { counts[x.status]++; });
     function redraw(msg) { dash.note = msg || ''; dashPut(); render('stay'); }
@@ -1450,7 +1475,7 @@ button.dash-stat:hover { background: var(--muted); }
     // "Send a form" is its own page, opened from the button at the top of the dashboard.
     if (dash.view === 'send') {
       wrap.classList.add('dash-sendpage');
-      wrap.appendChild(h('button', { type: 'button', class: 'edit act', id: 'dash-back', onclick: function () { dash.view = null; dash.note = ''; render('back'); window.scrollTo(0, 0); }, text: '\u2190 Dashboard' }));
+      wrap.appendChild(h('button', { type: 'button', class: 'edit act', id: 'dash-back', onclick: function () { dash.view = null; dash.note = ''; render('back'); window.scrollTo(0, 0); }, text: full ? '\u2190 Track forms' : '\u2190 Dashboard' }));
       wrap.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Send a form' }),
         h('p', { class: 'help', text: 'Choose who gets the form and what the message says. Templates are prepared per department, so each person gets the right one, with their own link.' })));
     // 1. Send a form
@@ -1565,10 +1590,10 @@ button.dash-stat:hover { background: var(--muted); }
         h('button', { type: 'button', class: 'btn ghost act', id: 'dash-send-cancel', onclick: function () { dash.view = null; dash.note = ''; render('back'); window.scrollTo(0, 0); }, text: 'Cancel' }))));
       return wrap;
     }
-    wrap.appendChild(h('div', { class: 'dash-bar dash-top' }, h('div', { class: 'head' }, h('h1', { text: 'Compliance dashboard' }),
-      h('p', { class: 'help', text: 'Send the risk assessment to people, follow how far each of them got, and keep an eye on new legislation.' })),
+    wrap.appendChild(h('div', { class: 'dash-bar dash-top' }, h('div', { class: 'head' }, h('h1', { text: full ? 'Track forms' : 'Compliance dashboard' }),
+      h('p', { class: 'help', text: full ? 'Every form that has been sent, and how far each person got.' : 'Send the risk assessment to people, follow how far each of them got, and keep an eye on new legislation.' })),
       h('button', { type: 'button', class: 'btn act', id: 'dash-send-open', onclick: function () { dash.view = 'send'; dash.note = ''; render('fwd'); window.scrollTo(0, 0); }, text: 'Send a form' })));
-    wrap.appendChild(h('div', { class: 'dash-stats' },
+    if (!full) wrap.appendChild(h('div', { class: 'dash-stats' },
       h('div', { class: 'dash-stat' }, h('b', { text: String(d.sent.length) }), h('span', { text: 'Forms sent' })),
       h('div', { class: 'dash-stat' }, h('b', { text: String(counts.opened + counts.saved + counts.submitted) }), h('span', { text: 'Opened' })),
       h('div', { class: 'dash-stat' }, h('b', { text: String(counts.saved) }), h('span', { text: 'Draft saved, not sent' })),
@@ -1583,7 +1608,7 @@ button.dash-stat:hover { background: var(--muted); }
     d.sent.forEach(function (x) { var t = deptOf(x); if (!t) noDept++; else if (depts.indexOf(t) < 0) depts.push(t); });
     depts.sort();
     if (dash.dept !== 'all' && dash.dept !== 'none' && depts.indexOf(dash.dept) < 0) dash.dept = 'all';
-    var rows = d.sent.filter(function (x) { return (dash.filter === 'all' || x.status === dash.filter) && (dash.dept === 'all' || (dash.dept === 'none' ? !deptOf(x) : deptOf(x) === dash.dept)); }), body = h('tbody');
+    var rows = d.sent.filter(function (x) { if (!full) return true; return (dash.filter === 'all' || x.status === dash.filter) && (dash.dept === 'all' || (dash.dept === 'none' ? !deptOf(x) : deptOf(x) === dash.dept)); }), body = h('tbody');
     // Click a column heading to sort by it; click again to reverse.
     var tplName = function (x) { return ((TEMPLATES.filter(function (t) { return t.id === x.tpl; })[0] || TEMPLATES[0]).name || '').replace(/ \(.*/, ''); };
     var SORTS = {
@@ -1609,9 +1634,9 @@ button.dash-stat:hover { background: var(--muted); }
         } }, label, arrow));
     }
     // Ten rows to a page.
-    var PER = 10, pages = Math.max(1, Math.ceil(rows.length / PER)), total = rows.length;
-    dash.page = Math.min(Math.max(0, dash.page || 0), pages - 1);
-    var from = dash.page * PER;
+    var PER = full ? 10 : 5, pages = Math.max(1, Math.ceil(rows.length / PER)), total = rows.length;
+    if (full) dash.page = Math.min(Math.max(0, dash.page || 0), pages - 1);
+    var from = full ? dash.page * PER : 0;
     function goPage(p) { dash.page = p; render('stay'); var el = document.getElementById('dash-tracking'); if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView(); }
     var pager = h('nav', { class: 'dash-pager', id: 'dash-pager', 'aria-label': 'Pages of forms' },
       h('span', { class: 'fsub', id: 'dash-page-info', text: total ? (from + 1) + '\u2013' + Math.min(from + PER, total) + ' of ' + total : '' }));
@@ -1652,15 +1677,46 @@ button.dash-stat:hover { background: var(--muted); }
           ]);
         } }, dots()))));
     });
+    // What changed: a short summary of the tracked legislation changes with the last three, and of the
+    // articles found on pharma industry pages and news sites. The articles are sample data in this prototype.
+    var month = Date.now() - 30 * DAY, recent = d.alerts.slice().sort(function (a, b) { return b.at - a.at; });
+    var inMonth = recent.filter(function (a) { return a.at >= month; }).length, srcN = recent.map(function (a) { return a.src; }).filter(function (s, i, all) { return all.indexOf(s) === i; }).length;
+    var legList = h('ul', { class: 'dash-list', id: 'dash-leg-list' });
+    recent.slice(0, 3).forEach(function (a) {
+      legList.appendChild(h('li', null, h('span', { class: 'dash-dot' + (a.read ? ' read' : ''), 'aria-hidden': 'true' }),
+        h('span', { class: 'grow' }, h('div', { text: a.title }), h('span', { class: 'fsub', text: stamp(a.at) + ' \u00B7 ' + a.src }))));
+    });
+    var newsList = h('ul', { class: 'dash-list', id: 'dash-news-list' });
+    NEWS.forEach(function (n) {
+      newsList.appendChild(h('li', null, h('span', { class: 'grow' }, h('div', { class: 'dash-news-t', text: n.title }),
+        h('p', { class: 'dash-news-s', text: n.summary }),
+        h('span', { class: 'fsub', text: stamp(Date.now() - n.days * DAY) + ' \u00B7 ' + n.src }))));
+    });
+    var twoCards = h('div', { class: 'dash-two' },
+      h('div', { class: 'dash-card', id: 'dash-legislation' },
+        h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Legislation changes' }),
+          h('button', { type: 'button', class: 'edit act', id: 'dash-leg-open', text: 'Open Legislation watch', onclick: function () { setMode('watch'); } })),
+        h('p', { class: 'dash-sum', id: 'dash-leg-sum', text: recent.length
+          ? inMonth + (inMonth === 1 ? ' change' : ' changes') + ' tracked in the last 30 days from ' + srcN + (srcN === 1 ? ' watched page' : ' watched pages') + '. ' + (dashUnread() ? dashUnread() + ' not read yet.' : 'All have been read.')
+          : 'No changes tracked yet. Add pages to watch on the Legislation watch page.' }),
+        recent.length ? h('h3', { text: 'Last 3 changes' }) : null,
+        recent.length ? legList : null),
+      h('div', { class: 'dash-card', id: 'dash-news' },
+        h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Industry news' }), h('span', { class: 'tag', text: 'Sample articles' })),
+        h('p', { class: 'dash-sum', id: 'dash-news-sum', text: NEWS_SUMMARY }),
+        h('h3', { text: 'Articles found' }),
+        newsList));
     wrap.appendChild(h('div', { class: 'dash-card', id: 'dash-tracking' },
-      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: 'Track forms' }),
-        h('div', { class: 'dash-filters' },
+      h('div', { class: 'dash-bar' }, h('h2', { class: 'grp', text: full ? 'All forms' : 'Track forms' }),
+        !full ? h('button', { type: 'button', class: 'edit act dash-seeall', id: 'dash-track-all', text: 'See all forms (' + d.sent.length + ')', onclick: function () { setMode('track'); } }) : h('div', { class: 'dash-filters' },
           select('dash-dept', 'Filter by department', dash.dept, [['all', 'All departments']].concat(depts.map(function (t) { return [t, t + ' (' + d.sent.filter(function (x) { return deptOf(x) === t; }).length + ')']; })).concat(noDept ? [['none', 'No department (' + noDept + ')']] : []), function (v) { dash.dept = v; dash.page = 0; }),
           select('dash-filter', 'Filter by progress', dash.filter, [['all', 'All stages (' + d.sent.length + ')']].concat(TRACK.map(function (s) { return [s, TRACK_NAME[s] + ' (' + counts[s] + ')']; })), function (v) { dash.filter = v; dash.page = 0; }))),
       rows.length ? h('div', { class: 'table-wrap' }, h('table', { class: 'dash-table' }, h('thead', null, h('tr', null, sortTh('person', 'Person'), sortTh('tpl', 'Template and area'), sortTh('sent', 'Sent'), sortTh('status', 'Status'), h('th', { scope: 'col' }, h('span', { class: 'sr', text: 'Actions' })))), body))
         : h('p', { class: 'tip', text: d.sent.length ? 'No forms match these filters.' : 'No forms have been sent yet.' }),
-      rows.length ? pager : null,
-      h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
+      rows.length && full ? pager : null,
+      !full ? null : h('p', { class: 'tip', text: 'Progress updates when a person opens their link, presses “Save draft” or submits. In this prototype that only works in the browser the link was created in; rows marked as sample data show what it looks like.' })));
+    // Track forms comes first; the legislation and news summaries follow it.
+    if (!full) wrap.appendChild(twoCards);
     return wrap;
   }
   // A small menu behind a three-dot button. It is placed on the page itself, so a scrolling table cannot cut it off.
@@ -1769,25 +1825,54 @@ button.dash-stat:hover { background: var(--muted); }
         .then(function (r) { apply((r && r.synonyms) || {}, false); });
     }).catch(function () { note.textContent = 'Suggestions could not be generated just now. Try again.'; note.hidden = false; done(); });
   }
+  // The synonyms of one risk as removable pills, with a field to type more. Reading or setting .value
+  // uses the comma-separated text, so the AI suggestions and saving work on it unchanged.
+  function synTags(o) {
+    var words = [], el = h('div', { class: 'mail-tags syn-tags', 'data-v': o.v });
+    var inp = h('input', { type: 'text', autocomplete: 'off', 'aria-label': 'Add a synonym for ' + o.l });
+    el.addEventListener('click', function (e) { if (e.target === el) inp.focus(); });
+    function parse(text) { return String(text || '').split(',').map(function (w) { return w.trim().toLowerCase(); }).filter(Boolean); }
+    function draw() {
+      Array.prototype.slice.call(el.querySelectorAll('.mail-tag')).forEach(function (t) { t.remove(); });
+      words.forEach(function (w, k) {
+        var x = h('button', { type: 'button', class: 'act', 'aria-label': 'Remove ' + w, onclick: function () { words.splice(k, 1); draw(); inp.focus(); } });
+        x.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+        el.insertBefore(h('span', { class: 'mail-tag' }, h('span', { text: w }), x), inp);
+      });
+    }
+    function commit(text) { parse(text).forEach(function (w) { if (words.indexOf(w) < 0) words.push(w.slice(0, 40)); }); inp.value = ''; draw(); }
+    inp.addEventListener('input', function () { if (inp.value.indexOf(',') >= 0) { var parts = inp.value.split(','), rest = parts.pop(); commit(parts.join(',')); inp.value = rest.replace(/^\s+/, ''); } });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); if (inp.value.trim()) commit(inp.value); }
+      else if (e.key === 'Backspace' && !inp.value && words.length) { words.pop(); draw(); }
+    });
+    inp.addEventListener('blur', function () { if (inp.value.trim()) commit(inp.value); });
+    el.appendChild(inp);
+    return {
+      el: el,
+      get value() { return words.concat(parse(inp.value)).join(', '); },
+      set value(text) { words = []; parse(text).forEach(function (w) { if (words.indexOf(w) < 0) words.push(w); }); inp.value = ''; draw(); }
+    };
+  }
   function synPane(pane) {
     var synRows = [];
     var opts = v2Opts(), list = h('div', { class: 'syn-list' }), note = h('p', { class: 'tip', id: 'syn-note', role: 'status' });
     note.hidden = true;
     pane.appendChild(h('div', { class: 'head' }, h('h1', { text: 'Synonyms' }),
-      h('p', { class: 'help', text: 'Words people might type instead of a risk’s name. The search in the form finds the risk by these words too. Separate them with commas.' })));
+      h('p', { class: 'help', text: 'Words people might type instead of a risk’s name. The search in the form finds the risk by these words too. Type a word and press Enter or comma; use the X to remove one.' })));
     areaTags().forEach(function (a) {
       var mine = opts.filter(function (o) { return o.area === a.id; });
       if (!mine.length) return;
       list.appendChild(h('h2', { class: 'grp', text: a.name }));
       mine.forEach(function (o) {
-        var inp = h('input', { type: 'text', class: 'line syn-in', 'data-v': o.v, 'aria-label': 'Synonyms for ' + o.l, autocomplete: 'off' });
+        var inp = synTags(o);
         inp.value = (SYN[o.v] || []).join(', ');
         var one = { o: o, inp: inp }, more = h('button', { type: 'button', class: 'btn ghost sm act syn-more', title: 'Suggest more synonyms for this risk', 'aria-label': 'Suggest more synonyms for ' + o.l, text: '✦ Suggest', onclick: function () {
           more.disabled = true; more.textContent = 'Thinking…';
           synSuggest([one], note, function () { more.disabled = false; more.textContent = '✦ Suggest'; });
         } });
         synRows.push(one);
-        list.appendChild(h('div', { class: 'syn-row' }, h('span', { class: 'syn-name', text: o.l }), inp, more));
+        list.appendChild(h('div', { class: 'syn-row' }, h('span', { class: 'syn-name', text: o.l }), inp.el, more));
       });
     });
     var allBtn = h('button', { type: 'button', class: 'btn ghost sm act', id: 'syn-all', text: '✦ Suggest more for all risks', onclick: function () {
@@ -1800,9 +1885,9 @@ button.dash-stat:hover { background: var(--muted); }
     pane.appendChild(h('div', { class: 'go' },
       h('button', { type: 'button', class: 'btn sm act', id: 'syn-save', text: 'Save synonyms', onclick: function () {
         var all = {};
-        [].forEach.call(pane.querySelectorAll('.syn-in'), function (el) {
-          var words = el.value.split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(Boolean);
-          SYN[el.getAttribute('data-v')] = words; all[el.getAttribute('data-v')] = words;
+        synRows.forEach(function (one) {
+          var words = one.inp.value.split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(Boolean);
+          SYN[one.o.v] = words; all[one.o.v] = words;
         });
         try { localStorage.setItem('riskSynonyms', JSON.stringify(all)); note.textContent = 'Synonyms saved in this browser. The search in the form uses them from now on.'; }
         catch (e) { note.textContent = 'Synonyms are in use for this session, but could not be stored here.'; }
@@ -2236,10 +2321,6 @@ button.dash-stat:hover { background: var(--muted); }
           st !== 'rejected' ? { id: 'rv-reject', text: 'Reject', run: function () { rv.panel = 'reject'; rv.note = ''; render('stay'); } } : null,
           st !== 'pending' ? { id: 'rv-reopen', text: 'Set back to pending', run: function () { setStatus(live, 'pending'); } } : null,
           { id: 'rv-ask', text: 'Email extra questions', run: function () { rv.panel = 'ask'; rv.note = ''; render('stay'); } },
-          { id: 'rv-tags', text: 'Add tags', run: function () {
-            var firstRow = live.rows.filter(function (x) { return x.group !== 'About you' && x.value && x.value !== 'No input'; })[0];
-            tg.view = 'answers'; if (firstRow) tg.sel = live.id + '|' + firstRow.label; tg.detail = true; state.mode = 'tags'; render('fwd');
-          } },
           { id: 'rv-resend', text: 'Resend to a person', run: function () { startRegen(rec, 'person'); } },
           { id: 'rv-pdf', text: 'Download PDF', run: function () { downloadPdf(rec, { textContent: '', disabled: false }); } },
           { id: 'rv-hist', text: 'History \u00B7 ' + historyOf(rec).length, run: function () {
@@ -2935,6 +3016,7 @@ button.dash-stat:hover { background: var(--muted); }
   });
 
   function setMode(mode) {
+    if (mode === 'tags' || mode === 'label') return;
     if (state.mode === mode) return;
     clearTimeout(autoTimer);
     if (busy) { busy.dead = true; if (busy.ctl) busy.ctl.abort(); busy = null; }
@@ -4628,8 +4710,9 @@ button.dash-stat:hover { background: var(--muted); }
     return sec;
   }
   function render(dir) {
-    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', watchM = state.mode === 'watch', linksM = state.mode === 'links', synM = state.mode === 'syn', other = review || tagging || labeling || dashM || watchM || linksM || synM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
+    var review = state.mode === 'review', tagging = state.mode === 'tags', labeling = state.mode === 'label', dashM = state.mode === 'dash', trackM = state.mode === 'track', watchM = state.mode === 'watch', linksM = state.mode === 'links', synM = state.mode === 'syn', other = review || tagging || labeling || dashM || trackM || watchM || linksM || synM, unreadN = dashGet().notify.inApp ? dashUnread() : 0;
     document.getElementById('tab-dash').setAttribute('aria-selected', dashM ? 'true' : 'false');
+    document.getElementById('tab-track').setAttribute('aria-selected', trackM ? 'true' : 'false');
     if (other && role !== 'compliance') { role = 'compliance'; roleApply(); }
     document.getElementById('tab-watch').setAttribute('aria-selected', watchM ? 'true' : 'false');
     document.getElementById('tab-watch-n').hidden = !unreadN; document.getElementById('tab-watch-n').textContent = String(unreadN);
@@ -4652,7 +4735,7 @@ button.dash-stat:hover { background: var(--muted); }
       var oldPane = stage.querySelector('.rv-detail'), keepPane = oldPane && dir === 'stay' ? oldPane.scrollTop : 0;
       stopDictation();
       stopRecording();
-      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM ? dashScreen() : watchM ? watchScreen() : linksM ? toolScreen(linksPane) : synM ? toolScreen(synPane) : tagScreen());
+      stage.replaceChildren(review ? reviewScreen() : labeling ? labelScreen() : dashM || trackM ? dashScreen() : watchM ? watchScreen() : linksM ? toolScreen(linksPane) : synM ? toolScreen(synPane) : tagScreen());
       if (dir !== 'stay') window.scrollTo(0, 0);
       if (keep && stage.querySelector('.rv-list')) stage.querySelector('.rv-list').scrollTop = keep;
       if ((tagging || labeling) && keepPane && stage.querySelector('.rv-detail')) stage.querySelector('.rv-detail').scrollTop = keepPane;
@@ -4869,6 +4952,7 @@ button.dash-stat:hover { background: var(--muted); }
   document.getElementById('role-compliance').addEventListener('click', function () { roleSet('compliance'); });
   roleApply();
   document.getElementById('tab-watch').addEventListener('click', function () { setMode('watch'); });
+  document.getElementById('tab-track').addEventListener('click', function () { setMode('track'); });
   document.getElementById('tab-dash').addEventListener('click', function () { dash.view = null; if (state.mode === 'dash') render('stay'); else setMode('dash'); });
   // Side menu: collapses to icons; the choice is remembered. On small screens it starts closed and closes after a choice.
   var sideBtn = document.getElementById('side-toggle'), sideNav = document.getElementById('side');
@@ -4878,8 +4962,7 @@ button.dash-stat:hover { background: var(--muted); }
   sideNav.addEventListener('click', function (e) { if (window.innerWidth <= 760 && e.target.closest('button')) sideSet(true); });
   document.getElementById('tab-form').addEventListener('click', function () { setMode('form'); });
   document.getElementById('tab-review').addEventListener('click', function () { setMode('review'); });
-  document.getElementById('tab-tags').addEventListener('click', function () { setMode('tags'); });
-  document.getElementById('tab-label').addEventListener('click', function () { setMode('label'); });
+  // Tagging and Labeling are not open yet: the menu items show "Coming soon" and do nothing.
   document.getElementById('tab-links').addEventListener('click', function () { setMode('links'); });
   document.getElementById('tab-syn').addEventListener('click', function () { setMode('syn'); });
   document.getElementById('next').addEventListener('click', next);
@@ -4914,7 +4997,7 @@ button.dash-stat:hover { background: var(--muted); }
     if (data && data.fu) state.fu = data.fu;
     if (data && data.edited) state.edited = data.edited;
     if (data && data.editing) state.editing = true;
-    if (data && (data.mode === 'review' || data.mode === 'tags' || data.mode === 'label')) state.mode = data.mode;
+    if (data && data.mode === 'review') state.mode = data.mode;
     if (data && data.req && data.req.risks) state.req = data.req;
     if (data && data.at) state.at = data.at;
     if (role === 'compliance' && state.mode === 'form' && !state.req) state.mode = 'dash';
