@@ -790,8 +790,8 @@ button.v2-opt:hover { background: var(--muted); }
 .mx-table td.mx-group { font-weight: 600; background: var(--muted); }
 /* Area and Risk category stay in place when the matrix scrolls sideways. */
 .mx-table .mx-c0, .mx-table .mx-c1 { position: sticky; z-index: 1; box-sizing: border-box; }
-.mx-table .mx-c0 { left: 0; width: 210px; min-width: 210px; max-width: 210px; }
-.mx-table .mx-c1 { left: 210px; width: 190px; min-width: 190px; max-width: 190px; box-shadow: 4px 0 6px -3px rgba(0, 0, 0, .12); }
+.mx-table .mx-c0 { left: 0; width: 130px; min-width: 130px; max-width: 130px; }
+.mx-table .mx-c1 { left: 130px; width: 130px; min-width: 130px; max-width: 130px; box-shadow: 4px 0 6px -3px rgba(0, 0, 0, .12); }
 .mx-table th.mx-c0, .mx-table th.mx-c1 { z-index: 3; }
 .mx-table .mx-guide th.mx-c0, .mx-table .mx-guide th.mx-c1 { position: sticky; z-index: 1; }
 .mx-table td.mx-name { font-weight: 500; }
@@ -2952,6 +2952,26 @@ function mxHistoryPanel() {
     try { localStorage.setItem(MX_KEY, JSON.stringify(st)); } catch (e) {}
     return added > 0;
   }
+  // When a version opens and none of its changed cells is in view, scroll the matrix to the nearest one:
+  // the closest column first, then the closest row, keeping it clear of the frozen columns and the header.
+  function mxvReveal(box) {
+    var cells = box.querySelectorAll('td.mx-changed');
+    if (!cells.length) return;
+    var b = box.getBoundingClientRect(), th1 = box.querySelector('thead th.mx-c1'), head = box.querySelector('thead');
+    var frozen = th1 ? th1.getBoundingClientRect().right - b.left : 0, headH = head ? head.getBoundingClientRect().bottom - b.top : 0;
+    var rects = Array.prototype.map.call(cells, function (c) { return c.getBoundingClientRect(); });
+    var seen = function (r) { return r.left - b.left >= frozen - 1 && r.right <= b.right - 2 && r.top - b.top >= headH - 1 && r.top < b.bottom - 40; };
+    if (rects.some(seen)) return;
+    var best = null;
+    rects.forEach(function (r) {
+      var d = Math.abs(r.left - b.left - frozen) * 10000 + Math.abs(r.top - b.top - headH);
+      if (!best || d < best.d) best = { r: r, d: d };
+    });
+    var left = box.scrollLeft + best.r.left - b.left - frozen - 16, top = box.scrollTop;
+    if (best.r.top - b.top < headH || best.r.top > b.bottom - 40) top = box.scrollTop + best.r.top - b.top - headH - 16;
+    var far = Math.abs(left - box.scrollLeft) + Math.abs(top - box.scrollTop) > 1500;
+    box.scrollTo({ left: Math.max(0, left), top: Math.max(0, top), behavior: far ? 'auto' : 'smooth' });
+  }
   function mxVersionScreen() {
     var vs = mxVersions(), total = vs.length + 1;
     if (!mxv.n || mxv.n > total) mxv.n = total;
@@ -2962,6 +2982,7 @@ function mxHistoryPanel() {
       mxv.n = n;
       Array.prototype.forEach.call(list.querySelectorAll('.mxv-card'), function (c) { c.setAttribute('aria-current', c.id === 'mxv-' + n ? 'true' : 'false'); });
       right.replaceChildren(matrixScreen(mxSnapshot(n)));
+      setTimeout(function () { var bx = right.querySelector('.mx-wrap'); if (bx) mxvReveal(bx); }, 0);
     }
     function card(n, who, meta, summary) {
       var top = h('div', { class: 'mxv-top' }, h('h2', { text: 'Version ' + n }));
