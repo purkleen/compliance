@@ -1,2 +1,6 @@
 .claude/settings.local.json
 .DS_Store
+
+# Local only: this machine's Claude settings and the source risk matrix
+.claude/
+matrix.csv

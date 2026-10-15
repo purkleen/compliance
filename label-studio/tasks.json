@@ -1,0 +1,1107 @@
+[
+  {
+    "data": {
+      "text": "Risk description: Our churn model scores customers automatically and nobody has classified it under the AI Act yet.\nRisk drivers: Models are built by three teams with no shared inventory.\nOpportunities: A single model register would also speed up audits.\nRisk source: EU AI Act",
+      "risk": "AI Act ethical obligations",
+      "risk_title": "Non-compliance with AI Act ethical obligations",
+      "person": "Priya Nair",
+      "ref": "RSK-2026-2273",
+      "submitted": "05 Oct 2026",
+      "followups": "Q: Who would own the classification work?\nA: Data governance, with Legal signing off.",
+      "attachments": "None",
+      "key": "ex-9|AI Act ethical obligations",
+      "meta": "Priya Nair · RSK-2026-2273 · submitted 05 Oct 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "form-tagging",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with AI Act ethical obligations",
+                "Insufficient monitoring of the ongoing EU work on new late-payment regulations",
+                "Non-compliance with the upcoming EU Anti-Corruption Directive",
+                "Inadequate adaptation to upcoming changes in labour law (including mobbing definition)",
+                "Non-compliance with greenwashing regulations (ECGT Directive)",
+                "Non-compliance with equal pay transparency requirements",
+                "Dynamic regulatory environment in the area of compliance"
+              ]
+            }
+          },
+          {
+            "from_name": "g_source",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "EU regulation",
+                "National law",
+                "Internal process",
+                "Third party",
+                "Systems and data"
+              ]
+            }
+          },
+          {
+            "from_name": "g_opp",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Efficiency",
+                "Reputation and trust",
+                "Talent and retention",
+                "Better data",
+                "Cost saving"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Rules on synthetic data for model training could change what we are allowed to keep.\nRisk source: Regulators and standards bodies",
+      "risk": "Unknown unknowns",
+      "risk_title": "Unknown unknowns",
+      "person": "Priya Nair",
+      "ref": "RSK-2026-2273",
+      "submitted": "05 Oct 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-9|Unknown unknowns",
+      "meta": "Priya Nair · RSK-2026-2273 · submitted 05 Oct 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Systemic"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Unknown unknowns"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Sales decks still describe two product lines as \"climate neutral\" without substantiation.\nRisk drivers: Old templates are reused by regional teams.\nOpportunities: Verified claims could become a selling point in tenders.\nRisk source: ECGT Directive",
+      "risk": "Greenwashing (ECGT Directive)",
+      "risk_title": "Non-compliance with greenwashing regulations (ECGT Directive)",
+      "person": "Lukas Becker",
+      "ref": "RSK-2026-2136",
+      "submitted": "02 Oct 2026",
+      "followups": "No follow-up questions",
+      "attachments": "claims-audit.pdf",
+      "key": "ex-8|Greenwashing (ECGT Directive)",
+      "meta": "Lukas Becker · RSK-2026-2136 · submitted 02 Oct 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with greenwashing regulations (ECGT Directive)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Hospitality for public-sector buyers is approved informally by email.\nRisk drivers: No single register of gifts and hospitality.\nRisk source: EU Anti-Corruption Directive",
+      "risk": "EU Anti-Corruption Directive",
+      "risk_title": "Non-compliance with the upcoming EU Anti-Corruption Directive",
+      "person": "Lukas Becker",
+      "ref": "RSK-2026-2136",
+      "submitted": "02 Oct 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-8|EU Anti-Corruption Directive",
+      "meta": "Lukas Becker · RSK-2026-2136 · submitted 02 Oct 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with the upcoming EU Anti-Corruption Directive"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Shift supervisors have not been trained on the wider mobbing definition, so complaints may be handled wrongly.\nRisk drivers: High supervisor turnover and night shifts with little HR presence.\nOpportunities: Training would also lower absence and attrition.\nRisk source: Upcoming labour code amendment",
+      "risk": "Labour law changes",
+      "risk_title": "Inadequate adaptation to upcoming changes in labour law (including mobbing definition)",
+      "person": "Katarzyna Wojcik",
+      "ref": "RSK-2026-1999",
+      "submitted": "29 Sep 2026",
+      "followups": "Q: How likely is this to affect your area in the next 12 months?\nA: Likely. We had two informal complaints this quarter.\nQ: Who would own the response if it did?\nA: The site HR partner.",
+      "attachments": "None",
+      "key": "ex-7|Labour law changes",
+      "meta": "Katarzyna Wojcik · RSK-2026-1999 · submitted 29 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Inadequate adaptation to upcoming changes in labour law (including mobbing definition)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Contract review tooling may fall under transparency obligations when used on employee matters.\nRisk source: EU AI Act",
+      "risk": "AI Act ethical obligations",
+      "risk_title": "Non-compliance with AI Act ethical obligations",
+      "person": "James Okafor",
+      "ref": "RSK-2026-1862",
+      "submitted": "24 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-6|AI Act ethical obligations",
+      "meta": "James Okafor · RSK-2026-1862 · submitted 24 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with AI Act ethical obligations"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Legal is not consulted on environmental claims before campaigns launch.\nRisk drivers: Marketing approvals skip Legal for \"minor\" updates.\nRisk source: ECGT Directive",
+      "risk": "Greenwashing (ECGT Directive)",
+      "risk_title": "Non-compliance with greenwashing regulations (ECGT Directive)",
+      "person": "James Okafor",
+      "ref": "RSK-2026-1862",
+      "submitted": "24 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-6|Greenwashing (ECGT Directive)",
+      "meta": "James Okafor · RSK-2026-1862 · submitted 24 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with greenwashing regulations (ECGT Directive)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Third-party due diligence does not yet cover the new offences in the draft directive.\nRisk drivers: Questionnaire last updated in 2022.\nOpportunities: One refreshed questionnaire can serve sanctions and ESG checks too.\nRisk source: EU Anti-Corruption Directive",
+      "risk": "EU Anti-Corruption Directive",
+      "risk_title": "Non-compliance with the upcoming EU Anti-Corruption Directive",
+      "person": "James Okafor",
+      "ref": "RSK-2026-1862",
+      "submitted": "24 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "dd-questionnaire-v3.docx, gap-analysis.xlsx",
+      "key": "ex-6|EU Anti-Corruption Directive",
+      "meta": "James Okafor · RSK-2026-1862 · submitted 24 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with the upcoming EU Anti-Corruption Directive"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: We track new rules in a spreadsheet that depends on one person.\nRisk drivers: No regulatory watch tool or backup owner.\nRisk source: Internal process",
+      "risk": "Dynamic regulatory environment",
+      "risk_title": "Dynamic regulatory environment in the area of compliance",
+      "person": "James Okafor",
+      "ref": "RSK-2026-1862",
+      "submitted": "24 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-6|Dynamic regulatory environment",
+      "meta": "James Okafor · RSK-2026-1862 · submitted 24 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Dynamic regulatory environment in the area of compliance"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Possible national gold-plating when directives are transposed.\nRisk source: National legislators",
+      "risk": "Unknown unknowns",
+      "risk_title": "Unknown unknowns",
+      "person": "James Okafor",
+      "ref": "RSK-2026-1862",
+      "submitted": "24 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-6|Unknown unknowns",
+      "meta": "James Okafor · RSK-2026-1862 · submitted 24 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Systemic"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Unknown unknowns"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Payroll data cannot yet be split by job grade and gender in one report.\nRisk drivers: Two payroll systems after the merger.\nOpportunities: A merged dataset improves budgeting accuracy.\nRisk source: EU Pay Transparency Directive",
+      "risk": "Equal pay transparency",
+      "risk_title": "Non-compliance with equal pay transparency requirements",
+      "person": "Elena Petrova",
+      "ref": "RSK-2026-1725",
+      "submitted": "18 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-5|Equal pay transparency",
+      "meta": "Elena Petrova · RSK-2026-1725 · submitted 18 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with equal pay transparency requirements"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: A fixed 30-day cap would break the payment terms we have with about forty suppliers.\nRisk drivers: Standard terms are 60 days.\nOpportunities: Earlier payment could earn supplier discounts.\nRisk source: Proposed EU Late Payment Regulation",
+      "risk": "Late-payment regulations",
+      "risk_title": "Insufficient monitoring of the ongoing EU work on new late-payment regulations",
+      "person": "Elena Petrova",
+      "ref": "RSK-2026-1725",
+      "submitted": "18 Sep 2026",
+      "followups": "Q: How likely is this to affect your area in the next 12 months?\nA: Unclear. It depends on the final text and transition period.",
+      "attachments": "None",
+      "key": "ex-5|Late-payment regulations",
+      "meta": "Elena Petrova · RSK-2026-1725 · submitted 18 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Insufficient monitoring of the ongoing EU work on new late-payment regulations"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Finance learns about new reporting duties late in the year.\nRisk source: Internal communication",
+      "risk": "Dynamic regulatory environment",
+      "risk_title": "Dynamic regulatory environment in the area of compliance",
+      "person": "Elena Petrova",
+      "ref": "RSK-2026-1725",
+      "submitted": "18 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-5|Dynamic regulatory environment",
+      "meta": "Elena Petrova · RSK-2026-1725 · submitted 18 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Dynamic regulatory environment in the area of compliance"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Agents in two markets are paid success fees with no documented services.\nRisk drivers: Legacy agency agreements without audit rights.\nOpportunities: Renegotiating now would cut commission costs.\nRisk source: Third parties",
+      "risk": "EU Anti-Corruption Directive",
+      "risk_title": "Non-compliance with the upcoming EU Anti-Corruption Directive",
+      "person": "Tomasz Zielinski",
+      "ref": "RSK-2026-1588",
+      "submitted": "11 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "agent-contracts-list.xlsx",
+      "key": "ex-4|EU Anti-Corruption Directive",
+      "meta": "Tomasz Zielinski · RSK-2026-1588 · submitted 11 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with the upcoming EU Anti-Corruption Directive"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Nobody in Procurement is following the late-payment proposal.\nRisk drivers: No named owner.\nRisk source: Proposed EU Late Payment Regulation",
+      "risk": "Late-payment regulations",
+      "risk_title": "Insufficient monitoring of the ongoing EU work on new late-payment regulations",
+      "person": "Tomasz Zielinski",
+      "ref": "RSK-2026-1588",
+      "submitted": "11 Sep 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-4|Late-payment regulations",
+      "meta": "Tomasz Zielinski · RSK-2026-1588 · submitted 11 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Insufficient monitoring of the ongoing EU work on new late-payment regulations"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Packaging uses a self-made \"eco\" label that will count as an unverified sustainability label.\nRisk drivers: Label printed on 18 months of stock.\nOpportunities: Switching to a certified scheme strengthens the brand.\nRisk source: ECGT Directive",
+      "risk": "Greenwashing (ECGT Directive)",
+      "risk_title": "Non-compliance with greenwashing regulations (ECGT Directive)",
+      "person": "Sofia Lindgren",
+      "ref": "RSK-2026-1451",
+      "submitted": "04 Sep 2026",
+      "followups": "Q: Who would own the response if it did?\nA: Brand and Packaging together, with Legal reviewing the wording.",
+      "attachments": "label-inventory.pdf, packaging-photo.jpg",
+      "key": "ex-3|Greenwashing (ECGT Directive)",
+      "meta": "Sofia Lindgren · RSK-2026-1451 · submitted 04 Sep 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with greenwashing regulations (ECGT Directive)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Staff use public chatbots with customer data and we have no AI literacy training in place.\nRisk drivers: No approved tool list.\nOpportunities: An approved toolset would raise productivity safely.\nRisk source: EU AI Act",
+      "risk": "AI Act ethical obligations",
+      "risk_title": "Non-compliance with AI Act ethical obligations",
+      "person": "Marek Nowak",
+      "ref": "RSK-2026-1314",
+      "submitted": "27 Aug 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-2|AI Act ethical obligations",
+      "meta": "Marek Nowak · RSK-2026-1314 · submitted 27 Aug 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with AI Act ethical obligations"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Security and privacy rules change faster than our policy review cycle.\nRisk drivers: Policies reviewed once a year.\nRisk source: Regulators",
+      "risk": "Dynamic regulatory environment",
+      "risk_title": "Dynamic regulatory environment in the area of compliance",
+      "person": "Marek Nowak",
+      "ref": "RSK-2026-1314",
+      "submitted": "27 Aug 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-2|Dynamic regulatory environment",
+      "meta": "Marek Nowak · RSK-2026-1314 · submitted 27 Aug 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Dynamic regulatory environment in the area of compliance"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Pay bands are not documented for every role, so we may be unable to justify pay differences once reporting starts.\nRisk drivers: Legacy salary agreements and no shared job architecture.\nOpportunities: A clear pay structure would help hiring and retention.\nRisk source: EU Pay Transparency Directive",
+      "risk": "Equal pay transparency",
+      "risk_title": "Non-compliance with equal pay transparency requirements",
+      "person": "Anna Kowalska",
+      "ref": "RSK-2026-1177",
+      "submitted": "19 Aug 2026",
+      "followups": "Q: How likely is this to affect your area in the next 12 months?\nA: Very likely. The first report is due next year.",
+      "attachments": "pay-band-audit.xlsx",
+      "key": "ex-1|Equal pay transparency",
+      "meta": "Anna Kowalska · RSK-2026-1177 · submitted 19 Aug 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Non-compliance with equal pay transparency requirements"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Managers have not been trained on the new mobbing definition.\nRisk drivers: High manager turnover.\nRisk source: Upcoming labour code amendment",
+      "risk": "Labour law changes",
+      "risk_title": "Inadequate adaptation to upcoming changes in labour law (including mobbing definition)",
+      "person": "Anna Kowalska",
+      "ref": "RSK-2026-1177",
+      "submitted": "19 Aug 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-1|Labour law changes",
+      "meta": "Anna Kowalska · RSK-2026-1177 · submitted 19 Aug 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Regulatory"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Inadequate adaptation to upcoming changes in labour law (including mobbing definition)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "data": {
+      "text": "Risk description: Works council rules for AI tools used in hiring are still unclear.",
+      "risk": "Unknown unknowns",
+      "risk_title": "Unknown unknowns",
+      "person": "Anna Kowalska",
+      "ref": "RSK-2026-1177",
+      "submitted": "19 Aug 2026",
+      "followups": "No follow-up questions",
+      "attachments": "None",
+      "key": "ex-1|Unknown unknowns",
+      "meta": "Anna Kowalska · RSK-2026-1177 · submitted 19 Aug 2026"
+    },
+    "predictions": [
+      {
+        "model_version": "question-position",
+        "result": [
+          {
+            "from_name": "g_category",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Upcoming Legal and Systemic Changes"
+              ]
+            }
+          },
+          {
+            "from_name": "g_sub",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Systemic"
+              ]
+            }
+          },
+          {
+            "from_name": "g_risk",
+            "to_name": "answer",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Unknown unknowns"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

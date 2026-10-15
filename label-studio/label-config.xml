@@ -1,0 +1,53 @@
+<View>
+  <Header value="$risk_title"/>
+  <Text name="meta" value="$meta"/>
+  <Text name="answer" value="$text"/>
+  <Header value="Follow-up questions" size="5"/>
+  <Text name="followups" value="$followups"/>
+  <Header value="Matrix category (matrix column)" size="5"/>
+  <Choices name="g_category" toName="answer" choice="multiple" showInline="true">
+    <Choice value="Upcoming Legal and Systemic Changes"/>
+  </Choices>
+  <Header value="Subcategory (matrix column)" size="5"/>
+  <Choices name="g_sub" toName="answer" choice="multiple" showInline="true">
+    <Choice value="Regulatory"/>
+    <Choice value="Systemic"/>
+  </Choices>
+  <Header value="Risk (matrix column)" size="5"/>
+  <Choices name="g_risk" toName="answer" choice="multiple" showInline="true">
+    <Choice value="Non-compliance with equal pay transparency requirements"/>
+    <Choice value="Non-compliance with AI Act ethical obligations"/>
+    <Choice value="Non-compliance with greenwashing regulations (ECGT Directive)"/>
+    <Choice value="Inadequate adaptation to upcoming changes in labour law (including mobbing definition)"/>
+    <Choice value="Non-compliance with the upcoming EU Anti-Corruption Directive"/>
+    <Choice value="Insufficient monitoring of the ongoing EU work on new late-payment regulations"/>
+    <Choice value="Dynamic regulatory environment in the area of compliance"/>
+    <Choice value="Unknown unknowns"/>
+  </Choices>
+  <Header value="Risk source" size="5"/>
+  <Choices name="g_source" toName="answer" choice="multiple" showInline="true">
+    <Choice value="EU regulation"/>
+    <Choice value="National law"/>
+    <Choice value="Internal process"/>
+    <Choice value="Third party"/>
+    <Choice value="Systems and data"/>
+    <Choice value="People and skills"/>
+  </Choices>
+  <Header value="Risk driver" size="5"/>
+  <Choices name="g_driver" toName="answer" choice="multiple" showInline="true">
+    <Choice value="No clear owner"/>
+    <Choice value="Legacy agreements"/>
+    <Choice value="Training gap"/>
+    <Choice value="Tooling gap"/>
+    <Choice value="Data quality"/>
+    <Choice value="Staff turnover"/>
+  </Choices>
+  <Header value="Opportunity" size="5"/>
+  <Choices name="g_opp" toName="answer" choice="multiple" showInline="true">
+    <Choice value="Efficiency"/>
+    <Choice value="Reputation and trust"/>
+    <Choice value="Talent and retention"/>
+    <Choice value="Cost saving"/>
+    <Choice value="Better data"/>
+  </Choices>
+</View>
