@@ -103,6 +103,7 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
 .role-switch button[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
 .top-left { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
 .ver { position: relative; }
+.ver { display: none !important; }
 .ver summary { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; list-style: none; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
 .ver summary::-webkit-details-marker { display: none; }
 .ver summary:hover { background: var(--muted); }
@@ -380,7 +381,7 @@ h1 { margin: 0; font-size: clamp(30px, 6.5vw, 41px); font-weight: 700; letter-sp
     if (inClaude) { a.href = a.getAttribute('data-url'); a.target = '_blank'; a.rel = 'noopener'; }
     else a.addEventListener('click', function () {
       // A tile always opens the form itself, even if the Compliance team view was used last.
-      try { localStorage.setItem('viewRole', 'employee'); } catch (e) {}
+      try { localStorage.setItem('viewRole', 'employee'); sessionStorage.setItem('riskFlow', a.getAttribute('data-file')); } catch (e) {}
       a.href = a.getAttribute('data-file') + location.search + location.hash;
     });
   });

@@ -640,6 +640,8 @@ button.v2-opt:hover { background: var(--muted); }
 .nav button:disabled { opacity: .5; cursor: default; }
 .top-left { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
 .ver { position: relative; }
+/* The version menu is hidden: Employee starts on "Choose your way". */
+.ver { display: none !important; }
 .ver summary { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; list-style: none; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
 .ver summary::-webkit-details-marker { display: none; }
 .ver summary:hover { background: var(--muted); }
@@ -6182,6 +6184,16 @@ function mxHistoryPanel() {
   var role = 'compliance';
   try { if (localStorage.getItem('viewRole') === 'employee') role = 'employee'; } catch (e) {}
   if (/[?&]t=/.test(location.search) || /^#cat-/.test(location.hash)) role = 'employee';
+  // Employee starts on "Choose your way". This form opens directly only from its tile there, a person's link or an area link;
+  // otherwise the Employee view goes to the chooser.
+  var CHOOSER = { file: 'index.html', url: 'https://claude.ai/artifact/UzoXrGLLca5nJ6cJntzfDJ' }, inClaudeApp = !!window.claude || /claude/.test(location.hostname);
+  function fromChooser() { try { return sessionStorage.getItem('riskFlow') === 'version-03.html'; } catch (e) { return false; } }
+  function toChooser() {
+    if (inClaudeApp) { window.open(CHOOSER.url, '_blank', 'noopener'); return; }
+    try { localStorage.setItem('viewRole', 'employee'); } catch (e) {}
+    location.href = CHOOSER.file + (/[?&]lang=/.test(location.search) ? '?' + location.search.match(/lang=[a-z]+/)[0] : '');
+  }
+  if (role === 'employee' && !inClaudeApp && !fromChooser() && !/[?&]t=/.test(location.search) && !/^#cat-/.test(location.hash)) toChooser();
   function roleApply() {
     document.documentElement.classList.toggle('role-employee', role === 'employee');
     document.documentElement.classList.toggle('role-compliance', role === 'compliance');
@@ -6189,6 +6201,8 @@ function mxHistoryPanel() {
     document.getElementById('role-compliance').setAttribute('aria-pressed', role === 'compliance' ? 'true' : 'false');
   }
   function roleSet(r) {
+    // Switching to Employee opens "Choose your way" unless this form was picked there or opened from a link.
+    if (r === 'employee' && role !== 'employee' && !fromChooser() && !/[?&]t=/.test(location.search) && !/^#cat-/.test(location.hash)) { toChooser(); return; }
     role = r;
     try { localStorage.setItem('viewRole', r); } catch (e) {}
     roleApply();
