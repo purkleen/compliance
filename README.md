@@ -25,6 +25,7 @@ Open `index.html` in a browser. It is "Choose your way", a start page that expla
 - Attached files are not uploaded anywhere; only their names are recorded.
 - Every text box in the employee forms has a microphone for dictation. It uses the browser's speech recognition (Chrome, Edge, Safari) and is switched off inside Claude, where the microphone is not available.
 - Matrix edits, versions and AI guidance are kept in the browser's local storage.
+- Page views on the deployed site are counted with Vercel Web Analytics (a small script in each page; it does not run inside Claude or locally).
 
 ## Polish version
 
